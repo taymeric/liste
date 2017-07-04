@@ -24,6 +24,8 @@ import com.example.android.liste.data.ListContract;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import static android.R.attr.keySet;
+
 
 /**
  * HistoryActivity displays the items in the history table.
@@ -74,11 +76,11 @@ public class HistoryActivity extends AppCompatActivity
         mRecyclerView = (RecyclerView) findViewById(R.id.history_recyclerview);
         mLayoutManager = PreferenceUtils.getLayoutFromPrefs(this, mSharedPreferences, getString(R.string.pref_history_layout_key));
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setBackgroundColor(PreferenceUtils.getHistoryColorFromPrefs(this, mSharedPreferences));
+        //mRecyclerView.setBackgroundColor(PreferenceUtils.getHistoryColorFromPrefs(this, mSharedPreferences));
         mAdapter = new HistoryAdapter(this, this);
         mRecyclerView.setAdapter(mAdapter);
 
-        mEmptyView = (View) findViewById(R.id.empty_view);
+        mEmptyView = findViewById(R.id.empty_view);
         setRecyclerViewVisibility();
 
         getLoaderManager().initLoader(HISTORY_LOADER_ID, null, this);
@@ -123,10 +125,9 @@ public class HistoryActivity extends AppCompatActivity
                         Uri uri;
                         // Iterate through all the Ids contained in the HasMap of selected elements
                         // and remove elements with those Ids from the history table.
-                        Iterator iterator = selectedIds.keySet().iterator();
-                        while (iterator.hasNext()) {
+                        for (String id : selectedIds.keySet()) {
                             uri = ListContract.HistoryEntry.CONTENT_URI;
-                            uri = uri.buildUpon().appendPath(iterator.next().toString()).build();
+                            uri = uri.buildUpon().appendPath(id).build();
                             nb += getContentResolver().delete(uri, null, null);
                         }
                         if (nb == 1)
@@ -166,12 +167,11 @@ public class HistoryActivity extends AppCompatActivity
         Uri newuri;
         // Iterate through all the text values contained in the HasMap of selected elements
         // and add elements with those texts to the list table.
-        Iterator iterator = selectedIds.values().iterator();
-        while (iterator.hasNext()) {
+        for (String value: selectedIds.values()) {
             cv = new ContentValues();
-            cv.put(ListContract.ListEntry.COLUMN_STRING, iterator.next().toString());
+            cv.put(ListContract.ListEntry.COLUMN_STRING, value);
             newuri = getContentResolver().insert(uri, cv);
-            if (!newuri.equals(Uri.EMPTY)) nb++;
+            if (newuri != null && !newuri.equals(Uri.EMPTY)) nb++;
         }
 
         switch(nb) {

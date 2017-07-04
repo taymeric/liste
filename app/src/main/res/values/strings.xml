@@ -4,29 +4,28 @@
     <string name="history_title">History</string>
     <string name="settings">Settings</string>
 
-    <string name="clear">Clear</string>
+    <string name="clear">Clear list</string>
     <string name="clear_selection">Clear selection</string>
     <string name="clear_all">Clear history</string>
     <string name="message_confirm_clear_list">Clear current list?</string>
-    <string name="message_confirm_clear_selected">Clear selected items from history?</string>
+    <string name="message_confirm_clear_selected">Clear selected products from history?</string>
     <string name="message_confirm_clear_history">Clear history?</string>
     <string name="confirm_clear">Yes</string>
     <string name="cancel_clear">No</string>
     <string name="message_clear_list">List cleared!</string>
-    <string name="element_cleared">item cleared from history</string>
-    <string name="elements_cleared">items cleared from history</string>
+    <string name="element_cleared">product cleared from history</string>
+    <string name="elements_cleared">products cleared from history</string>
     <string name="message_clear_history">History cleared!</string>
 
     <string name="search_hint">Add</string>
-    <string name="add_items">Add selected items</string>
+    <string name="add_items">Add selected products</string>
     <string name="already">is already on the list</string>
-    <string name="no_new_element">No new element</string>
-    <string name="one_new_element">item added to the list</string>
-    <string name="several_new_elements">items added to the list</string>
+    <string name="no_new_element">No new product</string>
+    <string name="one_new_element">product added to the list</string>
+    <string name="several_new_elements">products added to the list</string>
 
     <string name="empty_image_description">Pen icon</string>
-    <string name="empty_view_title_text">There is nothing here yet</string>
-    <string name="empty_view_subtitle_text">Add elements from the main screen and they will appear here after.</string>
+    <string name="empty_view_title_text">History is empty. First, add products from the main screen.</string>
 
     <!-- Strings for Settings-->
 

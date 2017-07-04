@@ -30,30 +30,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:fontFamily="sans-serif-medium"
+            android:alpha="0.4"
+            android:fontFamily="sans-serif"
+            android:paddingEnd="40dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:paddingStart="40dp"
             android:text="@string/empty_view_title_text"
-            android:textAppearance="?android:textAppearanceMedium"/>
-
-        <TextView
-            android:id="@+id/empty_subtitle_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/empty_title_text"
-            android:layout_centerHorizontal="true"
-            android:paddingLeft="56dp"
-            android:paddingRight="56dp"
-            android:paddingTop="8dp"
-            android:text="@string/empty_view_subtitle_text"
-            android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="#A2AAB0"/>
+            android:textAlignment="center"
+            android:textAppearance="?android:textAppearanceLarge"/>
 
         <ImageView
-            android:id="@+id/create_image_view"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_below="@+id/empty_subtitle_text"
+            android:id="@+id/empty_image_view"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_below="@id/empty_title_text"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
+            android:layout_margin="16dp"
             android:background="@drawable/ic_create_black_48px"
             android:contentDescription="@string/empty_image_description"/>
 
