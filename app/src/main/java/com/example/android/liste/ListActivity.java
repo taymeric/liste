@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -169,13 +170,14 @@ public class ListActivity extends AppCompatActivity
                 new int[] {android.R.id.text1},
                 0
         );
+
         // Filter for suggestions from the history table.
         mCursorAdapter.setFilterQueryProvider(new FilterQueryProvider() {
             public Cursor runQuery(CharSequence str) {
                 return getCursor(str);
             } });
 
-        mSearchView.setSuggestionsAdapter(mCursorAdapter);
+        //mSearchView.setSuggestionsAdapter(mCursorAdapter);
 
         mSearchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
             @Override
@@ -203,7 +205,7 @@ public class ListActivity extends AppCompatActivity
                     ContentValues values = new ContentValues();
                     values.put(ListContract.ListEntry.COLUMN_STRING, texte);
                     Uri uri = getContentResolver().insert(ListContract.ListEntry.CONTENT_URI, values);
-                    if (uri.equals(Uri.EMPTY)) {
+                    if (uri != null && uri.equals(Uri.EMPTY)) {
                         showMessage(texte + " " + getString(R.string.already));
                     }
                     // Add text to the history

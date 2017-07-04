@@ -24,7 +24,7 @@
     <string name="one_new_element">item added to the list</string>
     <string name="several_new_elements">items added to the list</string>
 
-
+    <string name="empty_image_description">Pen icon</string>
     <string name="empty_view_title_text">There is nothing here yet</string>
     <string name="empty_view_subtitle_text">Add elements from the main screen and they will appear here after.</string>
 

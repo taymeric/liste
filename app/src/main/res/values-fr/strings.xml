@@ -51,5 +51,6 @@
     <string name="pref_sort_order_label">Tri</string>
     <string name="pref_sort_order_by_name_label">Ordre alphabétique</string>
     <string name="pref_sort_order_by_id_label">Ordre d\'ajout</string>
+    <string name="empty_image_description">Icône de crayon</string>
 
 </resources>
