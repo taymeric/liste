@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Grocery List</string>
+    <string name="history_title">History</string>
+    <string name="settings">Settings</string>
+
+    <string name="clear">Clear</string>
+    <string name="clear_selection">Clear selection</string>
+    <string name="clear_all">Clear history</string>
+    <string name="message_confirm_clear_list">Clear current list?</string>
+    <string name="message_confirm_clear_selected">Clear selected items from history?</string>
+    <string name="message_confirm_clear_history">Clear history?</string>
+    <string name="confirm_clear">Yes</string>
+    <string name="cancel_clear">No</string>
+    <string name="message_clear_list">List cleared!</string>
+    <string name="element_cleared">item cleared from history</string>
+    <string name="elements_cleared">items cleared from history</string>
+    <string name="message_clear_history">History cleared!</string>
+
+    <string name="search_hint">Add</string>
+    <string name="add_items">Add selected items</string>
+    <string name="already">is already on the list</string>
+    <string name="no_new_element">No new element</string>
+    <string name="one_new_element">item added to the list</string>
+    <string name="several_new_elements">items added to the list</string>
+
+
+    <string name="empty_view_title_text">There is nothing here yet</string>
+    <string name="empty_view_subtitle_text">Add elements from the main screen and they will appear here after.</string>
+
+    <!-- Strings for Settings-->
+
+    <string name="list_label">List</string>
+    <string name="history_label">History</string>
+
+    <!-- Strings for color settings -->
+    <string name="pref_color_label">Background color</string>
+    <string name="pref_color_label_white">White</string>
+    <string name="pref_color_label_green">Green</string>
+
+    <string name="pref_color_key" translatable="false">color</string>
+    <string name="pref_color_white_value" translatable="false">white</string>
+    <string name="pref_color_green_value" translatable="false">green</string>
+
+    <!-- Strings for size settings -->
+    <string name="pref_size_label">Text size</string>
+    <string name="pref_size_small_label">Small</string>
+    <string name="pref_size_big_label">Big</string>
+
+    <string name="pref_list_size_key" translatable="false">list_size</string>
+    <string name="pref_history_size_key" translatable="false">history_size</string>
+    <string name="pref_size_small_value" translatable="false">small</string>
+    <string name="pref_size_big_value" translatable="false">big</string>
+
+    <!-- Strings for layout settings-->
+    <string name="pref_layout_label">Layout</string>
+    <string name="pref_layout_linear_label">One column</string>
+    <string name="pref_layout_grid_label">Several columns</string>
+
+    <string name="pref_list_layout_key" translatable="false">list_layout</string>
+    <string name="pref_history_layout_key" translatable="false">list_layout</string>
+    <string name="pref_layout_linear_value" translatable="false">linear</string>
+    <string name="pref_layout_grid_value" translatable="false">grid</string>
+
+    <!--Strings for sort order -->
+    <string name="pref_sort_order_label">Sort</string>
+    <string name="pref_sort_order_by_name_label">By name</string>
+    <string name="pref_sort_order_by_id_label">By order of addition</string>
+
+    <string name="pref_sort_order_key" translatable="false">sortorder</string>
+    <string name="pref_sort_order_name_value" translatable="false">byname</string>
+    <string name="pref_sort_order_added_value" translatable="false">byadded</string>
+</resources>

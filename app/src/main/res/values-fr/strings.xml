@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Liste d\'épicerie</string>
+    <string name="history_title">Historique</string>
+    <string name="settings">Paramètres</string>
+
+    <string name="clear">Effacer</string>
+    <string name="clear_selection">Effacer la sélection</string>
+    <string name="clear_all">Effacer l\'historique</string>
+    <string name="message_confirm_clear_list">Effacer la liste actuelle ?</string>
+    <string name="message_confirm_clear_selected">Effacer les éléments sélectionnés de l\'historique ?</string>
+    <string name="message_confirm_clear_history">Effacer l\'historique ?</string>
+    <string name="confirm_clear">Oui</string>
+    <string name="cancel_clear">Non</string>
+    <string name="message_clear_list">Liste vidée !</string>
+    <string name="element_cleared">élément supprimé de l\'historique</string>
+    <string name="elements_cleared">éléments supprimés de l\'historique</string>
+    <string name="message_clear_history">Historique vidé !</string>
+
+    <string name="search_hint">Ajouter</string>
+    <string name="add_items">Ajouter les éléments sélectionnés</string>
+    <string name="already">est déjà dans la liste</string>
+    <string name="no_new_element">Pas de nouvel élément</string>
+    <string name="one_new_element">produit ajouté à la liste</string>
+    <string name="several_new_elements">produits ajoutés à la liste</string>
+
+    <string name="empty_view_title_text">Il n\'y a encore rien ici</string>
+    <string name="empty_view_subtitle_text">Ajoutez des éléments depuis l\'écran principal et ils apparaîtront ensuite ici.</string>
+
+    <!-- Strings for Settings-->
+
+    <string name="list_label">Liste</string>
+    <string name="history_label">Historique</string>
+
+    <!-- Strings for color settings -->
+    <string name="pref_color_label">Couleur du fond</string>
+    <string name="pref_color_label_white">Blanc</string>
+    <string name="pref_color_label_green">Vert</string>
+
+    <!-- Strings for size settings -->
+    <string name="pref_size_label">Taille du texte</string>
+    <string name="pref_size_small_label">Petit</string>
+    <string name="pref_size_big_label">Grand</string>
+
+    <!-- Strings for layout settings-->
+    <string name="pref_layout_label">Affichage</string>
+    <string name="pref_layout_linear_label">Une colonne</string>
+    <string name="pref_layout_grid_label">Plusieurs colonnes</string>
+
+    <!--Strings for sort order -->
+    <string name="pref_sort_order_label">Tri</string>
+    <string name="pref_sort_order_by_name_label">Ordre alphabétique</string>
+    <string name="pref_sort_order_by_id_label">Ordre d\'ajout</string>
+
+</resources>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/settings">
+
+    <PreferenceCategory
+        android:title="@string/list_label"
+        style="@style/CustomCategories">
+        <ListPreference
+            android:entries="@array/pref_size_option_labels"
+            android:entryValues="@array/pref_size_option_values"
+            android:defaultValue="@string/pref_size_small_value"
+            android:key="@string/pref_list_size_key"
+            android:title="@string/pref_size_label"
+            />
+        <ListPreference
+            android:entries="@array/pref_layout_option_labels"
+            android:entryValues="@array/pref_layout_option_values"
+            android:defaultValue="@string/pref_layout_linear_value"
+            android:key="@string/pref_list_layout_key"
+            android:title="@string/pref_layout_label"
+            />
+        <ListPreference
+            android:entries="@array/pref_sort_order_option_labels"
+            android:entryValues="@array/pref_sort_order_option_values"
+            android:defaultValue="@string/pref_sort_order_name_value"
+            android:key="@string/pref_sort_order_key"
+            android:title="@string/pref_sort_order_label"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/history_label"
+        style="@style/CustomCategories">
+        <ListPreference
+            android:entries="@array/pref_size_option_labels"
+            android:entryValues="@array/pref_size_option_values"
+            android:defaultValue="@string/pref_size_big_value"
+            android:key="@string/pref_history_size_key"
+            android:title="@string/pref_size_label"
+            />
+        <ListPreference
+            android:entries="@array/pref_layout_option_labels"
+            android:entryValues="@array/pref_layout_option_values"
+            android:defaultValue="@string/pref_layout_grid_value"
+            android:key="@string/pref_history_layout_key"
+            android:title="@string/pref_layout_label"
+            />
+        <ListPreference
+            android:entries="@array/pref_color_option_labels"
+            android:entryValues="@array/pref_color_option_values"
+            android:defaultValue="@string/pref_color_green_value"
+            android:key="@string/pref_color_key"
+            android:title="@string/pref_color_label"
+            />
+    </PreferenceCategory>
+
+</PreferenceScreen>
