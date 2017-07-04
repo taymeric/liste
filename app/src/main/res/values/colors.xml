@@ -5,7 +5,4 @@
     <color name="colorPrimaryLight">#bef67a</color>
     <color name="colorAccent">#0091ea</color>
     <color name="colorAccentLight">#b3e5fc</color>
-
-    <!-- Color used for background -->
-    <color name="colorGreen">#F1F8E9</color>
 </resources>

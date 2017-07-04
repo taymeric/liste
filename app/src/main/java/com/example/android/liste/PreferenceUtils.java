@@ -13,26 +13,13 @@ import com.example.android.liste.data.ListContract;
 /**
  * Utility methods to get settings values in accordance with preference settings
  */
-public class PreferenceUtils {
-
-    public static int getHistoryColorFromPrefs(Context context, SharedPreferences sharedPreferences) {
-        int color;
-        String colorString = sharedPreferences.getString(
-                context.getString(R.string.pref_color_key),
-                context.getString(R.string.pref_color_green_value));
-        if (colorString.equals(context.getString(R.string.pref_color_green_value))) {
-            color = ContextCompat.getColor(context, R.color.colorGreen);
-        } else {
-            color = ContextCompat.getColor(context, android.R.color.white);
-        }
-        return color;
-    }
+class PreferenceUtils {
 
     /*
      * In this method, the parameter 'key' differentiate between the RecylerView for the list
      * and the RecyclerView for the history.
      */
-    public static float getTextSizeFromPrefs(
+    static float getTextSizeFromPrefs(
             Context context, SharedPreferences sharedPreferences, String key) {
         float size;
         String sizeString = sharedPreferences.getString(
@@ -50,7 +37,7 @@ public class PreferenceUtils {
      * In this method, the parameter 'key' differentiate between the RecylerView for the list
      * and the RecyclerView for the history.
      */
-    public static RecyclerView.LayoutManager getLayoutFromPrefs(
+    static RecyclerView.LayoutManager getLayoutFromPrefs(
             Context context, SharedPreferences sharedPreferences, String key) {
 
         String value = sharedPreferences.getString(
@@ -69,7 +56,7 @@ public class PreferenceUtils {
             return new LinearLayoutManager(context);
     }
 
-    public static String getSortOrderFromPrefs(Context context, SharedPreferences sharedPreferences) {
+    static String getSortOrderFromPrefs(Context context, SharedPreferences sharedPreferences) {
         String sortOrder = sharedPreferences.getString(
                 context.getString(R.string.pref_sort_order_key),
                 context.getString(R.string.pref_sort_order_name_value));

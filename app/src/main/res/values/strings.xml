@@ -32,15 +32,6 @@
     <string name="list_label">List</string>
     <string name="history_label">History</string>
 
-    <!-- Strings for color settings -->
-    <string name="pref_color_label">Background color</string>
-    <string name="pref_color_label_white">White</string>
-    <string name="pref_color_label_green">Green</string>
-
-    <string name="pref_color_key" translatable="false">color</string>
-    <string name="pref_color_white_value" translatable="false">white</string>
-    <string name="pref_color_green_value" translatable="false">green</string>
-
     <!-- Strings for size settings -->
     <string name="pref_size_label">Text size</string>
     <string name="pref_size_small_label">Small</string>
@@ -54,7 +45,7 @@
     <!-- Strings for layout settings-->
     <string name="pref_layout_label">Layout</string>
     <string name="pref_layout_linear_label">One column</string>
-    <string name="pref_layout_grid_label">Several columns</string>
+    <string name="pref_layout_grid_label">Two columns</string>
 
     <string name="pref_list_layout_key" translatable="false">list_layout</string>
     <string name="pref_history_layout_key" translatable="false">list_layout</string>

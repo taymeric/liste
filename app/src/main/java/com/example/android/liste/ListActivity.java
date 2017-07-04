@@ -81,7 +81,7 @@ public class ListActivity extends AppCompatActivity
         mRecyclerView = (RecyclerView) findViewById(recyclerView);
         mLayoutManager = PreferenceUtils.getLayoutFromPrefs(this, mSharedPreferences, getString(R.string.pref_list_layout_key));
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
+        //mRecyclerView.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
         mAdapter = new ListAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 

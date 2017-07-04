@@ -22,9 +22,6 @@ import android.widget.Toast;
 import com.example.android.liste.data.ListContract;
 
 import java.util.HashMap;
-import java.util.Iterator;
-
-import static android.R.attr.keySet;
 
 
 /**
@@ -76,7 +73,6 @@ public class HistoryActivity extends AppCompatActivity
         mRecyclerView = (RecyclerView) findViewById(R.id.history_recyclerview);
         mLayoutManager = PreferenceUtils.getLayoutFromPrefs(this, mSharedPreferences, getString(R.string.pref_history_layout_key));
         mRecyclerView.setLayoutManager(mLayoutManager);
-        //mRecyclerView.setBackgroundColor(PreferenceUtils.getHistoryColorFromPrefs(this, mSharedPreferences));
         mAdapter = new HistoryAdapter(this, this);
         mRecyclerView.setAdapter(mAdapter);
 

@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="pref_color_option_labels">
-        <item>@string/pref_color_label_green</item>
-        <item>@string/pref_color_label_white</item>
-    </array>
-
-    <array name="pref_color_option_values">
-        <item>@string/pref_color_green_value</item>
-        <item>@string/pref_color_white_value</item>
-    </array>
-
     <array name="pref_size_option_labels">
         <item>@string/pref_size_small_label</item>
         <item>@string/pref_size_big_label</item>

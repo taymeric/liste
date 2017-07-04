@@ -1,5 +1,6 @@
 package com.example.android.liste;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -20,7 +21,7 @@ import java.util.HashSet;
  * Adapter class to manage display of items in the recycler view for the history.
  */
 
-public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
+class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
     public  static final String TAG = "HistoryAdapter.java";
 
@@ -33,14 +34,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     // A HashSet that contains selected elements identified by their position
     private HashSet<Integer> mSelectedPositions;
 
-    // Provides a way to interact with an activity implementing this interface
-    public interface AdapterOnClickHandler {
-        void onClick(String id, String txt);
-    }
-
     // A Context is needed for PreferenceUtils methods.
     // An AdapterOnClickHandler is used to interact with History activity.
-    public HistoryAdapter(Context context, AdapterOnClickHandler clickHandler) {
+    HistoryAdapter(Context context, AdapterOnClickHandler clickHandler) {
         mContext = context;
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         mTextSize = PreferenceUtils.getTextSizeFromPrefs(
@@ -55,12 +51,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public HistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.history_item, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     // Replaces the contents of a view
     @Override
+    @SuppressLint("PrivateResource")
     public void onBindViewHolder(HistoryAdapter.ViewHolder holder, int position) {
         // Gets element at position and replaces the contents of the view with that element
         if (mCursor.moveToPosition(position)) {
@@ -72,7 +68,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             if (mSelectedPositions.contains(position))
                 holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorAccentLight));
             else
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.transparent));
+                holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.background_material_light));
         }
     }
 
@@ -90,22 +86,27 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         return id;
     }
 
-    public void swapCursor(Cursor cursor) {
+    void swapCursor(Cursor cursor) {
         mCursor = cursor;
         notifyDataSetChanged();
     }
 
     // Selected elements constitute the HashSet
-    public void clearSelection() {
+    void clearSelection() {
         mSelectedPositions.clear();
     }
 
-    // Provides a reference to the view(s) for each data item
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        // each data item is just a string in our case
-        public TextView mTextView;
+    // Provides a way to interact with an activity implementing this interface
+    interface AdapterOnClickHandler {
+        void onClick(String id, String txt);
+    }
 
-        public ViewHolder(View itemView) {
+    // Provides a reference to the view(s) for each data item
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        // each data item is just a string in our case
+        TextView mTextView;
+
+        ViewHolder(View itemView) {
             super(itemView);
             mTextView = (TextView) itemView.findViewById(R.id.item_text);
             itemView.setOnClickListener(this);

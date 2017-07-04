@@ -17,7 +17,7 @@ import com.example.android.liste.data.ListContract;
  * Adapter class to manage display of items in the recycler view for the list.
  */
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
+class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     public static final String TAG = "ListAdapter.java";
 
@@ -27,7 +27,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private float mTextSize;
 
     // A Context is needed for PreferenceUtils methods.
-    public ListAdapter(Context context) {
+    ListAdapter(Context context) {
         mContext = context;
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         mTextSize = PreferenceUtils.getTextSizeFromPrefs(
@@ -40,8 +40,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     // Replaces the contents of a view
@@ -73,22 +72,22 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return id;
     }
 
-    public void swapCursor(Cursor cursor) {
+    void swapCursor(Cursor cursor) {
         mCursor = cursor;
         notifyDataSetChanged();
     }
 
-    public void reloadSize() {
+    void reloadSize() {
         mTextSize = PreferenceUtils.getTextSizeFromPrefs(
                 mContext, mSharedPreferences, mContext.getString(R.string.pref_list_size_key));
     }
 
     // Provides a reference to the view(s) for each data item
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in our case
-        public TextView mTextView;
+        TextView mTextView;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             mTextView = (TextView) itemView.findViewById(R.id.item_text);
         }
