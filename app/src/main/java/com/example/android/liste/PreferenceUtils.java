@@ -24,7 +24,7 @@ class PreferenceUtils {
         float size;
         String sizeString = sharedPreferences.getString(
                 key,
-                context.getString(R.string.pref_size_small_value));
+                context.getString(R.string.pref_size_big_value));
         if (sizeString.equals(context.getString(R.string.pref_size_big_value))) {
             size = context.getResources().getDimension(R.dimen.text_big);
         } else {
@@ -44,13 +44,7 @@ class PreferenceUtils {
                 key,
                 context.getString(R.string.pref_layout_linear_value));
         if (value.equals(context.getString(R.string.pref_layout_grid_value))) {
-            int orientation = context.getResources().getConfiguration().orientation;
-            // Returns a GridLayout with more columns in landscape mode to accomodate
-            // the larger width.
-            if (orientation == Configuration.ORIENTATION_LANDSCAPE)
-                return new GridLayoutManager(context, 3);
-            else
-                return new GridLayoutManager(context, 2);
+            return new GridLayoutManager(context, 2);
         }
         else
             return new LinearLayoutManager(context);
