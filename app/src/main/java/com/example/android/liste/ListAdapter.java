@@ -6,12 +6,16 @@ import android.database.Cursor;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.liste.data.ListContract;
+
 
 /**
  * Adapter class to manage display of items in the recycler view for the list.
@@ -25,10 +29,12 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private Context mContext;
     private SharedPreferences mSharedPreferences;
     private float mTextSize;
+    private ListAdapterOnClickListener mListAdapterOnClickListener;
 
     // A Context is needed for PreferenceUtils methods.
-    ListAdapter(Context context) {
+    ListAdapter(Context context, ListAdapterOnClickListener listener) {
         mContext = context;
+        mListAdapterOnClickListener = listener;
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         mTextSize = PreferenceUtils.getTextSizeFromPrefs(
                 mContext, mSharedPreferences, mContext.getString(R.string.pref_list_size_key));
@@ -48,13 +54,19 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     public void onBindViewHolder(ListAdapter.ViewHolder holder, int position) {
         // Gets element at position and replaces the contents of the view with that element
         if (mCursor.moveToPosition(position)) {
+
             String s = mCursor.getString(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_STRING));
             holder.mTextView.setText(s);
             holder.mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
+
+            int p = mCursor.getInt(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
+            if (p == ListActivity.HIGH_PRIORITY) holder.mPriorityView.setVisibility(View.VISIBLE);
+            else holder.mPriorityView.setVisibility(View.INVISIBLE);
+
             // A tag containing the Id of the element in the table is needed
             // to handle delete-on-swipe from the List activity.
-            int i = mCursor.getInt(mCursor.getColumnIndex(ListContract.ListEntry._ID));
-            holder.itemView.setTag(i);
+            holder.id = mCursor.getInt(mCursor.getColumnIndex(ListContract.ListEntry._ID));
+            holder.itemView.setTag(holder.id);
         }
     }
 
@@ -82,14 +94,38 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 mContext, mSharedPreferences, mContext.getString(R.string.pref_list_size_key));
     }
 
+    interface ListAdapterOnClickListener {
+        void onClick(int id);
+    }
+
     // Provides a reference to the view(s) for each data item
     class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in our case
         TextView mTextView;
+        ImageView mPriorityView;
+        int id;
 
         ViewHolder(View itemView) {
             super(itemView);
             mTextView = (TextView) itemView.findViewById(R.id.item_text);
+            mPriorityView = (ImageView) itemView.findViewById(R.id.priority_mark);
+            mTextView.setOnTouchListener(new View.OnTouchListener() {
+                private GestureDetector gestureDetector = new GestureDetector(
+                        mContext, new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onDoubleTap(MotionEvent e) {
+                        if (id > 0)
+                            mListAdapterOnClickListener.onClick(id);
+                        return true;
+                    }
+                });
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    gestureDetector.onTouchEvent(event);
+                    return true;
+                }
+            });
         }
     }
 }

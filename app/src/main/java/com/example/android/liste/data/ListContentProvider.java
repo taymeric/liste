@@ -10,21 +10,13 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-
-/**
- * Created by aymeric on 17-05-02.
- */
-
 public class ListContentProvider extends ContentProvider {
-
-    private ListDbHelper mListDbHelper;
 
     // Constants used to match Uris, see UriMatcher.
     public static final int LIST = 100;
     public static final int LIST_ID = 200;
     public static final int HISTORY = 300;
     public static final int HISTORY_ID = 400;
-
     // The UriMatcher will match a given Uri with these templates and return a code to identify
     // the table and the specificity of the Uri (single row or full table).
     private static UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -35,6 +27,8 @@ public class ListContentProvider extends ContentProvider {
         sUriMatcher.addURI(ListContract.CONTENT_AUTHORITY, ListContract.PATH_HISTORY, HISTORY);
         sUriMatcher.addURI(ListContract.CONTENT_AUTHORITY, ListContract.PATH_HISTORY + "/#", HISTORY_ID);
     }
+
+    private ListDbHelper mListDbHelper;
 
     @Override
     public boolean onCreate() {
@@ -58,6 +52,15 @@ public class ListContentProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         switch (match) {
             case LIST:
+                cursor = db.query(ListContract.ListEntry.TABLE_NAME,
+                        strings,
+                        s,
+                        strings1,
+                        null,
+                        null,
+                        s1);
+                break;
+            case LIST_ID:
                 cursor = db.query(ListContract.ListEntry.TABLE_NAME,
                         strings,
                         s,
@@ -128,7 +131,7 @@ public class ListContentProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
         SQLiteDatabase db = mListDbHelper.getWritableDatabase();
-        int rowsDeleted = 0;
+        int rowsDeleted;
         int match = sUriMatcher.match(uri);
         switch (match) {
             case LIST:
@@ -156,11 +159,11 @@ public class ListContentProvider extends ContentProvider {
         return rowsDeleted;
     }
 
-    // Not used in this application!
+    // Update is only used for LIST_ID when updating priority
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
         SQLiteDatabase db = mListDbHelper.getWritableDatabase();
-        int rowsUpdated = 0;
+        int rowsUpdated;
         int match = sUriMatcher.match(uri);
         switch(match) {
             case LIST_ID:

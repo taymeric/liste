@@ -2,6 +2,7 @@ package com.example.android.liste;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 import com.example.android.liste.data.ListContract;
 
+import static android.R.attr.priority;
 import static com.example.android.liste.R.id.recyclerView;
 
 /**
@@ -43,12 +45,16 @@ import static com.example.android.liste.R.id.recyclerView;
  */
 public class ListActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor>,
-        SharedPreferences.OnSharedPreferenceChangeListener
+        SharedPreferences.OnSharedPreferenceChangeListener,
+        ListAdapter.ListAdapterOnClickListener
 {
 
     public static final int LIST_LOADER_ID = 77;
     public static final int HISTORY_LOADER_ID = 88;
     public static final String TAG = "ListActivity.java";
+
+    public static final int DEFAULT_PRIORITY = 2;
+    public static final int HIGH_PRIORITY = 1;
 
     private FloatingActionButton mFab;
     private RecyclerView mRecyclerView;
@@ -82,7 +88,7 @@ public class ListActivity extends AppCompatActivity
         mLayoutManager = PreferenceUtils.getLayoutFromPrefs(this, mSharedPreferences, getString(R.string.pref_list_layout_key));
         mRecyclerView.setLayoutManager(mLayoutManager);
         //mRecyclerView.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
-        mAdapter = new ListAdapter(this);
+        mAdapter = new ListAdapter(this, this);
         mRecyclerView.setAdapter(mAdapter);
 
         // Hides FAB when scrolling down
@@ -122,15 +128,8 @@ public class ListActivity extends AppCompatActivity
 
                 // The Adapter stores the Id of the element in the viewHolder
                 int id = (int) viewHolder.itemView.getTag();
-                String stringId = Integer.toString(id);
 
-                Uri uri = ListContract.ListEntry.CONTENT_URI;
-                uri = uri.buildUpon().appendPath(stringId).build();
-
-                getContentResolver().delete(uri, null, null);
-
-                // Make sure the FAB is visible as scrolling up may not be possible anymore
-                if (!mFab.isShown()) mFab.show();
+                deleteEntry(id);
             }
         }).attachToRecyclerView(mRecyclerView);
 
@@ -199,20 +198,9 @@ public class ListActivity extends AppCompatActivity
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String texte) {
-                if (!(texte == null || texte.equals(""))) {
-                    // Add text to the list table, shows a message if it is already there
-                    ContentValues values = new ContentValues();
-                    values.put(ListContract.ListEntry.COLUMN_STRING, texte);
-                    Uri uri = getContentResolver().insert(ListContract.ListEntry.CONTENT_URI, values);
-                    if (uri != null && uri.equals(Uri.EMPTY)) {
-                        showMessage(texte + " " + getString(R.string.already));
-                    }
-                    // Add text to the history
-                    ContentValues values2 = new ContentValues();
-                    values2.put(ListContract.HistoryEntry.COLUMN_STRING, texte);
-                    Uri uri2 = getContentResolver().insert(ListContract.HistoryEntry.CONTENT_URI, values2);
-
+            public boolean onQueryTextSubmit(String text) {
+                if (!(text == null || text.equals(""))) {
+                    insertValueIntoTables(text);
                     mSearchView.setQuery("",false);
                 }
                 menuItem.collapseActionView();
@@ -238,6 +226,21 @@ public class ListActivity extends AppCompatActivity
                 ListContract.HistoryEntry._ID,
                 ListContract.HistoryEntry.COLUMN_STRING  };
         return getContentResolver().query(ListContract.HistoryEntry.CONTENT_URI, contactsProjection, select, selectArgs, null);
+    }
+
+    private void insertValueIntoTables(String value) {
+        // Add value to the list table with a default priority, shows a message if it is already there
+        ContentValues values = new ContentValues();
+        values.put(ListContract.ListEntry.COLUMN_STRING, value);
+        values.put(ListContract.ListEntry.COLUMN_PRIORITY, DEFAULT_PRIORITY);
+        Uri uri = getContentResolver().insert(ListContract.ListEntry.CONTENT_URI, values);
+        if (uri != null && uri.equals(Uri.EMPTY)) {
+            showMessage(value + " " + getString(R.string.already));
+        }
+        // Add text to the history
+        ContentValues values2 = new ContentValues();
+        values2.put(ListContract.HistoryEntry.COLUMN_STRING, value);
+        getContentResolver().insert(ListContract.HistoryEntry.CONTENT_URI, values2);
     }
 
     @Override
@@ -272,6 +275,19 @@ public class ListActivity extends AppCompatActivity
                     .setNegativeButton(R.string.cancel_clear, null)
                     .create().show();
         }
+    }
+
+    private void deleteEntry(int id) {
+        String stringId = Integer.toString(id);
+
+        Uri uri = ListContract.ListEntry.CONTENT_URI;
+        uri = uri.buildUpon().appendPath(stringId).build();
+
+        getContentResolver().delete(uri, null, null);
+
+        // Make sure the FAB is visible as scrolling up may not be possible anymore
+        // as elements are deleted.
+        if (!mFab.isShown()) mFab.show();
     }
 
     @Override
@@ -339,6 +355,34 @@ public class ListActivity extends AppCompatActivity
             mRecyclerView.setLayoutManager(mLayoutManager);
         } else if (s.equals(getString(R.string.pref_sort_order_key))) {
             getLoaderManager().restartLoader(LIST_LOADER_ID, null, this);
+        }
+    }
+
+    @Override
+    public void onClick(int id) {
+        updatePriority(id);
+    }
+
+    private void updatePriority(int id) {
+
+        // Check which is the current value for priority
+        String stringId = Integer.toString(id);
+        Uri uri = ListContract.ListEntry.CONTENT_URI;
+        uri = uri.buildUpon().appendPath(stringId).build();
+        String[] columns = { ListContract.ListEntry.COLUMN_PRIORITY };
+        String selection = ListContract.ListEntry._ID + "=?";
+        String [] selectionArgs = new String[] { stringId };
+        Cursor cursor = getContentResolver().query(uri, columns, selection, selectionArgs, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int priority = cursor.getInt(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
+            if (priority == DEFAULT_PRIORITY) priority = HIGH_PRIORITY;
+            else priority = DEFAULT_PRIORITY;
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ListContract.ListEntry.COLUMN_PRIORITY, priority);
+            getContentResolver().update(uri, contentValues, null, null);
+            cursor.close();
         }
     }
 }

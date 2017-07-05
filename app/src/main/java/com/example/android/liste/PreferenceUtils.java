@@ -60,8 +60,9 @@ class PreferenceUtils {
         String sortOrder = sharedPreferences.getString(
                 context.getString(R.string.pref_sort_order_key),
                 context.getString(R.string.pref_sort_order_name_value));
-        if (sortOrder.equals(context.getString(R.string.pref_sort_order_added_value))) {
-            sortOrder = ListContract.ListEntry._ID + " ASC";
+        if (sortOrder.equals(context.getString(R.string.pref_sort_order_priority_value))) {
+            sortOrder = ListContract.ListEntry.COLUMN_PRIORITY + " ASC, "
+                    + ListContract.ListEntry.COLUMN_STRING + " COLLATE LOCALIZED ASC";
         } else {
             // Add COLLATE LOCALIZED to deal with special characters.
             sortOrder = ListContract.ListEntry.COLUMN_STRING + " COLLATE LOCALIZED ASC";

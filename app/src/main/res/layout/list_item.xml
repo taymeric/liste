@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/item_text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="12dp"
-    android:paddingLeft="32dp"
-    android:paddingRight="32dp"
-    android:paddingTop="12dp"
-    tools:text="Texte"/>
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/item_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="12dp"
+        android:paddingEnd="16dp"
+        android:paddingLeft="32dp"
+        android:paddingRight="16dp"
+        android:paddingStart="32dp"
+        android:paddingTop="12dp"
+        tools:text="Texte"/>
+
+    <ImageView
+        android:id="@+id/priority_mark"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_gravity="center"
+        android:alpha="0.5"
+        android:contentDescription="@string/priority_mark"
+        android:src="@drawable/ic_priority_high_black_24dp"/>
+</LinearLayout>

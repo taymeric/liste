@@ -24,7 +24,10 @@
     <string name="one_new_element">produit ajouté à la liste</string>
     <string name="several_new_elements">produits ajoutés à la liste</string>
 
-    <string name="empty_view_title_text">L\'historique est vide. D\'abord, ajoutez des produits depuis l\'écran principal.</string>
+    <string name="empty_image_description">Icône de crayon</string>
+    <string name="empty_view_title_text">L\'historique est vide. Pour commencer, ajoutez des produits depuis l\'écran principal.</string>
+
+    <string name="priority_mark">Point d\'exclamation</string>
 
     <!-- Strings for Settings-->
 
@@ -44,7 +47,5 @@
     <!--Strings for sort order -->
     <string name="pref_sort_order_label">Tri</string>
     <string name="pref_sort_order_by_name_label">Ordre alphabétique</string>
-    <string name="pref_sort_order_by_id_label">Ordre d\'ajout</string>
-    <string name="empty_image_description">Icône de crayon</string>
-
+    <string name="pref_sort_order_by_priority_label">Ordre de priorité</string>
 </resources>

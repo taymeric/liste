@@ -6,35 +6,32 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.Locale;
 
-/**
- * Created by aymeric on 17-04-27.
- */
-
-public class ListDbHelper extends SQLiteOpenHelper {
+class ListDbHelper extends SQLiteOpenHelper {
 
     // To be incremented every time the database schema is changed.
-    public static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
-    public static final String DATABASE_NAME = "list.db";
+    private static final String DATABASE_NAME = "list.db";
 
-    public static final String SQL_CREATE_LIST_ENTRIES =
+    private static final String SQL_CREATE_LIST_ENTRIES =
             "CREATE TABLE " + ListContract.ListEntry.TABLE_NAME + " ("
             + ListContract.ListEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + ListContract.ListEntry.COLUMN_STRING + " TEXT UNIQUE)";
+            + ListContract.ListEntry.COLUMN_STRING + " TEXT UNIQUE NOT NULL, "
+            + ListContract.ListEntry.COLUMN_PRIORITY + " INTEGER NOT NULL)";
 
-    public static final String SQL_DELETE_LIST_ENTRIES =
+    private static final String SQL_DELETE_LIST_ENTRIES =
             "DROP TABLE IF EXISTS " + ListContract.ListEntry.TABLE_NAME;
 
-    public static final String SQL_CREATE_HISTORY_ENTRIES =
+    private static final String SQL_CREATE_HISTORY_ENTRIES =
             "CREATE TABLE " + ListContract.HistoryEntry.TABLE_NAME + " ("
                     + ListContract.HistoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    + ListContract.HistoryEntry.COLUMN_STRING + " TEXT UNIQUE)";
+                    + ListContract.HistoryEntry.COLUMN_STRING + " TEXT UNIQUE NOT NULL)";
 
-    public static final String SQL_DELETE_HISTORY_ENTRIES =
+    private static final String SQL_DELETE_HISTORY_ENTRIES =
             "DROP TABLE IF EXISTS " + ListContract.HistoryEntry.TABLE_NAME;
 
 
-    public ListDbHelper(Context context) {
+    ListDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

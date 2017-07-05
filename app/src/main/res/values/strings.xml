@@ -25,7 +25,9 @@
     <string name="several_new_elements">products added to the list</string>
 
     <string name="empty_image_description">Pen icon</string>
-    <string name="empty_view_title_text">History is empty. First, add products from the main screen.</string>
+    <string name="empty_view_title_text">History is empty. Start by adding products from the main screen.</string>
+
+    <string name="priority_mark">Exclamation mark</string>
 
     <!-- Strings for Settings-->
 
@@ -48,16 +50,16 @@
     <string name="pref_layout_grid_label">Two columns</string>
 
     <string name="pref_list_layout_key" translatable="false">list_layout</string>
-    <string name="pref_history_layout_key" translatable="false">list_layout</string>
+    <string name="pref_history_layout_key" translatable="false">history_layout</string>
     <string name="pref_layout_linear_value" translatable="false">linear</string>
     <string name="pref_layout_grid_value" translatable="false">grid</string>
 
     <!--Strings for sort order -->
     <string name="pref_sort_order_label">Sort</string>
     <string name="pref_sort_order_by_name_label">By name</string>
-    <string name="pref_sort_order_by_id_label">By order of addition</string>
+    <string name="pref_sort_order_by_priority_label">By priority</string>
 
     <string name="pref_sort_order_key" translatable="false">sortorder</string>
     <string name="pref_sort_order_name_value" translatable="false">byname</string>
-    <string name="pref_sort_order_added_value" translatable="false">byadded</string>
+    <string name="pref_sort_order_priority_value" translatable="false">bypriority</string>
 </resources>

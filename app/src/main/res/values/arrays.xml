@@ -22,12 +22,12 @@
 
     <array name="pref_sort_order_option_labels">
         <item>@string/pref_sort_order_by_name_label</item>
-        <item>@string/pref_sort_order_by_id_label</item>
+        <item>@string/pref_sort_order_by_priority_label</item>
     </array>
 
     <array name="pref_sort_order_option_values">
         <item>@string/pref_sort_order_name_value</item>
-        <item>@string/pref_sort_order_added_value</item>
+        <item>@string/pref_sort_order_priority_value</item>
     </array>
 
 </resources>
