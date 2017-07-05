@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -110,7 +111,10 @@ public class ListContentProvider extends ContentProvider {
                         // in order to notify of a duplication (and no insertion).
                         returnUri = ContentUris.withAppendedId(ListContract.ListEntry.CONTENT_URI, id);
                     }
-                } catch (Throwable e) {}
+                }
+                catch (SQLiteConstraintException exception) {
+                    // There is a duplication, don't update returnUri
+                }
                 break;
             case HISTORY:
                 try {
@@ -118,7 +122,10 @@ public class ListContentProvider extends ContentProvider {
                     if (id != -1) {
                         returnUri = ContentUris.withAppendedId(ListContract.HistoryEntry.CONTENT_URI, id);
                     }
-                } catch (Throwable e) {}
+                }
+                catch (SQLiteConstraintException exception) {
+                    // There is a duplication, don't update returnUri
+                }
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

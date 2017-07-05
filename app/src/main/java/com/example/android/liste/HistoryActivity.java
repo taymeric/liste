@@ -23,6 +23,8 @@ import com.example.android.liste.data.ListContract;
 
 import java.util.HashMap;
 
+import static com.example.android.liste.ListActivity.LIST_LOADER_ID;
+
 
 /**
  * HistoryActivity displays the items in the history table.
@@ -85,14 +87,6 @@ public class HistoryActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.history_options, menu);
-
-        // Set up the 'Clear selection' so that it is only visible if there are selected elements.
-        MenuItem button_clear = menu.findItem(R.id.action_clear_selection);
-        if (selectedIds.isEmpty())
-            button_clear.setVisible(false);
-        else
-            button_clear.setVisible(true);
-
         return true;
     }
 
@@ -100,11 +94,9 @@ public class HistoryActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch(id) {
-            case R.id.action_clear_selection:
-                deleteSelectedEntries();
-                return true;
-            case R.id.action_clear_all:
-                deleteAllHistoryEntries();
+            case R.id.action_clear:
+                if (selectedIds.isEmpty()) deleteAllHistoryEntries();
+                else deleteSelectedEntries();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -166,6 +158,7 @@ public class HistoryActivity extends AppCompatActivity
         for (String value: selectedIds.values()) {
             cv = new ContentValues();
             cv.put(ListContract.ListEntry.COLUMN_STRING, value);
+            cv.put(ListContract.ListEntry.COLUMN_PRIORITY, ListActivity.DEFAULT_PRIORITY);
             newuri = getContentResolver().insert(uri, cv);
             if (newuri != null && !newuri.equals(Uri.EMPTY)) nb++;
         }
@@ -235,11 +228,9 @@ public class HistoryActivity extends AppCompatActivity
     private void setFabVisibility() {
         if (!selectedIds.isEmpty() && !mFab.isShown()) {
             mFab.show();
-            invalidateOptionsMenu();
         }
         else if (selectedIds.isEmpty() && mFab.isShown()) {
             mFab.hide();
-            invalidateOptionsMenu();
         }
     }
 

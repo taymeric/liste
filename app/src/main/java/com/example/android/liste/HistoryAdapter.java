@@ -91,6 +91,11 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    void reloadSize() {
+        mTextSize = PreferenceUtils.getTextSizeFromPrefs(
+                mContext, mSharedPreferences, mContext.getString(R.string.pref_history_size_key));
+    }
+
     // Selected elements constitute the HashSet
     void clearSelection() {
         mSelectedPositions.clear();

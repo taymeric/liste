@@ -2,7 +2,6 @@ package com.example.android.liste;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -12,9 +11,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
@@ -62,6 +59,7 @@ public class ListActivity extends AppCompatActivity
     private ListAdapter mAdapter;
     private SharedPreferences mSharedPreferences;
     private SearchView mSearchView;
+    private MenuItem mMenuItem;
 
     // A CursorAdapter for suggestions from the history table when typing
     private SimpleCursorAdapter mCursorAdapter;
@@ -152,8 +150,8 @@ public class ListActivity extends AppCompatActivity
     // The SearchView is the text field in the AppBar used to enter new elements.
     private void setupSearchView(Menu menu) {
 
-        final MenuItem menuItem = menu.findItem(R.id.action_add);
-        mSearchView = (SearchView) menuItem.getActionView();
+        mMenuItem = menu.findItem(R.id.action_add);
+        mSearchView = (SearchView) mMenuItem.getActionView();
         mSearchView.setQueryHint(getString(R.string.search_hint));
         mSearchView.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
@@ -176,7 +174,7 @@ public class ListActivity extends AppCompatActivity
                 return getCursor(str);
             } });
 
-        //mSearchView.setSuggestionsAdapter(mCursorAdapter);
+        mSearchView.setSuggestionsAdapter(mCursorAdapter);
 
         mSearchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
             @Override
@@ -203,7 +201,10 @@ public class ListActivity extends AppCompatActivity
                     insertValueIntoTables(text);
                     mSearchView.setQuery("",false);
                 }
-                menuItem.collapseActionView();
+                // Note: Collapsing the SearchView, whether programmatically with the line below
+                // or manually by clicking the back arrow, creates some warnings (about InputConnection).
+                // It could be that the SearchView is not properly managed...
+                mMenuItem.collapseActionView();
                 return true;
             }
 

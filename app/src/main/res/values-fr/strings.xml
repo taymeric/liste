@@ -4,12 +4,11 @@
     <string name="history_title">Historique</string>
     <string name="settings">Paramètres</string>
 
-    <string name="clear">Effacer la liste</string>
-    <string name="clear_selection">Effacer la sélection</string>
-    <string name="clear_all">Effacer l\'historique</string>
+    <string name="clear_list">Effacer la liste</string>
+    <string name="clear_history">Effacer…</string>
     <string name="message_confirm_clear_list">Effacer la liste actuelle ?</string>
     <string name="message_confirm_clear_selected">Effacer les produits sélectionnés de l\'historique ?</string>
-    <string name="message_confirm_clear_history">Effacer l\'historique ?</string>
+    <string name="message_confirm_clear_history">Effacer tous les produits de l\'historique ?</string>
     <string name="confirm_clear">Oui</string>
     <string name="cancel_clear">Non</string>
     <string name="message_clear_list">Liste vidée !</string>
