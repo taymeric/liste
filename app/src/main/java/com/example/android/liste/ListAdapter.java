@@ -3,6 +3,9 @@ package com.example.android.liste;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -11,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.liste.data.ListContract;
@@ -29,6 +31,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private Context mContext;
     private SharedPreferences mSharedPreferences;
     private float mTextSize;
+    private Drawable mPriorityMark;
     private ListAdapterOnClickListener mListAdapterOnClickListener;
 
     // A Context is needed for PreferenceUtils methods.
@@ -38,6 +41,9 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         mTextSize = PreferenceUtils.getTextSizeFromPrefs(
                 mContext, mSharedPreferences, mContext.getString(R.string.pref_list_size_key));
+        mPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_high_black_24dp);
+        mPriorityMark.setBounds(new Rect(0, 0, (int) mTextSize, (int) mTextSize));
+        mPriorityMark.setAlpha(127);
         setHasStableIds(true);
     }
 
@@ -60,8 +66,10 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             holder.mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
 
             int p = mCursor.getInt(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
-            if (p == ListActivity.HIGH_PRIORITY) holder.mPriorityView.setVisibility(View.VISIBLE);
-            else holder.mPriorityView.setVisibility(View.INVISIBLE);
+            if (p == ListActivity.HIGH_PRIORITY)
+                holder.mTextView.setCompoundDrawables(null, null, mPriorityMark, null);
+            else
+                holder.mTextView.setCompoundDrawables(null, null, null, null);
 
             // A tag containing the Id of the element in the table is needed
             // to handle delete-on-swipe from the List activity.
@@ -102,14 +110,12 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in our case
         TextView mTextView;
-        ImageView mPriorityView;
         int id;
 
         ViewHolder(View itemView) {
             super(itemView);
             mTextView = (TextView) itemView.findViewById(R.id.item_text);
-            mPriorityView = (ImageView) itemView.findViewById(R.id.priority_mark);
-            mTextView.setOnTouchListener(new View.OnTouchListener() {
+            itemView.setOnTouchListener(new View.OnTouchListener() {
                 private GestureDetector gestureDetector = new GestureDetector(
                         mContext, new GestureDetector.SimpleOnGestureListener() {
                     @Override
