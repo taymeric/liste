@@ -19,7 +19,8 @@
         android:paddingRight="24dp"
         android:paddingTop="8dp"
         android:text="@string/history_instructions"
-        android:textAppearance="?android:textAppearanceSmall"/>
+        android:textAppearance="?android:textAppearanceSmall"
+        android:textStyle="italic"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/history_recyclerview"

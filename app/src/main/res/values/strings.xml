@@ -23,7 +23,7 @@
     <string name="one_new_element">product added to the list</string>
     <string name="several_new_elements">products added to the list</string>
 
-    <string name="history_instructions">Select products to add to the list</string>
+    <string name="history_instructions">Select products to add to the list:</string>
     <string name="empty_image_description">Pen icon</string>
     <string name="empty_view_title_text">History is empty. Start by adding products from the main screen.</string>
 
