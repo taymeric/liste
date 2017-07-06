@@ -3,6 +3,7 @@ package com.example.android.liste;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,14 +23,16 @@ import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.FilterQueryProvider;
 import android.widget.Toast;
 
 import com.example.android.liste.data.ListContract;
 
-import static android.R.attr.priority;
 import static com.example.android.liste.R.id.recyclerView;
+
 
 /**
  * ListActivity is the main Activity and displays the items of the 'list' table.
@@ -56,10 +59,12 @@ public class ListActivity extends AppCompatActivity
     private FloatingActionButton mFab;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
+    private ItemTouchHelper.SimpleCallback mSimpleCallback;
     private ListAdapter mAdapter;
     private SharedPreferences mSharedPreferences;
     private SearchView mSearchView;
-    private MenuItem mMenuItem;
+
+    private EditText mEditTextTest;
 
     // A CursorAdapter for suggestions from the history table when typing
     private SimpleCursorAdapter mCursorAdapter;
@@ -112,8 +117,9 @@ public class ListActivity extends AppCompatActivity
             }
         });
 
-        // Delete-on-swipe implementation
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+        // ItemTouchHelper for delete on swipe
+        mSimpleCallback = new ItemTouchHelper.SimpleCallback(0,
+                PreferenceUtils.getDirectionFromPrefs(this, mSharedPreferences)) {
 
             @Override
             public boolean onMove(RecyclerView recyclerView,
@@ -123,13 +129,15 @@ public class ListActivity extends AppCompatActivity
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-
                 // The Adapter stores the Id of the element in the viewHolder
                 int id = (int) viewHolder.itemView.getTag();
-
                 deleteEntry(id);
             }
-        }).attachToRecyclerView(mRecyclerView);
+        };
+        new ItemTouchHelper(mSimpleCallback).attachToRecyclerView(mRecyclerView);
+
+        mEditTextTest = (EditText) findViewById(R.id.edittext);
+        mEditTextTest.setVisibility(View.GONE);
 
         getLoaderManager().initLoader(LIST_LOADER_ID, null, this);
     }
@@ -150,8 +158,8 @@ public class ListActivity extends AppCompatActivity
     // The SearchView is the text field in the AppBar used to enter new elements.
     private void setupSearchView(Menu menu) {
 
-        mMenuItem = menu.findItem(R.id.action_add);
-        mSearchView = (SearchView) mMenuItem.getActionView();
+        final MenuItem menuItem = menu.findItem(R.id.action_add);
+        mSearchView = (SearchView) menuItem.getActionView();
         mSearchView.setQueryHint(getString(R.string.search_hint));
         mSearchView.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
@@ -204,7 +212,7 @@ public class ListActivity extends AppCompatActivity
                 // Note: Collapsing the SearchView, whether programmatically with the line below
                 // or manually by clicking the back arrow, creates some warnings (about InputConnection).
                 // It could be that the SearchView is not properly managed...
-                mMenuItem.collapseActionView();
+                menuItem.collapseActionView();
                 return true;
             }
 
@@ -254,6 +262,16 @@ public class ListActivity extends AppCompatActivity
                 return true;
             case R.id.action_clear :
                 deleteListEntries();
+                return true;
+            case R.id.action_test:
+                int v = mEditTextTest.getVisibility();
+                if (v == View.GONE) {
+                    mEditTextTest.setVisibility(View.VISIBLE);
+                    mEditTextTest.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(mEditTextTest, InputMethodManager.SHOW_IMPLICIT);
+                }
+                else mEditTextTest.setVisibility(View.GONE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -356,6 +374,8 @@ public class ListActivity extends AppCompatActivity
             mRecyclerView.setLayoutManager(mLayoutManager);
         } else if (s.equals(getString(R.string.pref_sort_order_key))) {
             getLoaderManager().restartLoader(LIST_LOADER_ID, null, this);
+        } else if (s.equals(getString(R.string.pref_direction_key))) {
+            updateItemTouchHelper();
         }
     }
 
@@ -386,4 +406,10 @@ public class ListActivity extends AppCompatActivity
             cursor.close();
         }
     }
+
+    private void updateItemTouchHelper() {
+        int direction = PreferenceUtils.getDirectionFromPrefs(this, mSharedPreferences);
+        mSimpleCallback.setDefaultSwipeDirs(direction);
+    }
+
 }

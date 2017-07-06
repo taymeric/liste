@@ -8,6 +8,11 @@
           app:actionViewClass="android.support.v7.widget.SearchView"
           app:showAsAction="always|collapseActionView" />
 
+    <item android:id="@+id/action_test"
+          android:icon="@drawable/ic_alarm_white_24dp"
+          android:title="test"
+          app:showAsAction="always"/>
+
     <item
         android:id="@+id/action_clear"
         android:icon="@drawable/ic_delete_white_24dp"

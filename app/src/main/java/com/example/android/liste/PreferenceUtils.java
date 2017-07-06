@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 
 import com.example.android.liste.data.ListContract;
 
@@ -62,5 +63,14 @@ class PreferenceUtils {
             sortOrder = ListContract.ListEntry.COLUMN_STRING + " COLLATE LOCALIZED ASC";
         }
         return sortOrder;
+    }
+
+    static int getDirectionFromPrefs(Context context, SharedPreferences sharedPreferences) {
+        String directionString = sharedPreferences.getString(
+                context.getString(R.string.pref_direction_key),
+                context.getString(R.string.pref_direction_right_value));
+        if (directionString.equals(context.getString(R.string.pref_direction_right_value)))
+            return ItemTouchHelper.RIGHT;
+        else return ItemTouchHelper.LEFT;
     }
 }
