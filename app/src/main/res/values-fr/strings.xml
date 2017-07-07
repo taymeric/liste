@@ -11,13 +11,10 @@
     <string name="message_confirm_clear_history">Effacer tous les produits de l\'historique ?</string>
     <string name="confirm_clear">Oui</string>
     <string name="cancel_clear">Non</string>
-    <string name="message_clear_list">Liste vidée !</string>
     <string name="element_cleared">produit supprimé de l\'historique</string>
     <string name="elements_cleared">produits supprimés de l\'historique</string>
-    <string name="message_clear_history">Historique vidé !</string>
 
     <string name="add_hint">Ajouter</string>
-    <string name="add_items">Ajouter les produits sélectionnés</string>
     <string name="already">est déjà dans la liste</string>
     <string name="no_new_element">Pas de nouveau produit</string>
     <string name="one_new_element">produit ajouté à la liste</string>
@@ -26,8 +23,6 @@
     <string name="history_instructions">Sélectionner les produits à ajouter à la liste :</string>
     <string name="empty_image_description">Icône de crayon</string>
     <string name="empty_view_title_text">L\'historique est vide. Pour commencer, ajoutez des produits depuis l\'écran principal.</string>
-
-    <string name="priority_mark">Point d\'exclamation</string>
 
     <!-- Strings for Settings-->
 

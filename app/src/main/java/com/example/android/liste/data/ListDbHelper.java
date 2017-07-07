@@ -6,12 +6,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.Locale;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
-
 class ListDbHelper extends SQLiteOpenHelper {
 
     // To be incremented every time the database schema is changed.
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private static final String DATABASE_NAME = "list.db";
 
@@ -29,7 +27,7 @@ class ListDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + ListContract.HistoryEntry.TABLE_NAME + " ("
                     + ListContract.HistoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + ListContract.HistoryEntry.COLUMN_STRING + " TEXT NOT NULL, "
-                    + " UNIQUE (+" + ListContract.HistoryEntry.COLUMN_STRING + ") ON CONFLICT IGNORE);";
+                    + " UNIQUE (" + ListContract.HistoryEntry.COLUMN_STRING + ") ON CONFLICT IGNORE);";
 
     private static final String SQL_DELETE_HISTORY_ENTRIES =
             "DROP TABLE IF EXISTS " + ListContract.HistoryEntry.TABLE_NAME;

@@ -26,9 +26,9 @@ public class SettingsFragment extends PreferenceFragmentCompat
             Preference p = prefScreen.getPreference(i);
             if (p instanceof PreferenceCategory) {
                 // If it's a category, browse all the sub-preferences.
-                PreferenceCategory pcat = (PreferenceCategory) p;
-                for (int j = 0; j < pcat.getPreferenceCount(); j++) {
-                    Preference lp = pcat.getPreference(j);
+                PreferenceCategory pCat = (PreferenceCategory) p;
+                for (int j = 0; j < pCat.getPreferenceCount(); j++) {
+                    Preference lp = pCat.getPreference(j);
                     if (lp instanceof ListPreference) {
                         String value = sharedPreferences.getString(lp.getKey(), "");
                         setPreferenceSummary(lp, value);

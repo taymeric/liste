@@ -23,24 +23,20 @@ import java.util.HashSet;
 
 class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
-    public  static final String TAG = "HistoryAdapter.java";
-
-    private Cursor mCursor;
-    private Context mContext;
-    private SharedPreferences mSharedPreferences;
-    private float mTextSize;
-    private AdapterOnClickHandler mClickHandler;
-
+    final private Context mContext;
+    final private float mTextSize;
+    final private AdapterOnClickHandler mClickHandler;
     // A HashSet that contains selected elements identified by their position
-    private HashSet<Integer> mSelectedPositions;
+    final private HashSet<Integer> mSelectedPositions;
+    private Cursor mCursor;
 
     // A Context is needed for PreferenceUtils methods.
     // An AdapterOnClickHandler is used to interact with History activity.
     HistoryAdapter(Context context, AdapterOnClickHandler clickHandler) {
         mContext = context;
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         mTextSize = PreferenceUtils.getTextSizeFromPrefs(
-                mContext, mSharedPreferences, mContext.getString(R.string.pref_history_size_key));
+                mContext, sharedPreferences, mContext.getString(R.string.pref_history_size_key));
         mSelectedPositions = new HashSet<>();
         mClickHandler = clickHandler;
         setHasStableIds(true);
@@ -91,11 +87,6 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    void reloadSize() {
-        mTextSize = PreferenceUtils.getTextSizeFromPrefs(
-                mContext, mSharedPreferences, mContext.getString(R.string.pref_history_size_key));
-    }
-
     // Selected elements constitute the HashSet
     void clearSelection() {
         mSelectedPositions.clear();
@@ -109,11 +100,11 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     // Provides a reference to the view(s) for each data item
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is just a string in our case
-        TextView mTextView;
+        final TextView mTextView;
 
         ViewHolder(View itemView) {
             super(itemView);
-            mTextView = (TextView) itemView.findViewById(R.id.item_text);
+            mTextView = itemView.findViewById(R.id.item_text);
             itemView.setOnClickListener(this);
         }
 

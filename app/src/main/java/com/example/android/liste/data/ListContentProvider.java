@@ -14,13 +14,14 @@ import android.support.annotation.Nullable;
 public class ListContentProvider extends ContentProvider {
 
     // Constants used to match Uris, see UriMatcher.
-    public static final int LIST = 100;
-    public static final int LIST_ID = 200;
-    public static final int HISTORY = 300;
-    public static final int HISTORY_ID = 400;
+    private static final int LIST = 100;
+    private static final int LIST_ID = 200;
+    private static final int HISTORY = 300;
+    private static final int HISTORY_ID = 400;
+
     // The UriMatcher will match a given Uri with these templates and return a code to identify
     // the table and the specificity of the Uri (single row or full table).
-    private static UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    final private static UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         sUriMatcher.addURI(ListContract.CONTENT_AUTHORITY, ListContract.PATH_LIST, LIST);
@@ -85,9 +86,9 @@ public class ListContentProvider extends ContentProvider {
         }
 
         // Set a notification URI on the Cursor and return that Cursor
-        // The Nofitication Uri allows the cursor to be notified of changes
+        // The Notification Uri allows the cursor to be notified of changes
         // by the other methods (delete, insert, update) that call notifyChange(uri)
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        if (getContext() != null) cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
         // Return the desired Cursor
         return cursor;
@@ -130,7 +131,9 @@ public class ListContentProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        if (id > 0) getContext().getContentResolver().notifyChange(uri, null);
+        if (id > 0) {
+            if (getContext() != null) getContext().getContentResolver().notifyChange(uri, null);
+        }
         return returnUri;
     }
 
@@ -161,7 +164,7 @@ public class ListContentProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
         if (rowsDeleted != 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
+            if (getContext() != null) getContext().getContentResolver().notifyChange(uri, null);
         }
         return rowsDeleted;
     }
@@ -187,7 +190,7 @@ public class ListContentProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
         if (rowsUpdated != 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
+            if (getContext() != null) getContext().getContentResolver().notifyChange(uri, null);
         }
         return rowsUpdated;
     }

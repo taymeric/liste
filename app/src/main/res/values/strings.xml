@@ -11,13 +11,10 @@
     <string name="message_confirm_clear_history">Clear all products from history?</string>
     <string name="confirm_clear">Yes</string>
     <string name="cancel_clear">No</string>
-    <string name="message_clear_list">List cleared!</string>
     <string name="element_cleared">product cleared from history</string>
     <string name="elements_cleared">products cleared from history</string>
-    <string name="message_clear_history">History cleared!</string>
 
     <string name="add_hint">Add</string>
-    <string name="add_items">Add selected products</string>
     <string name="already">is already on the list</string>
     <string name="no_new_element">No new product</string>
     <string name="one_new_element">product added to the list</string>
@@ -26,8 +23,6 @@
     <string name="history_instructions">Select products to add to the list:</string>
     <string name="empty_image_description">Pen icon</string>
     <string name="empty_view_title_text">History is empty. Start by adding products from the main screen.</string>
-
-    <string name="priority_mark">Exclamation mark</string>
 
     <!-- Strings for Settings-->
 
@@ -59,9 +54,9 @@
     <string name="pref_sort_order_by_name_label">By name</string>
     <string name="pref_sort_order_by_priority_label">By priority</string>
 
-    <string name="pref_sort_order_key" translatable="false">sortorder</string>
-    <string name="pref_sort_order_name_value" translatable="false">byname</string>
-    <string name="pref_sort_order_priority_value" translatable="false">bypriority</string>
+    <string name="pref_sort_order_key" translatable="false">sort_order</string>
+    <string name="pref_sort_order_name_value" translatable="false">by_name</string>
+    <string name="pref_sort_order_priority_value" translatable="false">by_priority</string>
 
     <!--Strings for direction of swipe -->
     <string name="pref_direction_label">Swipe to delete</string>

@@ -25,14 +25,12 @@ import com.example.android.liste.data.ListContract;
 
 class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
-    public static final String TAG = "ListAdapter.java";
-
+    final private Context mContext;
+    final private SharedPreferences mSharedPreferences;
+    final private Drawable mPriorityMark;
+    final private ListAdapterOnClickListener mListAdapterOnClickListener;
     private Cursor mCursor;
-    private Context mContext;
-    private SharedPreferences mSharedPreferences;
     private float mTextSize;
-    private Drawable mPriorityMark;
-    private ListAdapterOnClickListener mListAdapterOnClickListener;
 
     // A Context is needed for PreferenceUtils methods.
     ListAdapter(Context context, ListAdapterOnClickListener listener) {
@@ -109,14 +107,14 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     // Provides a reference to the view(s) for each data item
     class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in our case
-        TextView mTextView;
+        final TextView mTextView;
         int id;
 
         ViewHolder(View itemView) {
             super(itemView);
-            mTextView = (TextView) itemView.findViewById(R.id.item_text);
+            mTextView = itemView.findViewById(R.id.item_text);
             itemView.setOnTouchListener(new View.OnTouchListener() {
-                private GestureDetector gestureDetector = new GestureDetector(
+                final private GestureDetector gestureDetector = new GestureDetector(
                         mContext, new GestureDetector.SimpleOnGestureListener() {
                     @Override
                     public boolean onDoubleTap(MotionEvent e) {

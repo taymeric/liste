@@ -3,7 +3,6 @@ package com.example.android.liste;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,9 +23,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.FilterQueryProvider;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,13 +48,10 @@ public class ListActivity extends AppCompatActivity
         ListAdapter.ListAdapterOnClickListener
 {
 
-    public static final int LIST_LOADER_ID = 77;
-    public static final int HISTORY_LOADER_ID = 88;
-    public static final String TAG = "ListActivity.java";
-
     public static final int DEFAULT_PRIORITY = 2;
     public static final int HIGH_PRIORITY = 1;
-
+    private static final int LIST_LOADER_ID = 77;
+    private static final int HISTORY_LOADER_ID = 88;
     private FloatingActionButton mFab;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -139,7 +133,6 @@ public class ListActivity extends AppCompatActivity
         new ItemTouchHelper(mSimpleCallback).attachToRecyclerView(mRecyclerView);
 
         getLoaderManager().initLoader(LIST_LOADER_ID, null, this);
-
     }
 
     @Override
@@ -167,7 +160,7 @@ public class ListActivity extends AppCompatActivity
         mSearchView.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES|InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
 
         // Hack to get suggestions starting from first character typed
-        AutoCompleteTextView searchAutoCompleteTextView = (AutoCompleteTextView) mSearchView.findViewById(getResources().getIdentifier("search_src_text", "id", getPackageName()));
+        AutoCompleteTextView searchAutoCompleteTextView = mSearchView.findViewById(getResources().getIdentifier("search_src_text", "id", getPackageName()));
         searchAutoCompleteTextView.setThreshold(1);
 
         mCursorAdapter = new SimpleCursorAdapter(
@@ -233,7 +226,7 @@ public class ListActivity extends AppCompatActivity
     private void setupAutoCompleteTextView(Menu menu) {
 
         View v = menu.findItem(R.id.action_add2).getActionView();
-        mAutoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.add_textview);
+        mAutoCompleteTextView = v.findViewById(R.id.add_text_view);
 
         mAutoCompleteTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -381,7 +374,7 @@ public class ListActivity extends AppCompatActivity
     /**
      * Shows a toast message.
      */
-    public void showMessage(String message) {
+    private void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 

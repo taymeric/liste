@@ -23,8 +23,6 @@ import com.example.android.liste.data.ListContract;
 
 import java.util.HashMap;
 
-import static com.example.android.liste.ListActivity.LIST_LOADER_ID;
-
 
 /**
  * HistoryActivity displays the items in the history table.
@@ -38,15 +36,12 @@ public class HistoryActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor>,
             HistoryAdapter.AdapterOnClickHandler {
 
-    public static final int HISTORY_LOADER_ID = 99;
-    public static final String TAG = "HistoryActivity.java";
+    private static final int HISTORY_LOADER_ID = 99;
 
     private FloatingActionButton mFab;
     private RecyclerView mRecyclerView;
     private View mEmptyView;
     private HistoryAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private SharedPreferences mSharedPreferences;
 
     // An HashMap is used to store (id, text) pairs of selected elements with no duplication.
     // id is used for deletion and text is used for insertion.
@@ -69,12 +64,12 @@ public class HistoryActivity extends AppCompatActivity
             }
         });
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Set up the Recycler View with its Adapter
-        mRecyclerView = (RecyclerView) findViewById(R.id.history_recyclerview);
-        mLayoutManager = PreferenceUtils.getLayoutFromPrefs(this, mSharedPreferences, getString(R.string.pref_history_layout_key));
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView = (RecyclerView) findViewById(R.id.history_recycler_view);
+        RecyclerView.LayoutManager layoutManager = PreferenceUtils.getLayoutFromPrefs(this, sharedPreferences, getString(R.string.pref_history_layout_key));
+        mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new HistoryAdapter(this, this);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -152,15 +147,15 @@ public class HistoryActivity extends AppCompatActivity
         Uri uri = ListContract.ListEntry.CONTENT_URI;
         int nb = 0;
         ContentValues cv;
-        Uri newuri;
+        Uri newUri;
         // Iterate through all the text values contained in the HasMap of selected elements
         // and add elements with those texts to the list table.
         for (String value: selectedIds.values()) {
             cv = new ContentValues();
             cv.put(ListContract.ListEntry.COLUMN_STRING, value);
             cv.put(ListContract.ListEntry.COLUMN_PRIORITY, ListActivity.DEFAULT_PRIORITY);
-            newuri = getContentResolver().insert(uri, cv);
-            if (newuri != null && !newuri.equals(Uri.EMPTY)) nb++;
+            newUri = getContentResolver().insert(uri, cv);
+            if (newUri != null && !newUri.equals(Uri.EMPTY)) nb++;
         }
 
         switch(nb) {
@@ -209,7 +204,7 @@ public class HistoryActivity extends AppCompatActivity
     /**
      * Shows a toast message.
      */
-    public void showMessage(String message) {
+    private void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 

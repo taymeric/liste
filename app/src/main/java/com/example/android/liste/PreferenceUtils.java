@@ -2,8 +2,6 @@ package com.example.android.liste;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +15,7 @@ import com.example.android.liste.data.ListContract;
 class PreferenceUtils {
 
     /*
-     * In this method, the parameter 'key' differentiate between the RecylerView for the list
+     * In this method, the parameter 'key' differentiate between the RecyclerView for the list
      * and the RecyclerView for the history.
      */
     static float getTextSizeFromPrefs(
@@ -35,7 +33,7 @@ class PreferenceUtils {
     }
 
     /*
-     * In this method, the parameter 'key' differentiate between the RecylerView for the list
+     * In this method, the parameter 'key' differentiate between the RecyclerView for the list
      * and the RecyclerView for the history.
      */
     static RecyclerView.LayoutManager getLayoutFromPrefs(

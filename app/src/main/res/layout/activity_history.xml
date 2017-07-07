@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/history_textview"
+        android:id="@+id/history_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -23,12 +23,12 @@
         android:textStyle="italic"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/history_recyclerview"
+        android:id="@+id/history_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/history_textview"
+        android:layout_below="@+id/history_text_view"
         android:scrollbars="vertical"
         />
 
