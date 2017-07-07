@@ -4,14 +4,16 @@
 
     <item android:id="@+id/action_add"
           android:icon="@drawable/ic_create_white_24dp"
-          android:title="@string/search_hint"
+          android:title="@string/add_hint"
           app:actionViewClass="android.support.v7.widget.SearchView"
           app:showAsAction="always|collapseActionView" />
 
-    <item android:id="@+id/action_test"
-          android:icon="@drawable/ic_alarm_white_24dp"
-          android:title="test"
-          app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_add2"
+        android:icon="@drawable/ic_create_white_24dp"
+        android:title="@string/add_hint"
+        app:actionLayout="@layout/add_layout"
+        app:showAsAction="ifRoom|collapseActionView"/>
 
     <item
         android:id="@+id/action_clear"

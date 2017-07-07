@@ -16,7 +16,7 @@
     <string name="elements_cleared">products cleared from history</string>
     <string name="message_clear_history">History cleared!</string>
 
-    <string name="search_hint">Add</string>
+    <string name="add_hint">Add</string>
     <string name="add_items">Add selected products</string>
     <string name="already">is already on the list</string>
     <string name="no_new_element">No new product</string>

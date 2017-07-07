@@ -20,6 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.FilterQueryProvider;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.liste.data.ListContract;
@@ -64,7 +66,7 @@ public class ListActivity extends AppCompatActivity
     private SharedPreferences mSharedPreferences;
     private SearchView mSearchView;
 
-    private EditText mEditTextTest;
+    private AutoCompleteTextView mAutoCompleteTextView;
 
     // A CursorAdapter for suggestions from the history table when typing
     private SimpleCursorAdapter mCursorAdapter;
@@ -81,8 +83,8 @@ public class ListActivity extends AppCompatActivity
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ListActivity.this, HistoryActivity.class);
-                startActivity(intent);
+            Intent intent = new Intent(ListActivity.this, HistoryActivity.class);
+            startActivity(intent);
             }
         });
 
@@ -136,10 +138,8 @@ public class ListActivity extends AppCompatActivity
         };
         new ItemTouchHelper(mSimpleCallback).attachToRecyclerView(mRecyclerView);
 
-        mEditTextTest = (EditText) findViewById(R.id.edittext);
-        mEditTextTest.setVisibility(View.GONE);
-
         getLoaderManager().initLoader(LIST_LOADER_ID, null, this);
+
     }
 
     @Override
@@ -151,7 +151,10 @@ public class ListActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.list_options, menu);
+
         setupSearchView(menu);
+        setupAutoCompleteTextView(menu);
+
         return true;
     }
 
@@ -160,8 +163,8 @@ public class ListActivity extends AppCompatActivity
 
         final MenuItem menuItem = menu.findItem(R.id.action_add);
         mSearchView = (SearchView) menuItem.getActionView();
-        mSearchView.setQueryHint(getString(R.string.search_hint));
-        mSearchView.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        mSearchView.setQueryHint(getString(R.string.add_hint));
+        mSearchView.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES|InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
 
         // Hack to get suggestions starting from first character typed
         AutoCompleteTextView searchAutoCompleteTextView = (AutoCompleteTextView) mSearchView.findViewById(getResources().getIdentifier("search_src_text", "id", getPackageName()));
@@ -226,6 +229,30 @@ public class ListActivity extends AppCompatActivity
         getLoaderManager().initLoader(HISTORY_LOADER_ID, null, this);
     }
 
+    // TEMPORARY !!?
+    private void setupAutoCompleteTextView(Menu menu) {
+
+        View v = menu.findItem(R.id.action_add2).getActionView();
+        mAutoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.add_textview);
+
+        mAutoCompleteTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                showMessage(mAutoCompleteTextView.getText().toString());
+                return true;
+            }
+        });
+
+
+        if (mCursorAdapter != null) mAutoCompleteTextView.setAdapter(mCursorAdapter);
+        mCursorAdapter.setCursorToStringConverter(new SimpleCursorAdapter.CursorToStringConverter() {
+            @Override
+            public CharSequence convertToString(Cursor cursor) {
+                return cursor.getString(cursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_STRING));
+            }
+        });
+    }
+
     // Helper method to get a Cursor that points to elements of the history table
     // that match the string passed as parameter.
     private Cursor getCursor(CharSequence str) {
@@ -262,16 +289,6 @@ public class ListActivity extends AppCompatActivity
                 return true;
             case R.id.action_clear :
                 deleteListEntries();
-                return true;
-            case R.id.action_test:
-                int v = mEditTextTest.getVisibility();
-                if (v == View.GONE) {
-                    mEditTextTest.setVisibility(View.VISIBLE);
-                    mEditTextTest.requestFocus();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(mEditTextTest, InputMethodManager.SHOW_IMPLICIT);
-                }
-                else mEditTextTest.setVisibility(View.GONE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -353,7 +370,12 @@ public class ListActivity extends AppCompatActivity
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
+        int id = loader.getId();
+        if (id == LIST_LOADER_ID) {
+            mAdapter.swapCursor(null);
+        } else if (id == HISTORY_LOADER_ID) {
+            mCursorAdapter.swapCursor(null);
+        }
     }
 
     /**
