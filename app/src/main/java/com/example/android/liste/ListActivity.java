@@ -3,6 +3,7 @@ package com.example.android.liste;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,17 +13,17 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.FilterQueryProvider;
 import android.widget.TextView;
@@ -58,8 +59,6 @@ public class ListActivity extends AppCompatActivity
     private ItemTouchHelper.SimpleCallback mSimpleCallback;
     private ListAdapter mAdapter;
     private SharedPreferences mSharedPreferences;
-    private SearchView mSearchView;
-
     private AutoCompleteTextView mAutoCompleteTextView;
 
     // A CursorAdapter for suggestions from the history table when typing
@@ -144,24 +143,52 @@ public class ListActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.list_options, menu);
-
-        setupSearchView(menu);
-        setupAutoCompleteTextView(menu);
-
+        setupActionView(menu);
         return true;
     }
 
-    // The SearchView is the text field in the AppBar used to enter new elements.
-    private void setupSearchView(Menu menu) {
+    private void setupActionView(Menu menu) {
 
         final MenuItem menuItem = menu.findItem(R.id.action_add);
-        mSearchView = (SearchView) menuItem.getActionView();
-        mSearchView.setQueryHint(getString(R.string.add_hint));
-        mSearchView.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES|InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
+        View v = menuItem.getActionView();
 
-        // Hack to get suggestions starting from first character typed
-        AutoCompleteTextView searchAutoCompleteTextView = mSearchView.findViewById(getResources().getIdentifier("search_src_text", "id", getPackageName()));
-        searchAutoCompleteTextView.setThreshold(1);
+        MenuItemCompat.OnActionExpandListener expandListener = new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                if (mAutoCompleteTextView != null) {
+                    mAutoCompleteTextView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAutoCompleteTextView.clearFocus();
+                            mAutoCompleteTextView.setText("");
+                            final InputMethodManager inputMethodManager
+                                    = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            inputMethodManager.hideSoftInputFromWindow(findViewById(R.id.main).getWindowToken(), 0);
+                        }
+                    });
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                if (mAutoCompleteTextView != null) {
+                    mAutoCompleteTextView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAutoCompleteTextView.requestFocusFromTouch();
+                            final InputMethodManager inputMethodManager
+                                    = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            inputMethodManager.showSoftInput(mAutoCompleteTextView, InputMethodManager.SHOW_IMPLICIT);
+                        }
+                    });
+                }
+                return true;
+            }
+        };
+        MenuItemCompat.setOnActionExpandListener(menuItem, expandListener);
+
+        mAutoCompleteTextView = v.findViewById(R.id.add_text_view);
 
         mCursorAdapter = new SimpleCursorAdapter(
                 this,
@@ -178,64 +205,18 @@ public class ListActivity extends AppCompatActivity
                 return getCursor(str);
             } });
 
-        mSearchView.setSuggestionsAdapter(mCursorAdapter);
-
-        mSearchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
-            @Override
-            public boolean onSuggestionSelect(int position) {
-                Cursor cursor = (Cursor) mSearchView.getSuggestionsAdapter().getItem(position);
-                String text = cursor.getString(cursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_STRING));
-                mSearchView.setQuery(text, false);
-                return true;
-            }
-
-            @Override
-            public boolean onSuggestionClick(int position) {
-                Cursor cursor = (Cursor) mSearchView.getSuggestionsAdapter().getItem(position);
-                String text = cursor.getString(cursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_STRING));
-                mSearchView.setQuery(text, false);
-                return true;
-            }
-        });
-
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String text) {
-                if (!(text == null || text.equals(""))) {
-                    insertValueIntoTables(text);
-                    mSearchView.setQuery("",false);
-                }
-                // Note: Collapsing the SearchView, whether programmatically with the line below
-                // or manually by clicking the back arrow, creates some warnings (about InputConnection).
-                // It could be that the SearchView is not properly managed...
-                menuItem.collapseActionView();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-
-        // Initialize Loader for history table here to make sure the SearchView has been created.
-        getLoaderManager().initLoader(HISTORY_LOADER_ID, null, this);
-    }
-
-    // TEMPORARY !!?
-    private void setupAutoCompleteTextView(Menu menu) {
-
-        View v = menu.findItem(R.id.action_add2).getActionView();
-        mAutoCompleteTextView = v.findViewById(R.id.add_text_view);
-
         mAutoCompleteTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                showMessage(mAutoCompleteTextView.getText().toString());
+                String text = mAutoCompleteTextView.getText().toString();
+                if (!text.equals("")) {
+                    insertValueIntoTables(text);
+                    mAutoCompleteTextView.setText("");
+                }
+                menuItem.collapseActionView();
                 return true;
             }
         });
-
 
         if (mCursorAdapter != null) mAutoCompleteTextView.setAdapter(mCursorAdapter);
         mCursorAdapter.setCursorToStringConverter(new SimpleCursorAdapter.CursorToStringConverter() {
