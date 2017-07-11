@@ -120,7 +120,6 @@ public class HistoryActivity extends AppCompatActivity
                         selectedIds.clear();
                         setFabVisibility();
                         setRecyclerViewVisibility();
-                        mAdapter.clearSelection();
                         mAdapter.notifyDataSetChanged();
                     }
                 })

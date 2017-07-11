@@ -11,6 +11,8 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.example.android.liste.data.ListContract;
@@ -26,8 +28,6 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     final private Context mContext;
     final private float mTextSize;
     final private AdapterOnClickHandler mClickHandler;
-    // A HashSet that contains selected elements identified by their position
-    final private HashSet<Integer> mSelectedPositions;
     private Cursor mCursor;
 
     // A Context is needed for PreferenceUtils methods.
@@ -37,7 +37,6 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         mTextSize = PreferenceUtils.getTextSizeFromPrefs(
                 mContext, sharedPreferences, mContext.getString(R.string.pref_history_size_key));
-        mSelectedPositions = new HashSet<>();
         mClickHandler = clickHandler;
         setHasStableIds(true);
     }
@@ -57,14 +56,8 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
         // Gets element at position and replaces the contents of the view with that element
         if (mCursor.moveToPosition(position)) {
             String s = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_STRING));
-            holder.mTextView.setText(s);
-            holder.mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
-
-            // Selection of an element is visually materialized by a different background color
-            if (mSelectedPositions.contains(position))
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorAccentLight));
-            else
-                holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.background_material_light));
+            holder.mCheckBox.setText(s);
+            holder.mCheckBox.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
         }
     }
 
@@ -87,44 +80,31 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    // Selected elements constitute the HashSet
-    void clearSelection() {
-        mSelectedPositions.clear();
-    }
-
     // Provides a way to interact with an activity implementing this interface
     interface AdapterOnClickHandler {
         void onClick(String id, String txt);
     }
 
     // Provides a reference to the view(s) for each data item
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        // each data item is just a string in our case
-        final TextView mTextView;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        // each data item is just a string in a checkbox
+        final CheckBox mCheckBox;
 
-        ViewHolder(View itemView) {
+        ViewHolder(final View itemView) {
             super(itemView);
-            mTextView = itemView.findViewById(R.id.item_text);
-            itemView.setOnClickListener(this);
-        }
-
-        // The onClick callback provides a way to both update the HashSet containing the selected
-        // positions (in order to display the correct background) and use the AdapterOnClickHandler
-        // to update the data structure identifying the selected items.
-        @Override
-        public void onClick(View view) {
-            int adapterPosition = getAdapterPosition();
-            mCursor.moveToPosition(adapterPosition);
-
-            if (mSelectedPositions.contains(adapterPosition))
-                mSelectedPositions.remove(adapterPosition);
-            else
-                mSelectedPositions.add(adapterPosition);
-            notifyItemChanged(adapterPosition);
-
-            String id = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry._ID));
-            String txt = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_STRING));
-            mClickHandler.onClick(id, txt);
+            mCheckBox = itemView.findViewById(R.id.item_text);
+            // The OnCheckedChange callback uses the AdapterOnClickHandler
+            // to update the data structure identifying the selected items.
+            mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    int adapterPosition = getAdapterPosition();
+                    mCursor.moveToPosition(adapterPosition);
+                    String id = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry._ID));
+                    String txt = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_STRING));
+                    mClickHandler.onClick(id, txt);
+                }
+            });
         }
     }
 }
