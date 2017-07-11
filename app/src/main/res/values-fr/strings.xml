@@ -2,30 +2,40 @@
 <resources>
     <string name="app_name">Liste d\'épicerie</string>
     <string name="history_title">Historique</string>
-    <string name="settings">Paramètres</string>
 
+    <string name="confirm">Oui</string>
+    <string name="cancel">Non</string>
+
+    <!-- Strings for deletion operations -->
     <string name="clear_list">Effacer la liste</string>
     <string name="clear_history">Effacer…</string>
     <string name="message_confirm_clear_list">Effacer la liste actuelle ?</string>
     <string name="message_confirm_clear_selected">Effacer les produits sélectionnés de l\'historique ?</string>
     <string name="message_confirm_clear_history">Effacer tous les produits de l\'historique ?</string>
-    <string name="confirm_clear">Oui</string>
-    <string name="cancel_clear">Non</string>
     <string name="element_cleared">produit supprimé de l\'historique</string>
     <string name="elements_cleared">produits supprimés de l\'historique</string>
 
+    <!-- Strings for addition operations -->
     <string name="add_hint">Ajouter</string>
     <string name="already">est déjà dans la liste</string>
     <string name="no_new_element">Pas de nouveau produit</string>
     <string name="one_new_element">produit ajouté à la liste</string>
     <string name="several_new_elements">produits ajoutés à la liste</string>
 
+    <!-- Strings for History activity -->
     <string name="history_instructions">Sélectionner les produits à ajouter à la liste :</string>
     <string name="empty_image_description">Icône de crayon</string>
     <string name="empty_view_title_text">L\'historique est vide. Pour commencer, ajoutez des produits depuis l\'écran principal.</string>
 
-    <!-- Strings for Settings-->
+    <!-- Strings for Notification -->
+    <string name="activate_reminder">Activer un rappel</string>
+    <string name="Notification_title">Rappel de la liste d\'épicerie</string>
+    <string name="Notification_text">Il y a des produits dans la liste d\'épicerie.</string>
+    <string name="notification_dialog_message">Voulez-vous recevoir une notification de rappel ?</string>
+    <string name="notification_picker_message">Sélectionner l\'heure à laquelle afficher une notification de rappel</string>
 
+    <!-- Strings for Settings-->
+    <string name="settings">Paramètres</string>
     <string name="list_label">Liste</string>
     <string name="history_label">Historique</string>
 

@@ -101,7 +101,7 @@ public class HistoryActivity extends AppCompatActivity
     private void deleteSelectedEntries() {
         new AlertDialog.Builder(HistoryActivity.this)
                 .setMessage(getString(R.string.message_confirm_clear_selected))
-                .setPositiveButton(R.string.confirm_clear, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         int nb = 0;
@@ -123,7 +123,7 @@ public class HistoryActivity extends AppCompatActivity
                         mAdapter.notifyDataSetChanged();
                     }
                 })
-                .setNegativeButton(R.string.cancel_clear, null)
+                .setNegativeButton(R.string.cancel, null)
                 .create().show();
     }
 
@@ -131,13 +131,13 @@ public class HistoryActivity extends AppCompatActivity
         if (mAdapter.getItemCount() != 0) {
             new AlertDialog.Builder(HistoryActivity.this)
                     .setMessage(getString(R.string.message_confirm_clear_history))
-                    .setPositiveButton(R.string.confirm_clear, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             getContentResolver().delete(ListContract.HistoryEntry.CONTENT_URI, null, null);
                         }
                     })
-                    .setNegativeButton(R.string.cancel_clear, null)
+                    .setNegativeButton(R.string.cancel, null)
                     .create().show();
         }
     }

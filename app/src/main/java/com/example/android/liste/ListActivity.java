@@ -1,7 +1,11 @@
 package com.example.android.liste;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -10,15 +14,20 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.icu.util.TimeZone;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,12 +36,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.FilterQueryProvider;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.android.liste.data.ListContract;
 
-import static com.example.android.liste.R.id.recyclerView;
+import java.sql.Time;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
+import static android.R.attr.delay;
 
 /**
  * ListActivity is the main Activity and displays the items of the 'list' table.
@@ -53,6 +66,8 @@ public class ListActivity extends AppCompatActivity
     public static final int HIGH_PRIORITY = 1;
     private static final int LIST_LOADER_ID = 77;
     private static final int HISTORY_LOADER_ID = 88;
+    private static final int LIST_NOTIFICATION_ID = 101;
+
     private FloatingActionButton mFab;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -82,7 +97,7 @@ public class ListActivity extends AppCompatActivity
         });
 
         // Set up the Recycler View and its Adapter
-        mRecyclerView = (RecyclerView) findViewById(recyclerView);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mLayoutManager = PreferenceUtils.getLayoutFromPrefs(this, mSharedPreferences, getString(R.string.pref_list_layout_key));
         mRecyclerView.setLayoutManager(mLayoutManager);
         //mRecyclerView.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
@@ -257,12 +272,16 @@ public class ListActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch(id) {
-            case R.id.action_settings :
+            case R.id.action_settings:
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 return true;
-            case R.id.action_clear :
+            case R.id.action_clear:
                 deleteListEntries();
+                return true;
+            case R.id.action_notify:
+                //showNotificationDialog();
+                showNotificationTimePicker();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -273,7 +292,7 @@ public class ListActivity extends AppCompatActivity
         if (mAdapter.getItemCount() != 0) {
             new AlertDialog.Builder(ListActivity.this)
                     .setMessage(getString(R.string.message_confirm_clear_list))
-                    .setPositiveButton(R.string.confirm_clear, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             getContentResolver().delete(ListContract.ListEntry.CONTENT_URI, null, null);
@@ -282,7 +301,7 @@ public class ListActivity extends AppCompatActivity
                             if (!mFab.isShown()) mFab.show();
                         }
                     })
-                    .setNegativeButton(R.string.cancel_clear, null)
+                    .setNegativeButton(R.string.cancel, null)
                     .create().show();
         }
     }
@@ -359,7 +378,9 @@ public class ListActivity extends AppCompatActivity
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    /* If a preference has been modified, makes the necessary calls in order to update display */
+    /**
+     * If a preference has been modified, makes the necessary calls in order to update display
+     */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         if (s.equals(getString(R.string.pref_list_size_key))) {
@@ -408,4 +429,93 @@ public class ListActivity extends AppCompatActivity
         mSimpleCallback.setDefaultSwipeDirs(direction);
     }
 
+    // Testing notifications
+    private void showNotificationDialog() {
+        new AlertDialog.Builder(ListActivity.this)
+                .setMessage(R.string.notification_dialog_message)
+                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        activateReminderDelay(10000);
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .create().show();
+    }
+
+    private void showNotificationTimePicker() {
+        Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+
+        final TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                activateReminderTime(hour, minute);
+            }
+        };
+
+        TimePickerDialog pickerDialog = new TimePickerDialog(
+                this,
+                listener,
+                hour,
+                minute,
+                DateFormat.is24HourFormat(this));
+
+        //pickerDialog.setTitle(getString(R.string.notification_picker_message));
+        pickerDialog.show();
+    }
+
+
+    private void activateReminderDelay(int delay) {
+
+        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, LIST_NOTIFICATION_ID);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, getNotification());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        //delay = 10000; // 10 seconds
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+    private void activateReminderTime(int hour, int minute) {
+
+        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, LIST_NOTIFICATION_ID);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, getNotification());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Calendar cur_cal = Calendar.getInstance();
+        Calendar cal = new GregorianCalendar();
+        cal.add(Calendar.DAY_OF_YEAR, cur_cal.get(Calendar.DAY_OF_YEAR));
+        cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.MINUTE, minute);
+        cal.set(Calendar.SECOND, cur_cal.get(Calendar.SECOND));
+        cal.set(Calendar.MILLISECOND, cur_cal.get(Calendar.MILLISECOND));
+        cal.set(Calendar.DATE, cur_cal.get(Calendar.DATE));
+        cal.set(Calendar.MONTH, cur_cal.get(Calendar.MONTH));
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+    }
+
+    // Method for creating the Notification object
+    private Notification getNotification() {
+        NotificationCompat.Builder mBuilder = (NotificationCompat.Builder)
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_shopping_basket_white_24dp)
+                        .setContentTitle(getString(R.string.notification_title))
+                        .setContentText(getString(R.string.notification_text))
+                        .setColor(ContextCompat.getColor(this, R.color.colorAccent))
+                        .setAutoCancel(true);
+
+        // Creates an explicit intent for an Activity in the app
+        Intent resultIntent = new Intent(this, ListActivity.class);
+
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+        return mBuilder.build();
+    }
 }
