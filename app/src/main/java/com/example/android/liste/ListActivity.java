@@ -14,7 +14,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.icu.util.TimeZone;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -41,11 +40,8 @@ import android.widget.Toast;
 
 import com.example.android.liste.data.ListContract;
 
-import java.sql.Time;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
-import static android.R.attr.delay;
 
 /**
  * ListActivity is the main Activity and displays the items of the 'list' table.
@@ -158,6 +154,7 @@ public class ListActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.list_options, menu);
+        setupAlarmButtons(menu);
         setupActionView(menu);
         return true;
     }
@@ -242,6 +239,14 @@ public class ListActivity extends AppCompatActivity
         });
     }
 
+    private void setupAlarmButtons(Menu menu) {
+        boolean isAlarmSet = mSharedPreferences.getBoolean(getString(R.string.alarm_on), false);
+        MenuItem alarmSettingButton = menu.findItem(R.id.action_notify);
+        alarmSettingButton.setVisible(!isAlarmSet);
+        MenuItem alarmCancelButton = menu.findItem(R.id.action_alarm_info);
+        alarmCancelButton.setVisible(isAlarmSet);
+    }
+
     // Helper method to get a Cursor that points to elements of the history table
     // that match the string passed as parameter.
     private Cursor getCursor(CharSequence str) {
@@ -280,8 +285,10 @@ public class ListActivity extends AppCompatActivity
                 deleteListEntries();
                 return true;
             case R.id.action_notify:
-                //showNotificationDialog();
                 showNotificationTimePicker();
+                return true;
+            case R.id.action_alarm_info:
+                showNotificationCancelingDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -393,6 +400,8 @@ public class ListActivity extends AppCompatActivity
             getLoaderManager().restartLoader(LIST_LOADER_ID, null, this);
         } else if (s.equals(getString(R.string.pref_direction_key))) {
             updateItemTouchHelper();
+        } else if (s.equals(getString(R.string.alarm_on))) {
+            invalidateOptionsMenu();
         }
     }
 
@@ -429,43 +438,34 @@ public class ListActivity extends AppCompatActivity
         mSimpleCallback.setDefaultSwipeDirs(direction);
     }
 
-    // Testing notifications
-    private void showNotificationDialog() {
+    private void cancelReminder() {
+        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, LIST_NOTIFICATION_ID);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, getNotification());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putBoolean(getString(R.string.alarm_on), false);
+        editor.commit();
+        invalidateOptionsMenu();
+    }
+
+    private void showNotificationCancelingDialog() {
+        String time = mSharedPreferences.getString(getString(R.string.alarm_time) , "00:00");
         new AlertDialog.Builder(ListActivity.this)
-                .setMessage(R.string.notification_dialog_message)
-                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                .setMessage(getString(R.string.alarm_set_message) + " " + time + ".")
+                .setPositiveButton(android.R.string.ok, null)
+                .setNegativeButton(R.string.remove, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        activateReminderDelay(10000);
+                        cancelReminder();
                     }
                 })
-                .setNegativeButton(R.string.cancel, null)
                 .create().show();
     }
-
-    private void showNotificationTimePicker() {
-        Calendar c = Calendar.getInstance();
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-        int minute = c.get(Calendar.MINUTE);
-
-        final TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                activateReminderTime(hour, minute);
-            }
-        };
-
-        TimePickerDialog pickerDialog = new TimePickerDialog(
-                this,
-                listener,
-                hour,
-                minute,
-                DateFormat.is24HourFormat(this));
-
-        //pickerDialog.setTitle(getString(R.string.notification_picker_message));
-        pickerDialog.show();
-    }
-
 
     private void activateReminderDelay(int delay) {
 
@@ -480,6 +480,32 @@ public class ListActivity extends AppCompatActivity
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
+    private void showNotificationTimePicker() {
+        Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+
+        final TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                activateReminderTime(hour, minute);
+                String time = hour + ":" + minute;
+                SharedPreferences.Editor editor = mSharedPreferences.edit();
+                editor.putString(getString(R.string.alarm_time), time);
+                editor.commit();
+            }
+        };
+
+        TimePickerDialog pickerDialog = new TimePickerDialog(
+                this,
+                listener,
+                hour,
+                minute,
+                DateFormat.is24HourFormat(this));
+
+        pickerDialog.show();
+    }
+
     private void activateReminderTime(int hour, int minute) {
 
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
@@ -487,18 +513,17 @@ public class ListActivity extends AppCompatActivity
         notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, getNotification());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Calendar cur_cal = Calendar.getInstance();
-        Calendar cal = new GregorianCalendar();
-        cal.add(Calendar.DAY_OF_YEAR, cur_cal.get(Calendar.DAY_OF_YEAR));
+        Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, minute);
-        cal.set(Calendar.SECOND, cur_cal.get(Calendar.SECOND));
-        cal.set(Calendar.MILLISECOND, cur_cal.get(Calendar.MILLISECOND));
-        cal.set(Calendar.DATE, cur_cal.get(Calendar.DATE));
-        cal.set(Calendar.MONTH, cur_cal.get(Calendar.MONTH));
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putBoolean(getString(R.string.alarm_on), true);
+        editor.commit();
+        invalidateOptionsMenu();
     }
 
     // Method for creating the Notification object

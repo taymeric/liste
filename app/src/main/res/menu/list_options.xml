@@ -15,10 +15,15 @@
         app:actionLayout="@layout/add_layout"
         app:showAsAction="ifRoom|collapseActionView"/>
 
+    <item android:id="@+id/action_alarm_info"
+          android:icon="@drawable/ic_alarm_on_white_24dp"
+          android:title="@string/activate_reminder"
+          app:showAsAction="ifRoom"/>
+
     <item android:id="@+id/action_notify"
           android:icon="@drawable/ic_alarm_white_24dp"
           android:title="@string/activate_reminder"
-          app:showAsAction="ifRoom"/>
+          app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_clear"

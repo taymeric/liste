@@ -5,6 +5,7 @@
 
     <string name="confirm">Oui</string>
     <string name="cancel">Non</string>
+    <string name="remove">Supprimer</string>
 
     <!-- Strings for deletion operations -->
     <string name="clear_list">Effacer la liste</string>
@@ -29,10 +30,12 @@
 
     <!-- Strings for Notification -->
     <string name="activate_reminder">Activer un rappel</string>
+    <string name="cancel_reminder">Annuler le rappel</string>
     <string name="Notification_title">Rappel de la liste d\'épicerie</string>
     <string name="Notification_text">Il y a des produits dans la liste d\'épicerie.</string>
     <string name="notification_dialog_message">Voulez-vous recevoir une notification de rappel ?</string>
     <string name="notification_picker_message">Sélectionner l\'heure à laquelle afficher une notification de rappel</string>
+    <string name="alarm_set_message">Une notification de rappel sera déclenchée à</string>
 
     <!-- Strings for Settings-->
     <string name="settings">Paramètres</string>
