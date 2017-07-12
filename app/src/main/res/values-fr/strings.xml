@@ -31,14 +31,17 @@
     <!-- Strings for Notification -->
     <string name="activate_reminder">Activer un rappel</string>
     <string name="cancel_reminder">Annuler le rappel</string>
-    <string name="Notification_title">Rappel de la liste d\'épicerie</string>
-    <string name="Notification_text">Il y a des produits dans la liste d\'épicerie.</string>
+    <string name="notification_title">Rappel de la liste d\'épicerie</string>
+    <string name="notification_text">Il y a des produits dans la liste d\'épicerie.</string>
     <string name="notification_dialog_message">Voulez-vous recevoir une notification de rappel ?</string>
     <string name="notification_picker_message">Sélectionner l\'heure à laquelle afficher une notification de rappel</string>
     <string name="alarm_set_message">Une notification de rappel sera déclenchée à</string>
 
+    <!-- Strings for email sending -->
+    <string name="share_email">Partager par email</string>
+
     <!-- Strings for Settings-->
-    <string name="settings">Paramètres</string>
+    <string name="settings">Préférences</string>
     <string name="list_label">Liste</string>
     <string name="history_label">Historique</string>
 

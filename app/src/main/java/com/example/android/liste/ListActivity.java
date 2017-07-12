@@ -41,6 +41,7 @@ import android.widget.Toast;
 import com.example.android.liste.data.ListContract;
 
 import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -290,6 +291,9 @@ public class ListActivity extends AppCompatActivity
             case R.id.action_alarm_info:
                 showNotificationCancelingDialog();
                 return true;
+            case R.id.action_email:
+                sendByEmail();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -489,10 +493,6 @@ public class ListActivity extends AppCompatActivity
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 activateReminderTime(hour, minute);
-                String time = hour + ":" + minute;
-                SharedPreferences.Editor editor = mSharedPreferences.edit();
-                editor.putString(getString(R.string.alarm_time), time);
-                editor.commit();
             }
         };
 
@@ -522,7 +522,11 @@ public class ListActivity extends AppCompatActivity
 
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putBoolean(getString(R.string.alarm_on), true);
-        editor.commit();
+        Date timeDate = cal.getTime();
+        java.text.DateFormat formatter = DateFormat.getTimeFormat(this);
+        String time = formatter.format(timeDate);
+        editor.putString(getString(R.string.alarm_time), time);
+        editor.apply();
         invalidateOptionsMenu();
     }
 
@@ -542,5 +546,31 @@ public class ListActivity extends AppCompatActivity
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(resultPendingIntent);
         return mBuilder.build();
+    }
+
+    private void sendByEmail() {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+        intent.putExtra(Intent.EXTRA_TEXT, getListAsString());
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
+    private String getListAsString() {
+        String list = "";
+        Uri uri = ListContract.ListEntry.CONTENT_URI;
+        String[] projection  = {ListContract.ListEntry.COLUMN_STRING, ListContract.ListEntry.COLUMN_PRIORITY};
+        String sortOrder = PreferenceUtils.getSortOrderFromPrefs(this, mSharedPreferences);
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, sortOrder);
+        while(cursor.moveToNext()) {
+            list = list + cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_STRING));
+            int p = cursor.getInt(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
+            if (p == HIGH_PRIORITY) list = list + " !\n";
+            else list = list + "\n";
+        }
+        cursor.close();
+        return list;
     }
 }

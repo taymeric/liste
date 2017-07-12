@@ -39,6 +39,9 @@
     <string name="alarm_time" translatable="false">alarm_time</string>
     <string name="alarm_set_message">A reminder notification will be triggered at</string>
 
+    <!-- Strings for email sending -->
+    <string name="share_email">Share by email</string>
+
     <!-- Strings for Settings -->
     <string name="settings">Settings</string>
     <string name="list_label">List</string>
