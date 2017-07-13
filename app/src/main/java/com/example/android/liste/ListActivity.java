@@ -28,9 +28,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.format.DateFormat;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.FilterQueryProvider;
@@ -451,18 +453,16 @@ public class ListActivity extends AppCompatActivity
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
 
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putBoolean(getString(R.string.alarm_on), false);
-        editor.commit();
+        PreferenceUtils.setAlarmIndicator(this, mSharedPreferences, false, null);
         invalidateOptionsMenu();
     }
 
     private void showNotificationCancelingDialog() {
         String time = mSharedPreferences.getString(getString(R.string.alarm_time) , "00:00");
         new AlertDialog.Builder(ListActivity.this)
-                .setMessage(getString(R.string.alarm_set_message) + " " + time + ".")
+                .setMessage(getString(R.string.alarm_set_message) + " " + time + " " + getString(R.string.today) + ".")
                 .setPositiveButton(android.R.string.ok, null)
-                .setNegativeButton(R.string.remove, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.deactivate, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         cancelReminder();
@@ -503,6 +503,11 @@ public class ListActivity extends AppCompatActivity
                 minute,
                 DateFormat.is24HourFormat(this));
 
+        LayoutInflater inflater = getLayoutInflater();
+        final ViewGroup nullParent = null;
+        View v = inflater.inflate(R.layout.picker_layout, nullParent);
+        pickerDialog.setCustomTitle(v);
+
         pickerDialog.show();
     }
 
@@ -520,13 +525,10 @@ public class ListActivity extends AppCompatActivity
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
 
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putBoolean(getString(R.string.alarm_on), true);
         Date timeDate = cal.getTime();
         java.text.DateFormat formatter = DateFormat.getTimeFormat(this);
         String time = formatter.format(timeDate);
-        editor.putString(getString(R.string.alarm_time), time);
-        editor.apply();
+        PreferenceUtils.setAlarmIndicator(this, mSharedPreferences, true, time);
         invalidateOptionsMenu();
     }
 
@@ -536,9 +538,10 @@ public class ListActivity extends AppCompatActivity
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_shopping_basket_white_24dp)
                         .setContentTitle(getString(R.string.notification_title))
-                        .setContentText(getString(R.string.notification_text))
+                        .setContentText(getListAsString(true))
                         .setColor(ContextCompat.getColor(this, R.color.colorAccent))
-                        .setAutoCancel(true);
+                        .setAutoCancel(true)
+                        .setDefaults(Notification.DEFAULT_VIBRATE);
 
         // Creates an explicit intent for an Activity in the app
         Intent resultIntent = new Intent(this, ListActivity.class);
@@ -551,26 +554,41 @@ public class ListActivity extends AppCompatActivity
     private void sendByEmail() {
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setData(Uri.parse("mailto:")); // only email apps should handle this
-        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-        intent.putExtra(Intent.EXTRA_TEXT, getListAsString());
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " " + getDate());
+        intent.putExtra(Intent.EXTRA_TEXT, getListAsString(false));
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
     }
 
-    private String getListAsString() {
+    private String getDate() {
+        Calendar c = Calendar.getInstance();
+        Date date = c.getTime();
+        java.text.DateFormat formatter = DateFormat.getDateFormat(this);
+        return formatter.format(date);
+    }
+
+    private String getListAsString(boolean forNotification) {
         String list = "";
         Uri uri = ListContract.ListEntry.CONTENT_URI;
         String[] projection  = {ListContract.ListEntry.COLUMN_STRING, ListContract.ListEntry.COLUMN_PRIORITY};
-        String sortOrder = PreferenceUtils.getSortOrderFromPrefs(this, mSharedPreferences);
+        String sortOrder;
+        if (!forNotification) sortOrder = PreferenceUtils.getSortOrderFromPrefs(this, mSharedPreferences);
+        else sortOrder = ListContract.ListEntry.COLUMN_PRIORITY + " ASC, "
+                + ListContract.ListEntry.COLUMN_STRING + " COLLATE LOCALIZED ASC";
         Cursor cursor = getContentResolver().query(uri, projection, null, null, sortOrder);
-        while(cursor.moveToNext()) {
-            list = list + cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_STRING));
-            int p = cursor.getInt(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
-            if (p == HIGH_PRIORITY) list = list + " !\n";
-            else list = list + "\n";
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                if (!forNotification) list = list + "* ";
+                list = list + cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_STRING));
+                int p = cursor.getInt(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
+                if (p == HIGH_PRIORITY && !forNotification) list = list + " !";
+                if (!forNotification) list = list + "\n";
+                else list = list + ", ";
+
+            }
+            cursor.close();
         }
-        cursor.close();
         return list;
     }
 }

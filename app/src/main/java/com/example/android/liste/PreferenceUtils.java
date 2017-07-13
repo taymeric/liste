@@ -2,9 +2,9 @@ package com.example.android.liste;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
 import com.example.android.liste.data.ListContract;
@@ -43,7 +43,8 @@ class PreferenceUtils {
                 key,
                 context.getString(R.string.pref_layout_linear_value));
         if (value.equals(context.getString(R.string.pref_layout_grid_value))) {
-            return new GridLayoutManager(context, 2);
+            //return new GridLayoutManager(context, 2);
+            return new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         }
         else
             return new LinearLayoutManager(context);
@@ -70,5 +71,14 @@ class PreferenceUtils {
         if (directionString.equals(context.getString(R.string.pref_direction_right_value)))
             return ItemTouchHelper.RIGHT;
         else return ItemTouchHelper.LEFT;
+    }
+
+    // Sets the value of 'alarm_on' which indicated if a reminder is planned.
+    // If it is on (true), then also sets the planned time as a String representation.
+    static void setAlarmIndicator(Context context, SharedPreferences sharedPreferences, boolean is_on, String time) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(context.getString(R.string.alarm_on), is_on);
+        if (is_on && time != null) editor.putString(context.getString(R.string.alarm_time), time);
+        editor.apply();
     }
 }

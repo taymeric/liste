@@ -24,8 +24,6 @@ public class NotificationReceiver extends BroadcastReceiver {
         notificationManager.notify(id, notification);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(context.getString(R.string.alarm_on), false);
-        editor.commit();
+        PreferenceUtils.setAlarmIndicator(context, sharedPreferences, false, null);
     }
 }

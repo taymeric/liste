@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -13,11 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 
 import com.example.android.liste.data.ListContract;
 
-import java.util.HashSet;
 
 /**
  * Adapter class to manage display of items in the recycler view for the history.
@@ -25,7 +22,6 @@ import java.util.HashSet;
 
 class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
-    final private Context mContext;
     final private float mTextSize;
     final private AdapterOnClickHandler mClickHandler;
     private Cursor mCursor;
@@ -33,10 +29,9 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     // A Context is needed for PreferenceUtils methods.
     // An AdapterOnClickHandler is used to interact with History activity.
     HistoryAdapter(Context context, AdapterOnClickHandler clickHandler) {
-        mContext = context;
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mTextSize = PreferenceUtils.getTextSizeFromPrefs(
-                mContext, sharedPreferences, mContext.getString(R.string.pref_history_size_key));
+                context, sharedPreferences, context.getString(R.string.pref_history_size_key));
         mClickHandler = clickHandler;
         setHasStableIds(true);
     }

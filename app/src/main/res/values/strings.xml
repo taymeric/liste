@@ -5,7 +5,6 @@
 
     <string name="confirm">Yes</string>
     <string name="cancel">No</string>
-    <string name="remove">Remove</string>
 
     <!-- Strings for deletion operations -->
     <string name="clear_list">Clear list</string>
@@ -30,14 +29,14 @@
 
     <!-- Strings for Notification -->
     <string name="activate_reminder">Activate a reminder</string>
-    <string name="cancel_reminder">Cancel the remdinder</string>
-    <string name="notification_title">Grocery List reminder</string>
-    <string name="notification_text">There are products in the grocery list.</string>
-    <string name="notification_dialog_message">Do you want to show a notification reminder?</string>
+    <string name="reminder_info">Get reminder info</string>
+    <string name="deactivate">Deactivate</string>
+    <string name="notification_title">Products in the grocery list:</string>
     <string name="notification_picker_message">Select the time to display a notification reminder</string>
     <string name="alarm_on" translatable="false">alarm_on</string>
     <string name="alarm_time" translatable="false">alarm_time</string>
     <string name="alarm_set_message">A reminder notification will be triggered at</string>
+    <string name="today">today</string>
 
     <!-- Strings for email sending -->
     <string name="share_email">Share by email</string>

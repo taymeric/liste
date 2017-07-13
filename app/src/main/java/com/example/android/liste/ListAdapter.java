@@ -40,7 +40,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         mTextSize = PreferenceUtils.getTextSizeFromPrefs(
                 mContext, mSharedPreferences, mContext.getString(R.string.pref_list_size_key));
         //mPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_high_black_24dp);
-        mPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_high_blue);
+        mPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_high_color);
         mPriorityMark.setBounds(new Rect(0, 0, (int) mTextSize, (int) mTextSize));
         mPriorityMark.setAlpha(127);
         setHasStableIds(true);
