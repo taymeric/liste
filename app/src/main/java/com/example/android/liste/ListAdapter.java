@@ -50,7 +50,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     @Override
     public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item, parent, false);
+                .inflate(R.layout.list_item_card, parent, false);
         return new ViewHolder(v);
     }
 
@@ -60,7 +60,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         // Gets element at position and replaces the contents of the view with that element
         if (mCursor.moveToPosition(position)) {
 
-            String s = mCursor.getString(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_STRING));
+            String s = "- " + mCursor.getString(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_STRING));
             holder.mTextView.setText(s);
             holder.mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
 

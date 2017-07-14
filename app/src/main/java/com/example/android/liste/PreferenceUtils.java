@@ -2,6 +2,7 @@ package com.example.android.liste;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -43,7 +44,8 @@ class PreferenceUtils {
                 key,
                 context.getString(R.string.pref_layout_linear_value));
         if (value.equals(context.getString(R.string.pref_layout_grid_value))) {
-            //return new GridLayoutManager(context, 2);
+            return new GridLayoutManager(context, 2);
+        } else if (value.equals(context.getString(R.string.pref_layout_staggered_grid_value))) {
             return new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         }
         else
@@ -70,7 +72,9 @@ class PreferenceUtils {
                 context.getString(R.string.pref_direction_right_value));
         if (directionString.equals(context.getString(R.string.pref_direction_right_value)))
             return ItemTouchHelper.RIGHT;
-        else return ItemTouchHelper.LEFT;
+        else if (directionString.equals(context.getString(R.string.pref_direction_left_value)))
+            return ItemTouchHelper.LEFT;
+        else return ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
     }
 
     // Sets the value of 'alarm_on' which indicated if a reminder is planned.

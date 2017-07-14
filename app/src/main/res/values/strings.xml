@@ -10,8 +10,9 @@
     <string name="clear_list">Clear list</string>
     <string name="clear_history">Clear…</string>
     <string name="message_confirm_clear_list">Clear current list?</string>
+    <string name="message_confirm_clear_list_tip">(Tip: Swipe a single element to delete it from the list.)</string>
     <string name="message_confirm_clear_selected">Clear selected products from history?</string>
-    <string name="message_confirm_clear_history">Clear all products from history?</string>
+    <string name="message_confirm_clear_history">Clear ALL products from history?</string>
     <string name="element_cleared">product cleared from history</string>
     <string name="elements_cleared">products cleared from history</string>
 
@@ -65,6 +66,7 @@
     <string name="pref_history_layout_key" translatable="false">history_layout</string>
     <string name="pref_layout_linear_value" translatable="false">linear</string>
     <string name="pref_layout_grid_value" translatable="false">grid</string>
+    <string name="pref_layout_staggered_grid_value" translatable="false">staggered</string>
 
     <!--Strings for sort order -->
     <string name="pref_sort_order_label">Sort</string>
@@ -79,8 +81,10 @@
     <string name="pref_direction_label">Swipe to delete</string>
     <string name="pref_direction_right_label">To the right</string>
     <string name="pref_direction_left_label">To the left</string>
+    <string name="pref_direction_both_label">To both directions (!)</string>
 
     <string name="pref_direction_key" translatable="false">direction</string>
     <string name="pref_direction_right_value" translatable="false">right</string>
     <string name="pref_direction_left_value" translatable="false">left</string>
+    <string name="pref_direction_both_value" translatable="false">both</string>
 </resources>

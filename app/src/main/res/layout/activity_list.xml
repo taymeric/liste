@@ -10,10 +10,12 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="16dp"
         android:clipToPadding="false"
-        android:paddingTop="8dp"
+        android:overScrollMode="never"
         android:scrollbars="vertical"
         />
+    <!--android:paddingTop="8dp"-->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"

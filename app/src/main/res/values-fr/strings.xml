@@ -10,8 +10,9 @@
     <string name="clear_list">Effacer la liste</string>
     <string name="clear_history">Effacer…</string>
     <string name="message_confirm_clear_list">Effacer la liste actuelle ?</string>
+    <string name="message_confirm_clear_list_tip">(Astuce : Balayer un seul élément avec le doigt pour le supprimer de la liste.)</string>
     <string name="message_confirm_clear_selected">Effacer les produits sélectionnés de l\'historique ?</string>
-    <string name="message_confirm_clear_history">Effacer tous les produits de l\'historique ?</string>
+    <string name="message_confirm_clear_history">Effacer TOUS les produits de l\'historique ?</string>
     <string name="element_cleared">produit supprimé de l\'historique</string>
     <string name="elements_cleared">produits supprimés de l\'historique</string>
 
@@ -63,4 +64,6 @@
     <string name="pref_direction_label">Balayer pour supprimer</string>
     <string name="pref_direction_left_label">Vers la gauche</string>
     <string name="pref_direction_right_label">Vers la droite</string>
+    <string name="pref_direction_both_label">Vers les deux directions (!)</string>
+
 </resources>

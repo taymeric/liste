@@ -27,6 +27,7 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -141,7 +142,10 @@ public class ListActivity extends AppCompatActivity
                 // The Adapter stores the Id of the element in the viewHolder
                 int id = (int) viewHolder.itemView.getTag();
                 deleteEntry(id);
+                showCustomToast();
             }
+
+
         };
         new ItemTouchHelper(mSimpleCallback).attachToRecyclerView(mRecyclerView);
 
@@ -304,7 +308,8 @@ public class ListActivity extends AppCompatActivity
     private void deleteListEntries() {
         if (mAdapter.getItemCount() != 0) {
             new AlertDialog.Builder(ListActivity.this)
-                    .setMessage(getString(R.string.message_confirm_clear_list))
+                    .setMessage(getString(R.string.message_confirm_clear_list)
+                            + "\n" + getString(R.string.message_confirm_clear_list_tip))
                     .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -392,6 +397,21 @@ public class ListActivity extends AppCompatActivity
     }
 
     /**
+     * Shows a custom toast message
+     */
+    private void showCustomToast() {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+    }
+
+    /**
      * If a preference has been modified, makes the necessary calls in order to update display
      */
     @Override
@@ -399,9 +419,11 @@ public class ListActivity extends AppCompatActivity
         if (s.equals(getString(R.string.pref_list_size_key))) {
             mAdapter.reloadSize();
             mAdapter.notifyDataSetChanged();
+            if (!mFab.isShown()) mFab.show();
         } else if (s.equals(getString(R.string.pref_list_layout_key))) {
             mLayoutManager = PreferenceUtils.getLayoutFromPrefs(this, mSharedPreferences, getString(R.string.pref_list_layout_key));
             mRecyclerView.setLayoutManager(mLayoutManager);
+            if (!mFab.isShown()) mFab.show();
         } else if (s.equals(getString(R.string.pref_sort_order_key))) {
             getLoaderManager().restartLoader(LIST_LOADER_ID, null, this);
         } else if (s.equals(getString(R.string.pref_direction_key))) {
@@ -579,7 +601,7 @@ public class ListActivity extends AppCompatActivity
         Cursor cursor = getContentResolver().query(uri, projection, null, null, sortOrder);
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                if (!forNotification) list = list + "* ";
+                if (!forNotification) list = list + "- ";
                 list = list + cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_STRING));
                 int p = cursor.getInt(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
                 if (p == HIGH_PRIORITY && !forNotification) list = list + " !";

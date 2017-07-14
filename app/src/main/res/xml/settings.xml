@@ -15,7 +15,7 @@
         <ListPreference
             android:defaultValue="@string/pref_layout_linear_value"
             android:entries="@array/pref_layout_option_labels"
-            android:entryValues="@array/pref_layout_option_values"
+            android:entryValues="@array/pref_list_layout_option_values"
             android:key="@string/pref_list_layout_key"
             android:title="@string/pref_layout_label"
             />
@@ -47,7 +47,7 @@
         <ListPreference
             android:defaultValue="@string/pref_layout_linear_value"
             android:entries="@array/pref_layout_option_labels"
-            android:entryValues="@array/pref_layout_option_values"
+            android:entryValues="@array/pref_history_layout_option_values"
             android:key="@string/pref_history_layout_key"
             android:title="@string/pref_layout_label"
             />
