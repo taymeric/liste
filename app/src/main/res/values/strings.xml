@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Grocery List</string>
-    <string name="history_title">History</string>
 
     <string name="confirm">Yes</string>
     <string name="cancel">No</string>
+
+    <string name="empty_list">The list is empty</string>
 
     <!-- Strings for deletion operations -->
     <string name="clear_list">Clear list</string>
     <string name="clear_history">Clear…</string>
     <string name="message_confirm_clear_list">Clear current list?</string>
-    <string name="message_confirm_clear_list_tip">(Tip: Swipe a single element to delete it from the list.)</string>
     <string name="message_confirm_clear_selected">Clear selected products from history?</string>
     <string name="message_confirm_clear_history">Clear ALL products from history?</string>
     <string name="element_cleared">product cleared from history</string>
     <string name="elements_cleared">products cleared from history</string>
 
     <!-- Strings for addition operations -->
-    <string name="add_hint">Add</string>
+    <string name="add_hint">Add a product</string>
     <string name="already">is already on the list</string>
     <string name="no_new_element">No new product</string>
     <string name="one_new_element">product added to the list</string>
     <string name="several_new_elements">products added to the list</string>
 
     <!-- Strings for History activity -->
+    <string name="history_title">History</string>
     <string name="history_instructions">Select products to add to the list:</string>
     <string name="empty_image_description">Pen icon</string>
     <string name="empty_view_title_text">History is empty. Start by adding products from the main screen.</string>
@@ -33,14 +34,14 @@
     <string name="reminder_info">Get reminder info</string>
     <string name="deactivate">Deactivate</string>
     <string name="notification_title">Products in the grocery list:</string>
-    <string name="notification_picker_message">Select the time to display a notification reminder</string>
+    <string name="notification_picker_message">Select time of notification:</string>
     <string name="alarm_on" translatable="false">alarm_on</string>
     <string name="alarm_time" translatable="false">alarm_time</string>
     <string name="alarm_set_message">A reminder notification will be triggered at</string>
     <string name="today">today</string>
 
     <!-- Strings for email sending -->
-    <string name="share_email">Share by email</string>
+    <string name="send_email">Send by email</string>
 
     <!-- Strings for Settings -->
     <string name="settings">Settings</string>
@@ -87,4 +88,11 @@
     <string name="pref_direction_right_value" translatable="false">right</string>
     <string name="pref_direction_left_value" translatable="false">left</string>
     <string name="pref_direction_both_value" translatable="false">both</string>
+
+    <!-- Strings for Help screen -->
+    <string name="help_title">Help</string>
+    <string name="help_add_text">Type to add a product to the list.</string>
+    <string name="help_swipe_text">Swipe left or right to remove a product from the list.</string>
+    <string name="help_importance_text">Double-tap to mark a product as important.</string>
+    <string name="help_history_text">Quickly add products from history.</string>
 </resources>

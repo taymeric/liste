@@ -16,7 +16,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -27,7 +26,6 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.format.DateFormat;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -142,7 +140,6 @@ public class ListActivity extends AppCompatActivity
                 // The Adapter stores the Id of the element in the viewHolder
                 int id = (int) viewHolder.itemView.getTag();
                 deleteEntry(id);
-                showCustomToast();
             }
 
 
@@ -300,6 +297,10 @@ public class ListActivity extends AppCompatActivity
             case R.id.action_email:
                 sendByEmail();
                 return true;
+            case R.id.action_help:
+                Intent helpIntent = new Intent(this, HelpActivity.class);
+                startActivity(helpIntent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -308,8 +309,7 @@ public class ListActivity extends AppCompatActivity
     private void deleteListEntries() {
         if (mAdapter.getItemCount() != 0) {
             new AlertDialog.Builder(ListActivity.this)
-                    .setMessage(getString(R.string.message_confirm_clear_list)
-                            + "\n" + getString(R.string.message_confirm_clear_list_tip))
+                    .setMessage(getString(R.string.message_confirm_clear_list))
                     .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -321,6 +321,8 @@ public class ListActivity extends AppCompatActivity
                     })
                     .setNegativeButton(R.string.cancel, null)
                     .create().show();
+        } else {
+            showMessage(getString(R.string.empty_list));
         }
     }
 
@@ -394,21 +396,6 @@ public class ListActivity extends AppCompatActivity
      */
     private void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Shows a custom toast message
-     */
-    private void showCustomToast() {
-        LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_toast,
-                (ViewGroup) findViewById(R.id.custom_toast_container));
-
-        Toast toast = new Toast(getApplicationContext());
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.setDuration(Toast.LENGTH_SHORT);
-        toast.setView(layout);
-        toast.show();
     }
 
     /**
@@ -493,19 +480,6 @@ public class ListActivity extends AppCompatActivity
                 .create().show();
     }
 
-    private void activateReminderDelay(int delay) {
-
-        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
-        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, LIST_NOTIFICATION_ID);
-        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, getNotification());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        //delay = 10000; // 10 seconds
-        long futureInMillis = SystemClock.elapsedRealtime() + delay;
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
-    }
-
     private void showNotificationTimePicker() {
         Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -574,12 +548,16 @@ public class ListActivity extends AppCompatActivity
     }
 
     private void sendByEmail() {
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
-        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " " + getDate());
-        intent.putExtra(Intent.EXTRA_TEXT, getListAsString(false));
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
+        if (mAdapter.getItemCount() != 0) {
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " " + getDate());
+            intent.putExtra(Intent.EXTRA_TEXT, getListAsString(false));
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            }
+        } else {
+            showMessage(getString(R.string.empty_list));
         }
     }
 

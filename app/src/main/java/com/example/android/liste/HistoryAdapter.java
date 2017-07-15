@@ -25,6 +25,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     final private float mTextSize;
     final private AdapterOnClickHandler mClickHandler;
     private Cursor mCursor;
+    private boolean[] isChecked;
 
     // A Context is needed for PreferenceUtils methods.
     // An AdapterOnClickHandler is used to interact with History activity.
@@ -33,6 +34,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
         mTextSize = PreferenceUtils.getTextSizeFromPrefs(
                 context, sharedPreferences, context.getString(R.string.pref_history_size_key));
         mClickHandler = clickHandler;
+        resetIsChecked();
         setHasStableIds(true);
     }
 
@@ -53,6 +55,20 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
             String s = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_STRING));
             holder.mCheckBox.setText(s);
             holder.mCheckBox.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
+
+            holder.mCheckBox.setOnCheckedChangeListener(null);
+            holder.mCheckBox.setChecked(isChecked[position]);
+            final int thisPosition = position;
+            holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    isChecked[thisPosition] = b;
+                    mCursor.moveToPosition(thisPosition);
+                    String id = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry._ID));
+                    String txt = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_STRING));
+                    mClickHandler.onClick(id, txt);
+                }
+            });
         }
     }
 
@@ -72,7 +88,15 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
     void swapCursor(Cursor cursor) {
         mCursor = cursor;
+        resetIsChecked();
         notifyDataSetChanged();
+    }
+
+    private void resetIsChecked() {
+        if (mCursor != null)
+            isChecked = new boolean[mCursor.getCount()];
+        else
+            isChecked = null;
     }
 
     // Provides a way to interact with an activity implementing this interface
@@ -88,18 +112,6 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
         ViewHolder(final View itemView) {
             super(itemView);
             mCheckBox = itemView.findViewById(R.id.item_text);
-            // The OnCheckedChange callback uses the AdapterOnClickHandler
-            // to update the data structure identifying the selected items.
-            mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    int adapterPosition = getAdapterPosition();
-                    mCursor.moveToPosition(adapterPosition);
-                    String id = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry._ID));
-                    String txt = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_STRING));
-                    mClickHandler.onClick(id, txt);
-                }
-            });
         }
     }
 }

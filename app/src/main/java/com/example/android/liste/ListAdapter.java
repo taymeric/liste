@@ -60,7 +60,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         // Gets element at position and replaces the contents of the view with that element
         if (mCursor.moveToPosition(position)) {
 
-            String s = "- " + mCursor.getString(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_STRING));
+            String s = mCursor.getString(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_STRING));
             holder.mTextView.setText(s);
             holder.mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
 
@@ -68,12 +68,12 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             if (p == ListActivity.HIGH_PRIORITY)
                 holder.mTextView.setCompoundDrawables(null, null, mPriorityMark, null);
             else
-                holder.mTextView.setCompoundDrawables(null, null, null, null);
-
             // A tag containing the Id of the element in the table is needed
             // to handle delete-on-swipe from the List activity.
             holder.id = mCursor.getInt(mCursor.getColumnIndex(ListContract.ListEntry._ID));
             holder.itemView.setTag(holder.id);
+            holder.mTextView.setCompoundDrawables(null, null, null, null);
+
         }
     }
 
