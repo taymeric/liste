@@ -9,19 +9,29 @@
 
     <!-- Strings for deletion operations -->
     <string name="clear_list">Effacer la liste</string>
-    <string name="clear_history">Effacer…</string>
+    <string name="clear_history">Effacer la sélection</string>
     <string name="message_confirm_clear_list">Effacer la liste actuelle ?</string>
-    <string name="message_confirm_clear_selected">Effacer les produits sélectionnés de l\'historique ?</string>
-    <string name="element_cleared">produit supprimé de l\'historique</string>
-    <string name="elements_cleared">produits supprimés de l\'historique</string>
+    <plurals name="clear_selected_products">
+        <item quantity="one">Effacer le produit sélectionné de l\'historique ?</item>
+        <item quantity="other">Effacer les produits sélectionnés de l\'historique ?</item>
+    </plurals>
+    <plurals name="products_cleared">
+        <item quantity="one">%d produit supprimé de l\'historique</item>
+        <item quantity="other">%d produits supprimés de l\'historique</item>
+    </plurals>
 
     <!-- Strings for addition operations -->
     <string name="add_hint">Ajouter un produit</string>
-    <string name="message_confirm_add_selected">Ajouter les éléments sélectionnés à la liste ?</string>
+    <plurals name="add_selected_products">
+        <item quantity="one">Ajouter l\'élément sélectionné à la liste ?</item>
+        <item quantity="other">Ajouter les éléments sélectionnés à la liste ?</item>
+    </plurals>
     <string name="already">est déjà dans la liste</string>
-    <string name="no_new_element">Pas de nouveau produit</string>
-    <string name="one_new_element">produit ajouté à la liste</string>
-    <string name="several_new_elements">produits ajoutés à la liste</string>
+    <string name="no_new_product">Pas de nouveau produit</string>
+    <plurals name="new_products">
+        <item quantity="one">%d nouveau produit ajouté à la liste</item>
+        <item quantity="other">%d nouveaux produits ajoutés à la liste</item>
+    </plurals>
 
     <!-- Strings for History activity -->
     <string name="history_title">Historique</string>
@@ -33,7 +43,7 @@
     <string name="activate_reminder">Planifier un rappel</string>
     <string name="reminder_info">Informations sur le rappel</string>
     <string name="deactivate">Désactiver</string>
-    <string name="notification_title">Produits dans la liste de course :</string>
+    <string name="notification_title">Produit(s) dans la liste de course :</string>
     <string name="notification_picker_message">Sélectionner l\'heure de la notification :</string>
     <string name="alarm_set_message">Une notification de rappel sera déclenchée à</string>
     <string name="today">aujourd\'hui</string>

@@ -9,19 +9,29 @@
 
     <!-- Strings for deletion operations -->
     <string name="clear_list">Clear list</string>
-    <string name="clear_history">Clear…</string>
+    <string name="clear_history">Clear selection</string>
     <string name="message_confirm_clear_list">Clear current list?</string>
-    <string name="message_confirm_clear_selected">Clear selected products from history?</string>
-    <string name="element_cleared">product cleared from history</string>
-    <string name="elements_cleared">products cleared from history</string>
+    <plurals name="clear_selected_products">
+        <item quantity="one">Clear selected product from history?</item>
+        <item quantity="other">Clear selected products from history?</item>
+    </plurals>
+    <plurals name="products_cleared">
+        <item quantity="one">%d product cleared from history</item>
+        <item quantity="other">%d products cleared from history</item>
+    </plurals>
 
     <!-- Strings for addition operations -->
     <string name="add_hint">Add a product</string>
-    <string name="message_confirm_add_selected">Add selected element to the list?</string>
+    <plurals name="add_selected_products">
+        <item quantity="one">Add selected element to the list?</item>
+        <item quantity="other">Add selected elements to the list?</item>
+    </plurals>
     <string name="already">is already on the list</string>
-    <string name="no_new_element">No new product</string>
-    <string name="one_new_element">product added to the list</string>
-    <string name="several_new_elements">products added to the list</string>
+    <string name="no_new_product">No new product</string>
+    <plurals name="new_products">
+        <item quantity="one">%d new product added to the list</item>
+        <item quantity="other">%d new products added to the list</item>
+    </plurals>
 
     <!-- Strings for History activity -->
     <string name="history_title">History</string>
@@ -33,7 +43,7 @@
     <string name="activate_reminder">Plan a reminder</string>
     <string name="reminder_info">Get reminder info</string>
     <string name="deactivate">Deactivate</string>
-    <string name="notification_title">Products in the grocery list:</string>
+    <string name="notification_title">Product(s) in the grocery list:</string>
     <string name="notification_picker_message">Select time of notification:</string>
     <string name="alarm_on" translatable="false">alarm_on</string>
     <string name="alarm_time" translatable="false">alarm_time</string>

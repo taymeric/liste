@@ -7,6 +7,7 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -99,7 +100,7 @@ public class HistoryActivity extends AppCompatActivity
             case android.R.id.home:
                 if (selectedIds != null && !selectedIds.isEmpty()) {
                     new AlertDialog.Builder(HistoryActivity.this)
-                            .setMessage(getString(R.string.message_confirm_add_selected))
+                            .setMessage(getResources().getQuantityString(R.plurals.add_selected_products, selectedIds.size()))
                             .setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -114,6 +115,8 @@ public class HistoryActivity extends AppCompatActivity
                                 }
                             })
                             .create().show();
+                } else {
+                    finish();
                 }
                 return true;
             default:
@@ -123,7 +126,7 @@ public class HistoryActivity extends AppCompatActivity
 
     private void deleteSelectedEntries() {
         new AlertDialog.Builder(HistoryActivity.this)
-                .setMessage(getString(R.string.message_confirm_clear_selected))
+                .setMessage(getResources().getQuantityString(R.plurals.clear_selected_products, selectedIds.size()))
                 .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -136,10 +139,7 @@ public class HistoryActivity extends AppCompatActivity
                             uri = uri.buildUpon().appendPath(id).build();
                             nb += getContentResolver().delete(uri, null, null);
                         }
-                        if (nb == 1)
-                            showMessage(nb + " " + getString(R.string.element_cleared));
-                        else
-                            showMessage(nb + " " + getString(R.string.elements_cleared));
+                        showMessage(getResources().getQuantityString(R.plurals.products_cleared, nb, nb));
                         selectedIds.clear();
                         setFabVisibility();
                         setRecyclerViewVisibility();
@@ -166,16 +166,11 @@ public class HistoryActivity extends AppCompatActivity
             if (newUri != null && !newUri.equals(Uri.EMPTY)) nb++;
         }
 
-        switch(nb) {
-            case 0:
-                showMessage(getString(R.string.no_new_element));
-                break;
-            case 1:
-                showMessage(nb + " " + getString(R.string.one_new_element));
-                break;
-            default:
-                showMessage(nb + " " + getString(R.string.several_new_elements));
-        }
+        if (nb == 0)
+            showMessage(getString(R.string.no_new_product));
+        else
+            showMessage(getResources().getQuantityString(R.plurals.new_products, nb, nb));
+
     }
 
     @Override
