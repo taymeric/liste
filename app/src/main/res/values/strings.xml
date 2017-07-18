@@ -12,12 +12,12 @@
     <string name="clear_history">Clear…</string>
     <string name="message_confirm_clear_list">Clear current list?</string>
     <string name="message_confirm_clear_selected">Clear selected products from history?</string>
-    <string name="message_confirm_clear_history">Clear ALL products from history?</string>
     <string name="element_cleared">product cleared from history</string>
     <string name="elements_cleared">products cleared from history</string>
 
     <!-- Strings for addition operations -->
     <string name="add_hint">Add a product</string>
+    <string name="message_confirm_add_selected">Add selected element to the list?</string>
     <string name="already">is already on the list</string>
     <string name="no_new_element">No new product</string>
     <string name="one_new_element">product added to the list</string>
@@ -30,7 +30,7 @@
     <string name="empty_view_title_text">History is empty. Start by adding products from the main screen.</string>
 
     <!-- Strings for Notification -->
-    <string name="activate_reminder">Activate a reminder</string>
+    <string name="activate_reminder">Plan a reminder</string>
     <string name="reminder_info">Get reminder info</string>
     <string name="deactivate">Deactivate</string>
     <string name="notification_title">Products in the grocery list:</string>

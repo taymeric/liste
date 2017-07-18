@@ -61,6 +61,7 @@ public class HistoryActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 addSelectedEntries();
+                finish();
             }
         });
 
@@ -82,6 +83,9 @@ public class HistoryActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.history_options, menu);
+        MenuItem trash = menu.findItem(R.id.action_clear);
+        if (selectedIds != null) trash.setVisible(!selectedIds.isEmpty());
+        else trash.setVisible(false);
         return true;
     }
 
@@ -90,8 +94,27 @@ public class HistoryActivity extends AppCompatActivity
         int id = item.getItemId();
         switch(id) {
             case R.id.action_clear:
-                if (selectedIds.isEmpty()) deleteAllHistoryEntries();
-                else deleteSelectedEntries();
+                deleteSelectedEntries();
+                return true;
+            case android.R.id.home:
+                if (selectedIds != null && !selectedIds.isEmpty()) {
+                    new AlertDialog.Builder(HistoryActivity.this)
+                            .setMessage(getString(R.string.message_confirm_add_selected))
+                            .setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    addSelectedEntries();
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    finish();
+                                }
+                            })
+                            .create().show();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -121,25 +144,11 @@ public class HistoryActivity extends AppCompatActivity
                         setFabVisibility();
                         setRecyclerViewVisibility();
                         mAdapter.notifyDataSetChanged();
+                        invalidateOptionsMenu();
                     }
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .create().show();
-    }
-
-    private void deleteAllHistoryEntries() {
-        if (mAdapter.getItemCount() != 0) {
-            new AlertDialog.Builder(HistoryActivity.this)
-                    .setMessage(getString(R.string.message_confirm_clear_history))
-                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            getContentResolver().delete(ListContract.HistoryEntry.CONTENT_URI, null, null);
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, null)
-                    .create().show();
-        }
     }
 
     private void addSelectedEntries() {
@@ -163,10 +172,10 @@ public class HistoryActivity extends AppCompatActivity
                 break;
             case 1:
                 showMessage(nb + " " + getString(R.string.one_new_element));
+                break;
             default:
                 showMessage(nb + " " + getString(R.string.several_new_elements));
         }
-        finish();
     }
 
     @Override
@@ -215,6 +224,7 @@ public class HistoryActivity extends AppCompatActivity
             selectedIds.remove(id);
         else selectedIds.put(id, txt);
         setFabVisibility();
+        invalidateOptionsMenu();
     }
 
     // Updates the visibility of the Floating Action Button.

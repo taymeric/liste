@@ -39,7 +39,6 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         mTextSize = PreferenceUtils.getTextSizeFromPrefs(
                 mContext, mSharedPreferences, mContext.getString(R.string.pref_list_size_key));
-        //mPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_high_black_24dp);
         mPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_high_color);
         mPriorityMark.setBounds(new Rect(0, 0, (int) mTextSize, (int) mTextSize));
         mPriorityMark.setAlpha(127);
@@ -68,12 +67,12 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             if (p == ListActivity.HIGH_PRIORITY)
                 holder.mTextView.setCompoundDrawables(null, null, mPriorityMark, null);
             else
+                holder.mTextView.setCompoundDrawables(null, null, null, null);
+
             // A tag containing the Id of the element in the table is needed
             // to handle delete-on-swipe from the List activity.
             holder.id = mCursor.getInt(mCursor.getColumnIndex(ListContract.ListEntry._ID));
             holder.itemView.setTag(holder.id);
-            holder.mTextView.setCompoundDrawables(null, null, null, null);
-
         }
     }
 

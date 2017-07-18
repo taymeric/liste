@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Liste de course</string>
+    <string name="app_name">Liste d\'épicerie</string>
 
     <string name="confirm">Oui</string>
     <string name="cancel">Non</string>
@@ -10,14 +10,14 @@
     <!-- Strings for deletion operations -->
     <string name="clear_list">Effacer la liste</string>
     <string name="clear_history">Effacer…</string>
-    <string name="message_confirm_clear_list">Effacer la liste actuelle ?</string>
-    <string name="message_confirm_clear_selected">Effacer les produits sélectionnés de l\'historique ?</string>
+    <string name="message_confirm_clear_list">Effacer la liste actuelle?</string>
+    <string name="message_confirm_clear_selected">Effacer les produits sélectionnés de l\'historique?</string>
     <string name="element_cleared">produit supprimé de l\'historique</string>
     <string name="elements_cleared">produits supprimés de l\'historique</string>
 
     <!-- Strings for addition operations -->
     <string name="add_hint">Ajouter un produit</string>
-    <string name="message_confirm_add_selected">Ajouter les éléments sélectionnés à la liste ?</string>
+    <string name="message_confirm_add_selected">Ajouter les éléments sélectionnés à la liste?</string>
     <string name="already">est déjà dans la liste</string>
     <string name="no_new_element">Pas de nouveau produit</string>
     <string name="one_new_element">produit ajouté à la liste</string>
@@ -33,13 +33,13 @@
     <string name="activate_reminder">Planifier un rappel</string>
     <string name="reminder_info">Informations sur le rappel</string>
     <string name="deactivate">Désactiver</string>
-    <string name="notification_title">Produits dans la liste de course :</string>
+    <string name="notification_title">Produits dans la liste d\'épicerie:</string>
     <string name="notification_picker_message">Sélectionner l\'heure de la notification :</string>
     <string name="alarm_set_message">Une notification de rappel sera déclenchée à</string>
     <string name="today">aujourd\'hui</string>
 
     <!-- Strings for email sending -->
-    <string name="send_email">Envoyer par email</string>
+    <string name="send_email">Envoyer par courriel</string>
 
     <!-- Strings for Settings-->
     <string name="settings">Préférences</string>

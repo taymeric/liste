@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -435,6 +436,7 @@ public class ListActivity extends AppCompatActivity
         String selection = ListContract.ListEntry._ID + "=?";
         String [] selectionArgs = new String[] { stringId };
         Cursor cursor = getContentResolver().query(uri, columns, selection, selectionArgs, null);
+        //Cursor cursor = getContentResolver().query(uri, columns, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
             int priority = cursor.getInt(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
@@ -444,6 +446,10 @@ public class ListActivity extends AppCompatActivity
             ContentValues contentValues = new ContentValues();
             contentValues.put(ListContract.ListEntry.COLUMN_PRIORITY, priority);
             getContentResolver().update(uri, contentValues, null, null);
+
+            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            v.vibrate(10);
+
             cursor.close();
         }
     }
