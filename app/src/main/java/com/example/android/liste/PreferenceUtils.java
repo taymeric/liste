@@ -85,4 +85,19 @@ class PreferenceUtils {
         if (is_on && time != null) editor.putString(context.getString(R.string.alarm_time), time);
         editor.apply();
     }
+
+    // Sets the selected day of the alarm between the three possibles options:
+    // today, tomorrow, aftertomorrow
+    static void setDayOfAlarm(Context context, SharedPreferences sharedPreferences, String day) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getString(R.string.day_alarm), day);
+        editor.apply();
+    }
+
+    // Sets the value in real time of the day of the alarm
+    static void setRealDayOfAlarm(Context context, SharedPreferences sharedPreferences, String realDay) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getString(R.string.real_day_alarm), realDay);
+        editor.apply();
+    }
 }

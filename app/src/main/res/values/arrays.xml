@@ -46,4 +46,10 @@
         <item>@string/pref_direction_left_value</item>
         <item>@string/pref_direction_both_value</item>
     </array>
+
+    <array name="day_selection">
+        <item>@string/today</item>
+        <item>@string/tomorrow</item>
+        <item>@string/aftertomorrow</item>
+    </array>
 </resources>

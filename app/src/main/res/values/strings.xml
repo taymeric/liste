@@ -48,7 +48,12 @@
     <string name="alarm_on" translatable="false">alarm_on</string>
     <string name="alarm_time" translatable="false">alarm_time</string>
     <string name="alarm_set_message">A reminder notification will be triggered at</string>
-    <string name="today">today</string>
+    <string name="alarm_set_when">on</string>
+    <string name="day_alarm" translatable="false">day_alarm</string>
+    <string name="real_day_alarm" translatable="false">real_day_alarm</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="aftertomorrow">After tomorrow</string>
 
     <!-- Strings for email sending -->
     <string name="send_email">Send by email</string>
@@ -57,6 +62,7 @@
     <string name="settings">Settings</string>
     <string name="list_label">List</string>
     <string name="history_label">History</string>
+    <string name="information_label">Information</string>
 
     <!-- Strings for size settings -->
     <string name="pref_size_label">Text size</string>

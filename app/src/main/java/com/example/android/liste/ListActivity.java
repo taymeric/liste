@@ -34,8 +34,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.FilterQueryProvider;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -44,6 +47,7 @@ import com.example.android.liste.data.ListContract;
 
 import java.util.Calendar;
 import java.util.Date;
+
 
 
 /**
@@ -448,7 +452,7 @@ public class ListActivity extends AppCompatActivity
             getContentResolver().update(uri, contentValues, null, null);
 
             Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            v.vibrate(10);
+            v.vibrate(25);
 
             cursor.close();
         }
@@ -475,7 +479,9 @@ public class ListActivity extends AppCompatActivity
     private void showNotificationCancelingDialog() {
         String time = mSharedPreferences.getString(getString(R.string.alarm_time) , "00:00");
         new AlertDialog.Builder(ListActivity.this)
-                .setMessage(getString(R.string.alarm_set_message) + " " + time + " " + getString(R.string.today) + ".")
+                .setMessage(getString(R.string.alarm_set_message) + " " + time + " "
+                        + getString(R.string.alarm_set_when) + " "
+                        + mSharedPreferences.getString(getString(R.string.real_day_alarm), "") + ".")
                 .setPositiveButton(android.R.string.ok, null)
                 .setNegativeButton(R.string.deactivate, new DialogInterface.OnClickListener() {
                     @Override
@@ -505,9 +511,31 @@ public class ListActivity extends AppCompatActivity
                 minute,
                 DateFormat.is24HourFormat(this));
 
+        // Create View for Custom title
         LayoutInflater inflater = getLayoutInflater();
         final ViewGroup nullParent = null;
         View v = inflater.inflate(R.layout.picker_layout, nullParent);
+
+        // Set up day selection spinner
+        Spinner spinner = v.findViewById(R.id.spinner_day);
+        ArrayAdapter daySpinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.day_selection, android.R.layout.simple_spinner_item);
+        daySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinner.setAdapter(daySpinnerAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                String selection = (String) adapterView.getItemAtPosition(position);
+                PreferenceUtils.setDayOfAlarm(ListActivity.this, mSharedPreferences, selection);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                PreferenceUtils.setDayOfAlarm(ListActivity.this, mSharedPreferences,
+                        mSharedPreferences.getString(getString(R.string.day_alarm), getString(R.string.today)));
+            }
+        });
+
         pickerDialog.setCustomTitle(v);
 
         pickerDialog.show();
@@ -524,13 +552,25 @@ public class ListActivity extends AppCompatActivity
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, minute);
 
+        String day = mSharedPreferences.getString(getString(R.string.day_alarm), getString(R.string.today));
+        int current_day = cal.get(Calendar.DAY_OF_YEAR);
+        if (day.equals(getString(R.string.tomorrow))) current_day += 1;
+        else if (day.equals(getString(R.string.aftertomorrow))) current_day += 2;
+        cal.set(Calendar.DAY_OF_YEAR, current_day);
+
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
 
         Date timeDate = cal.getTime();
+
         java.text.DateFormat formatter = DateFormat.getTimeFormat(this);
         String time = formatter.format(timeDate);
         PreferenceUtils.setAlarmIndicator(this, mSharedPreferences, true, time);
+
+        formatter = DateFormat.getMediumDateFormat(this);
+        String date = formatter.format(timeDate);
+        PreferenceUtils.setRealDayOfAlarm(this, mSharedPreferences, date);
+
         invalidateOptionsMenu();
     }
 

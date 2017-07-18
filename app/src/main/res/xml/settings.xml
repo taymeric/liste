@@ -53,4 +53,11 @@
             />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/information_label">
+        <PreferenceScreen
+            android:title="@string/help_title"></PreferenceScreen>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
