@@ -42,15 +42,6 @@
                 android:value="com.example.android.liste.ListActivity"/>
         </activity>
 
-        <activity
-            android:name="com.example.android.liste.HelpActivity"
-            android:label="@string/help_title"
-            android:screenOrientation="sensorPortrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.liste.ListActivity"/>
-        </activity>
-
         <provider
             android:name="com.example.android.liste.data.ListContentProvider"
             android:authorities="com.example.android.liste"

@@ -302,10 +302,6 @@ public class ListActivity extends AppCompatActivity
             case R.id.action_email:
                 sendByEmail();
                 return true;
-            case R.id.action_help:
-                Intent helpIntent = new Intent(this, HelpActivity.class);
-                startActivity(helpIntent);
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

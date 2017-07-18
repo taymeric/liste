@@ -63,6 +63,8 @@
     <string name="list_label">List</string>
     <string name="history_label">History</string>
     <string name="information_label">Information</string>
+    <string name="version_title">Version</string>
+    <string name="version_number" translatable="false">1.0</string>
 
     <!-- Strings for size settings -->
     <string name="pref_size_label">Text size</string>
@@ -107,6 +109,7 @@
 
     <!-- Strings for Help screen -->
     <string name="help_title">Help</string>
+    <string name="help_key" translatable="false">help_key</string>
     <string name="help_add_text">Type to add a product to the list.</string>
     <string name="help_swipe_text">Swipe left or right to remove a product from the list.</string>
     <string name="help_importance_text">Double-tap to mark a product as important.</string>

@@ -46,7 +46,10 @@
     <string name="notification_title">Produit(s) dans la liste de course :</string>
     <string name="notification_picker_message">Sélectionner l\'heure de la notification :</string>
     <string name="alarm_set_message">Une notification de rappel sera déclenchée à</string>
+    <string name="alarm_set_when">le</string>
     <string name="today">Aujourd\'hui</string>
+    <string name="tomorrow">Demain</string>
+    <string name="aftertomorrow">Après-demain</string>
 
     <!-- Strings for email sending -->
     <string name="send_email">Envoyer par email</string>
@@ -55,6 +58,8 @@
     <string name="settings">Préférences</string>
     <string name="list_label">Liste</string>
     <string name="history_label">Historique</string>
+    <string name="information_label">Information</string>
+    <string name="version_title">Version</string>
 
     <!-- Strings for size settings -->
     <string name="pref_size_label">Taille du texte</string>
@@ -83,7 +88,4 @@
     <string name="help_swipe_text">Balayer vers la gauche ou vers la droite pour supprimer un produit de la liste.</string>
     <string name="help_importance_text">Appuyer deux fois pour marquer un produit comme important.</string>
     <string name="help_history_text">Ajouter rapidement des produits depuis l\'historique.</string>
-    <string name="tomorrow">Demain</string>
-    <string name="aftertomorrow">Après-demain</string>
-    <string name="alarm_set_when">le</string>
 </resources>

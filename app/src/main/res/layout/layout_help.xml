@@ -4,13 +4,13 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:padding="40dp">
+              android:padding="16dp">
 
     <TextView
         android:id="@+id/add_help_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         android:drawableLeft="@drawable/ic_create_24px"
         android:drawablePadding="32dp"
         android:drawableStart="@drawable/ic_create_24px"
@@ -23,7 +23,7 @@
         android:id="@+id/swipe_help_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         android:drawableLeft="@drawable/ic_touch_app_24px"
         android:drawablePadding="32dp"
         android:drawableStart="@drawable/ic_touch_app_24px"
@@ -36,7 +36,7 @@
         android:id="@+id/importance_help_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         android:drawableLeft="@drawable/ic_priority_high_24px"
         android:drawablePadding="32dp"
         android:drawableStart="@drawable/ic_priority_high_24px"
