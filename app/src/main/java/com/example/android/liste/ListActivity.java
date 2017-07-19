@@ -38,6 +38,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.FilterQueryProvider;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -78,6 +79,7 @@ public class ListActivity extends AppCompatActivity
     private ListAdapter mAdapter;
     private SharedPreferences mSharedPreferences;
     private AutoCompleteTextView mAutoCompleteTextView;
+    private ProgressBar mProgressBar;
 
     // A CursorAdapter for suggestions from the history table when typing
     private SimpleCursorAdapter mCursorAdapter;
@@ -98,6 +100,9 @@ public class ListActivity extends AppCompatActivity
             startActivity(intent);
             }
         });
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         // Set up the Recycler View and its Adapter
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -375,6 +380,7 @@ public class ListActivity extends AppCompatActivity
         int id = loader.getId();
         if (id == LIST_LOADER_ID) {
             // Swap cursor in order to display List items when List Loader has finished
+            mProgressBar.setVisibility(View.GONE);
             mAdapter.swapCursor(data);
         } else if (id == HISTORY_LOADER_ID) {
             // Swap cursor in order to enable suggestions when History Loader has finished
@@ -386,6 +392,7 @@ public class ListActivity extends AppCompatActivity
     public void onLoaderReset(Loader<Cursor> loader) {
         int id = loader.getId();
         if (id == LIST_LOADER_ID) {
+            mProgressBar.setVisibility(View.VISIBLE);
             mAdapter.swapCursor(null);
         } else if (id == HISTORY_LOADER_ID) {
             mCursorAdapter.swapCursor(null);

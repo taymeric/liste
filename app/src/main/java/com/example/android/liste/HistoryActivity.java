@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.android.liste.data.ListContract;
@@ -41,6 +42,7 @@ public class HistoryActivity extends AppCompatActivity
     private FloatingActionButton mFab;
     private RecyclerView mRecyclerView;
     private View mEmptyView;
+    private ProgressBar mProgressBar;
     private HistoryAdapter mAdapter;
 
     // An HashMap is used to store (id, text) pairs of selected elements with no duplication.
@@ -75,7 +77,9 @@ public class HistoryActivity extends AppCompatActivity
         mRecyclerView.setAdapter(mAdapter);
 
         mEmptyView = findViewById(R.id.empty_view);
-        setRecyclerViewVisibility();
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         getLoaderManager().initLoader(HISTORY_LOADER_ID, null, this);
     }
@@ -141,7 +145,7 @@ public class HistoryActivity extends AppCompatActivity
                         showMessage(getResources().getQuantityString(R.plurals.products_cleared, nb, nb));
                         selectedIds.clear();
                         setFabVisibility();
-                        setRecyclerViewVisibility();
+                        setEmptyViewVisibility();
                         mAdapter.notifyDataSetChanged();
                         invalidateOptionsMenu();
                     }
@@ -191,16 +195,20 @@ public class HistoryActivity extends AppCompatActivity
         }
     }
 
+
+
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        mProgressBar.setVisibility(View.GONE);
         mAdapter.swapCursor(cursor);
-        setRecyclerViewVisibility();
+        setEmptyViewVisibility();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        mProgressBar.setVisibility(View.VISIBLE);
         mAdapter.swapCursor(null);
-        setRecyclerViewVisibility();
+        setEmptyViewVisibility();
     }
 
     /**
@@ -233,13 +241,11 @@ public class HistoryActivity extends AppCompatActivity
     }
 
     // If there are no elements in the history, display a message in an 'empty' view
-    private void setRecyclerViewVisibility() {
+    private void setEmptyViewVisibility() {
         if (mAdapter.getItemCount() == 0) {
             mEmptyView.setVisibility(View.VISIBLE);
-            mRecyclerView.setVisibility(View.INVISIBLE);
         } else {
-            mEmptyView.setVisibility(View.INVISIBLE);
-            mRecyclerView.setVisibility(View.VISIBLE);
+            mEmptyView.setVisibility(View.GONE);
         }
     }
 }

@@ -21,7 +21,7 @@
         android:drawableStart="@drawable/ic_create_24px"
         android:gravity="center_vertical"
         android:text="@string/help_add_text"
-        android:textAppearance="?android:textAppearance"
+        android:textAppearance="?android:textAppearanceMedium"
         tools:text="@string/help_add_text"/>
 
     <TextView
@@ -34,7 +34,7 @@
         android:drawableStart="@drawable/ic_touch_app_24px"
         android:gravity="center_vertical"
         android:text="@string/help_swipe_text"
-        android:textAppearance="?android:textAppearance"
+        android:textAppearance="?android:textAppearanceMedium"
         tools:text="@string/help_swipe_text"/>
 
     <TextView
@@ -47,7 +47,7 @@
         android:drawableStart="@drawable/ic_priority_high_24px"
         android:gravity="center_vertical"
         android:text="@string/help_importance_text"
-        android:textAppearance="?android:textAppearance"
+        android:textAppearance="?android:textAppearanceMedium"
         tools:text="@string/help_importance_text"/>
 
     <TextView
@@ -59,7 +59,7 @@
         android:drawableStart="@drawable/ic_shopping_basket_24px"
         android:gravity="center_vertical"
         android:text="@string/help_history_text"
-        android:textAppearance="?android:textAppearance"
+        android:textAppearance="?android:textAppearanceMedium"
         tools:text="@string/help_history_text"/>
 
 </LinearLayout>
