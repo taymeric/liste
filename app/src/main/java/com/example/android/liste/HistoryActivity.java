@@ -5,6 +5,7 @@ import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -114,6 +115,7 @@ public class HistoryActivity extends AppCompatActivity
                             .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+                                    setResult(RESULT_CANCELED, null);
                                     finish();
                                 }
                             })
@@ -126,6 +128,7 @@ public class HistoryActivity extends AppCompatActivity
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     private void deleteSelectedEntries() {
         new AlertDialog.Builder(HistoryActivity.this)
@@ -169,10 +172,12 @@ public class HistoryActivity extends AppCompatActivity
             if (newUri != null && !newUri.equals(Uri.EMPTY)) nb++;
         }
 
+        Intent intent = new Intent();
         if (nb == 0)
-            showMessage(getString(R.string.no_new_product));
+            intent.putExtra(getString(R.string.history_message), getString(R.string.no_new_product));
         else
-            showMessage(getResources().getQuantityString(R.plurals.new_products, nb, nb));
+            intent.putExtra(getString(R.string.history_message), getResources().getQuantityString(R.plurals.new_products, nb, nb));
+        setResult(RESULT_OK, intent);
 
     }
 

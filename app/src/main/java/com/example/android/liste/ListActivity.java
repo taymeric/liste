@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -71,6 +72,7 @@ public class ListActivity extends AppCompatActivity
     private static final int LIST_LOADER_ID = 77;
     private static final int HISTORY_LOADER_ID = 88;
     private static final int LIST_NOTIFICATION_ID = 101;
+    private static final int HISTORY_FOR_RESULT = 44;
 
     private FloatingActionButton mFab;
     private RecyclerView mRecyclerView;
@@ -97,7 +99,7 @@ public class ListActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
             Intent intent = new Intent(ListActivity.this, HistoryActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, HISTORY_FOR_RESULT);
             }
         });
 
@@ -163,6 +165,16 @@ public class ListActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == HISTORY_FOR_RESULT) {
+            if (resultCode == RESULT_OK) {
+                String message = data.getStringExtra(getString(R.string.history_message));
+                showMessage(message);
+            }
+        }
     }
 
     @Override
@@ -403,7 +415,8 @@ public class ListActivity extends AppCompatActivity
      * Shows a toast message.
      */
     private void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_SHORT).show();
     }
 
     /**
