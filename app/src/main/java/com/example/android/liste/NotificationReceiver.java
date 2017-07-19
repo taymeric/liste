@@ -20,6 +20,10 @@ public class NotificationReceiver extends BroadcastReceiver {
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Notification notification = intent.getParcelableExtra(NOTIFICATION);
+
+        // Modification : Créer la notification ici pour avoir une liste à jour.
+        // Utiliser un Service ou IntentService pour éviter de faire trop de travail ici
+
         int id = intent.getIntExtra(NOTIFICATION_ID, 0);
         notificationManager.notify(id, notification);
 

@@ -92,4 +92,7 @@
     <string name="help_swipe_text">Balayer vers la gauche ou vers la droite pour supprimer un produit de la liste.</string>
     <string name="help_importance_text">Appuyer deux fois pour marquer un produit comme important.</string>
     <string name="help_history_text">Ajouter rapidement des produits depuis l\'historique.</string>
+    <string name="pref_font_label">Police de caractère</string>
+    <string name="pref_font_normal_label">Normale</string>
+    <string name="pref_font_handwritten_label">Manuscrite</string>
 </resources>

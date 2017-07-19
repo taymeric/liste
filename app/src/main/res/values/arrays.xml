@@ -25,6 +25,16 @@
         <item>@string/pref_layout_grid_value</item>
     </array>
 
+    <array name="pref_font_labels">
+        <item>@string/pref_font_normal_label</item>
+        <item>@string/pref_font_handwritten_label</item>
+    </array>
+
+    <array name="pref_font_values">
+        <item>@string/pref_font_normal_value</item>
+        <item>@string/pref_font_handwritten_value</item>
+    </array>
+
     <array name="pref_sort_order_option_labels">
         <item>@string/pref_sort_order_by_name_label</item>
         <item>@string/pref_sort_order_by_priority_label</item>

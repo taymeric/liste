@@ -22,6 +22,13 @@
             android:title="@string/pref_layout_label"
             />
         <ListPreference
+            android:defaultValue="@string/pref_font_normal_value"
+            android:entries="@array/pref_font_labels"
+            android:entryValues="@array/pref_font_values"
+            android:icon="@drawable/ic_font_download_black_24dp"
+            android:key="@string/pref_font_key"
+            android:title="@string/pref_font_label"/>
+        <ListPreference
             android:defaultValue="@string/pref_sort_order_name_value"
             android:entries="@array/pref_sort_order_option_labels"
             android:entryValues="@array/pref_sort_order_option_values"

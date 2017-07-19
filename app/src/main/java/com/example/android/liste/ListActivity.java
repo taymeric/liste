@@ -425,6 +425,9 @@ public class ListActivity extends AppCompatActivity
             updateItemTouchHelper();
         } else if (s.equals(getString(R.string.alarm_on))) {
             invalidateOptionsMenu();
+        } else if (s.equals(getString(R.string.pref_font_key))) {
+            mAdapter.reloadFont();
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -468,10 +471,7 @@ public class ListActivity extends AppCompatActivity
 
     private void cancelReminder() {
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
-        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, LIST_NOTIFICATION_ID);
-        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, getNotification());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
 
@@ -580,8 +580,6 @@ public class ListActivity extends AppCompatActivity
     // Method for creating the Notification object
     private Notification getNotification() {
         String list = getListAsString(true);
-        // Remove last ',' character from String representation of list
-        if (!list.isEmpty()) list = list.substring(0, list.length()-2);
         int nbOfProducts = mAdapter.getItemCount();
         String title = getResources().getQuantityString(R.plurals.notification_title, nbOfProducts, nbOfProducts);
         NotificationCompat.Builder mBuilder = (NotificationCompat.Builder)
@@ -643,6 +641,8 @@ public class ListActivity extends AppCompatActivity
             }
             cursor.close();
         }
+        // Remove extra ', '
+        if (forNotification && !list.isEmpty()) list = list.substring(0, list.length()-2);
         return list;
     }
 }
