@@ -2,91 +2,18 @@
 <resources>
     <string name="app_name">Liste d\'épicerie</string>
 
-    <string name="confirm">Oui</string>
-    <string name="cancel">Non</string>
-
-    <string name="empty_list">La liste est vide</string>
-
-    <!-- Strings for deletion operations -->
-    <string name="clear_list">Effacer la liste</string>
-    <string name="clear_history">Effacer la sélection</string>
     <string name="message_confirm_clear_list">Effacer la liste actuelle?</string>
+
     <plurals name="clear_selected_products">
         <item quantity="one">Effacer le produit sélectionné de l\'historique?</item>
         <item quantity="other">Effacer les produits sélectionnés de l\'historique?</item>
     </plurals>
-    <plurals name="products_cleared">
-        <item quantity="one">%d produit supprimé de l\'historique</item>
-        <item quantity="other">%d produits supprimés de l\'historique</item>
-    </plurals>
 
-    <!-- Strings for addition operations -->
-    <string name="add_hint">Ajouter un produit</string>
     <plurals name="add_selected_products">
         <item quantity="one">Ajouter l\'élément sélectionné à la liste?</item>
         <item quantity="other">Ajouter les éléments sélectionnés à la liste?</item>
     </plurals>
-    <string name="already">est déjà dans la liste</string>
-    <string name="no_new_product">Pas de nouveau produit</string>
-    <plurals name="new_products">
-        <item quantity="one">%d nouveau produit ajouté à la liste</item>
-        <item quantity="other">%d nouveaux produits ajoutés à la liste</item>
-    </plurals>
 
-    <!-- Strings for History activity -->
-    <string name="history_title">Historique</string>
-    <string name="history_instructions">Sélectionner les produits à ajouter à la liste :</string>
-    <string name="empty_image_description">Icône de crayon</string>
-    <string name="empty_view_title_text">L\'historique est vide. Pour commencer, ajoutez des produits depuis l\'écran principal.</string>
-
-    <!-- Strings for Notification -->
-    <string name="activate_reminder">Planifier un rappel</string>
-    <string name="reminder_info">Informations sur le rappel</string>
-    <string name="deactivate">Désactiver</string>
-    <string name="notification_title">Produit(s) dans la liste d\'épicerie:</string>
-    <string name="notification_picker_message">Sélectionner l\'heure de la notification :</string>
-    <string name="alarm_set_message">Une notification de rappel sera déclenchée à</string>
-    <string name="alarm_set_when">le</string>
-    <string name="today">Aujourd\'hui</string>
-    <string name="tomorrow">Demain</string>
-    <string name="aftertomorrow">Après-demain</string>
-
-    <!-- Strings for email sending -->
     <string name="send_email">Envoyer par courriel</string>
-
-    <!-- Strings for Settings-->
-    <string name="settings">Préférences</string>
-    <string name="list_label">Liste</string>
-    <string name="history_label">Historique</string>
-    <string name="information_label">Information</string>
-    <string name="version_title">Version</string>
-
-    <!-- Strings for size settings -->
-    <string name="pref_size_label">Taille du texte</string>
-    <string name="pref_size_small_label">Petit</string>
-    <string name="pref_size_big_label">Grand</string>
-
-    <!-- Strings for layout settings-->
-    <string name="pref_layout_label">Affichage</string>
-    <string name="pref_layout_linear_label">Une colonne</string>
-    <string name="pref_layout_grid_label">Deux colonnes</string>
-
-    <!--Strings for sort order -->
-    <string name="pref_sort_order_label">Tri</string>
-    <string name="pref_sort_order_by_name_label">Ordre alphabétique</string>
-    <string name="pref_sort_order_by_priority_label">Ordre de priorité</string>
-
-    <!--Strings for direction of swipe -->
-    <string name="pref_direction_label">Balayer pour supprimer</string>
-    <string name="pref_direction_left_label">Vers la gauche</string>
-    <string name="pref_direction_right_label">Vers la droite</string>
-    <string name="pref_direction_both_label">Vers les deux directions (!)</string>
-
-    <!-- Strings for Help screen -->
-    <string name="help_title">Aide</string>
-    <string name="help_add_text">Entrer un produit dans la liste.</string>
-    <string name="help_swipe_text">Balayer vers la gauche ou vers la droite pour supprimer un produit de la liste.</string>
-    <string name="help_importance_text">Appuyer deux fois pour marquer un produit comme important.</string>
-    <string name="help_history_text">Ajouter rapidement des produits depuis l\'historique.</string>
 
 </resources>

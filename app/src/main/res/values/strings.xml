@@ -43,7 +43,10 @@
     <string name="activate_reminder">Plan a reminder</string>
     <string name="reminder_info">Get reminder info</string>
     <string name="deactivate">Deactivate</string>
-    <string name="notification_title">Product(s) in the grocery list:</string>
+    <plurals name="notification_title">
+        <item quantity="one">%d product in the grocery list:</item>
+        <item quantity="other">%d products in the grocery list:</item>
+    </plurals>
     <string name="notification_picker_message">Select time of notification:</string>
     <string name="alarm_on" translatable="false">alarm_on</string>
     <string name="alarm_time" translatable="false">alarm_time</string>

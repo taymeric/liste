@@ -7,7 +7,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="preferenceTheme">@style/myPreferenceTheme</item>
+    </style>
+
+    <style name="myPreferenceTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="android:overScrollMode">never</item>
     </style>
     
 </resources>

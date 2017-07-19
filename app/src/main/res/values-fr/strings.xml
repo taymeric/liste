@@ -43,7 +43,11 @@
     <string name="activate_reminder">Planifier un rappel</string>
     <string name="reminder_info">Informations sur le rappel</string>
     <string name="deactivate">Désactiver</string>
-    <string name="notification_title">Produit(s) dans la liste de course :</string>
+    <plurals name="notification_title">
+        <item quantity="zero">%d produit dans la liste de course :</item>
+        <item quantity="one">%d produit dans la liste de course :</item>
+        <item quantity="other">%d produits dans la liste de course :</item>
+    </plurals>
     <string name="notification_picker_message">Sélectionner l\'heure de la notification :</string>
     <string name="alarm_set_message">Une notification de rappel sera déclenchée à</string>
     <string name="alarm_set_when">le</string>
@@ -58,7 +62,7 @@
     <string name="settings">Préférences</string>
     <string name="list_label">Liste</string>
     <string name="history_label">Historique</string>
-    <string name="information_label">Information</string>
+    <string name="information_label">Informations</string>
     <string name="version_title">Version</string>
 
     <!-- Strings for size settings -->

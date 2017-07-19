@@ -11,5 +11,6 @@ public class HelpDialogPreference extends DialogPreference {
         super(context, attrs);
         setDialogLayoutResource(R.layout.layout_help);
         setPositiveButtonText(context.getString(android.R.string.ok));
+        setNegativeButtonText(null);
     }
 }

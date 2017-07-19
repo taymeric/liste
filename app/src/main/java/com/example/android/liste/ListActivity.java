@@ -572,11 +572,16 @@ public class ListActivity extends AppCompatActivity
 
     // Method for creating the Notification object
     private Notification getNotification() {
+        String list = getListAsString(true);
+        // Remove last ',' character from String representation of list
+        if (!list.isEmpty()) list = list.substring(0, list.length()-2);
+        int nbOfProducts = mAdapter.getItemCount();
+        String title = getResources().getQuantityString(R.plurals.notification_title, nbOfProducts, nbOfProducts);
         NotificationCompat.Builder mBuilder = (NotificationCompat.Builder)
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_shopping_basket_white_24dp)
-                        .setContentTitle(getString(R.string.notification_title))
-                        .setContentText(getListAsString(true))
+                        .setContentTitle(title)
+                        .setContentText(list)
                         .setColor(ContextCompat.getColor(this, R.color.colorAccent))
                         .setAutoCancel(true)
                         .setDefaults(Notification.DEFAULT_VIBRATE);
