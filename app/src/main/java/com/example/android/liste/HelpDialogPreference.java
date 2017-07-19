@@ -10,6 +10,7 @@ public class HelpDialogPreference extends DialogPreference {
     public HelpDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         setDialogLayoutResource(R.layout.layout_help);
+        setIcon(R.drawable.ic_help_black_24dp);
         setPositiveButtonText(context.getString(android.R.string.ok));
         setNegativeButtonText(null);
     }

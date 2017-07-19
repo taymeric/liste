@@ -9,6 +9,7 @@
             android:defaultValue="@string/pref_size_big_value"
             android:entries="@array/pref_size_option_labels"
             android:entryValues="@array/pref_size_option_values"
+            android:icon="@drawable/ic_format_size_black_24dp"
             android:key="@string/pref_list_size_key"
             android:title="@string/pref_size_label"
             />
@@ -16,6 +17,7 @@
             android:defaultValue="@string/pref_layout_linear_value"
             android:entries="@array/pref_layout_option_labels"
             android:entryValues="@array/pref_list_layout_option_values"
+            android:icon="@drawable/ic_view_column_black_24dp"
             android:key="@string/pref_list_layout_key"
             android:title="@string/pref_layout_label"
             />
@@ -23,6 +25,7 @@
             android:defaultValue="@string/pref_sort_order_name_value"
             android:entries="@array/pref_sort_order_option_labels"
             android:entryValues="@array/pref_sort_order_option_values"
+            android:icon="@drawable/ic_sort_black_24dp"
             android:key="@string/pref_sort_order_key"
             android:title="@string/pref_sort_order_label"
             />
@@ -30,6 +33,7 @@
             android:defaultValue="@string/pref_direction_right_value"
             android:entries="@array/pref_direction_option_labels"
             android:entryValues="@array/pref_direction_option_values"
+            android:icon="@drawable/ic_touch_app_black_24dp"
             android:key="@string/pref_direction_key"
             android:title="@string/pref_direction_label"
             />
@@ -41,6 +45,7 @@
             android:defaultValue="@string/pref_size_big_value"
             android:entries="@array/pref_size_option_labels"
             android:entryValues="@array/pref_size_option_values"
+            android:icon="@drawable/ic_format_size_black_24dp"
             android:key="@string/pref_history_size_key"
             android:title="@string/pref_size_label"
             />
@@ -48,6 +53,7 @@
             android:defaultValue="@string/pref_layout_linear_value"
             android:entries="@array/pref_layout_option_labels"
             android:entryValues="@array/pref_history_layout_option_values"
+            android:icon="@drawable/ic_view_column_black_24dp"
             android:key="@string/pref_history_layout_key"
             android:title="@string/pref_layout_label"
             />
@@ -61,8 +67,10 @@
             android:title="@string/help_title"/>
 
         <Preference
+            android:icon="@drawable/ic_info_black_24dp"
             android:summary="@string/version_number"
-            android:title="@string/version_title"/>
+            android:title="@string/version_title"
+            />
 
     </PreferenceCategory>
 

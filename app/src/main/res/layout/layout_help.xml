@@ -4,7 +4,12 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:padding="16dp">
+              android:paddingBottom="16dp"
+              android:paddingEnd="32dp"
+              android:paddingLeft="32dp"
+              android:paddingRight="32dp"
+              android:paddingStart="32dp"
+              android:paddingTop="32dp">
 
     <TextView
         android:id="@+id/add_help_text_view"
@@ -12,10 +17,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:drawableLeft="@drawable/ic_create_24px"
-        android:drawablePadding="32dp"
+        android:drawablePadding="24dp"
         android:drawableStart="@drawable/ic_create_24px"
         android:gravity="center_vertical"
         android:text="@string/help_add_text"
+        android:textAppearance="?android:textAppearance"
         tools:text="@string/help_add_text"/>
 
     <TextView
@@ -24,10 +30,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:drawableLeft="@drawable/ic_touch_app_24px"
-        android:drawablePadding="32dp"
+        android:drawablePadding="24dp"
         android:drawableStart="@drawable/ic_touch_app_24px"
         android:gravity="center_vertical"
         android:text="@string/help_swipe_text"
+        android:textAppearance="?android:textAppearance"
         tools:text="@string/help_swipe_text"/>
 
     <TextView
@@ -36,10 +43,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:drawableLeft="@drawable/ic_priority_high_24px"
-        android:drawablePadding="32dp"
+        android:drawablePadding="24dp"
         android:drawableStart="@drawable/ic_priority_high_24px"
         android:gravity="center_vertical"
         android:text="@string/help_importance_text"
+        android:textAppearance="?android:textAppearance"
         tools:text="@string/help_importance_text"/>
 
     <TextView
@@ -47,10 +55,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_shopping_basket_24px"
-        android:drawablePadding="32dp"
+        android:drawablePadding="24dp"
         android:drawableStart="@drawable/ic_shopping_basket_24px"
         android:gravity="center_vertical"
         android:text="@string/help_history_text"
+        android:textAppearance="?android:textAppearance"
         tools:text="@string/help_history_text"/>
 
 </LinearLayout>
