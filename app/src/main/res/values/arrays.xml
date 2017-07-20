@@ -60,6 +60,6 @@
     <array name="day_selection">
         <item>@string/today</item>
         <item>@string/tomorrow</item>
-        <item>@string/aftertomorrow</item>
+        <item>@string/after_tomorrow</item>
     </array>
 </resources>

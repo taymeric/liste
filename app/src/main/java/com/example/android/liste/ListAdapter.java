@@ -19,9 +19,6 @@ import android.widget.TextView;
 
 import com.example.android.liste.data.ListContract;
 
-import static android.R.attr.font;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-
 
 /**
  * Adapter class to manage display of items in the recycler view for the list.
@@ -31,7 +28,6 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     final private Context mContext;
     final private SharedPreferences mSharedPreferences;
-    final private Drawable mPriorityMark;
     final private ListAdapterOnClickListener mListAdapterOnClickListener;
     private Cursor mCursor;
     private float mTextSize;
@@ -46,9 +42,15 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 mContext, mSharedPreferences, mContext.getString(R.string.pref_list_size_key));
         mFontFamily = mSharedPreferences.getString(context.getString(R.string.pref_font_key),
                 context.getString(R.string.pref_font_normal_value));
-        mPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_high_color);
-        mPriorityMark.setBounds(new Rect(0, 0, (int) mTextSize, (int) mTextSize));
-        mPriorityMark.setAlpha(127);
+
+        Drawable highPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_high_color);
+        highPriorityMark.setBounds(new Rect(0, 0, (int) mTextSize, (int) mTextSize));
+        highPriorityMark.setAlpha(127);
+
+        Drawable lowPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_low_color);
+        lowPriorityMark.setBounds(new Rect(0, 0, (int) mTextSize, (int) mTextSize));
+        lowPriorityMark.setAlpha(127);
+
         setHasStableIds(true);
     }
 
@@ -66,20 +68,32 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         // Gets element at position and replaces the contents of the view with that element
         if (mCursor.moveToPosition(position)) {
 
-            String s = mCursor.getString(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_STRING));
-            holder.mTextView.setText(s);
+            String product = mCursor.getString(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT));
+            String annotation = mCursor.getString(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_ANNOTATION));
+            int priority = mCursor.getInt(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
+            if (annotation != null) {
+                annotation = annotation.trim();
+                if (!annotation.equals("")) product += "  ( " + annotation + " )";
+            }
+            if (priority == ListActivity.HIGH_PRIORITY)
+                product += "  !";
+            else if (priority == ListActivity.LOW_PRIORITY)
+                product += "  ?";
+            product = "-  " + product;
+            holder.mTextView.setText(product);
 
             // The following two lines are not a efficient way to proceed.
             // Use viewType in onCreateViewHolder later.
             holder.mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
             holder.mTextView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
 
-
-            int p = mCursor.getInt(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
-            if (p == ListActivity.HIGH_PRIORITY)
-                holder.mTextView.setCompoundDrawables(null, null, mPriorityMark, null);
+            /*int priority = mCursor.getInt(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
+            if (priority == ListActivity.HIGH_PRIORITY)
+                holder.mTextView.setCompoundDrawables(null, null, mHighPriorityMark, null);
+            else if (priority == ListActivity.LOW_PRIORITY)
+                holder.mTextView.setCompoundDrawables(null, null, mLowPriorityMark, null);
             else
-                holder.mTextView.setCompoundDrawables(null, null, null, null);
+                holder.mTextView.setCompoundDrawables(null, null, null, null);*/
 
             // A tag containing the Id of the element in the table is needed
             // to handle delete-on-swipe from the List activity.

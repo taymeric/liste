@@ -52,7 +52,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     public void onBindViewHolder(HistoryAdapter.ViewHolder holder, int position) {
         // Gets element at position and replaces the contents of the view with that element
         if (mCursor.moveToPosition(position)) {
-            String s = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_STRING));
+            String s = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_PRODUCT));
             holder.mCheckBox.setText(s);
             holder.mCheckBox.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
 
@@ -65,7 +65,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
                     isChecked[thisPosition] = b;
                     mCursor.moveToPosition(thisPosition);
                     String id = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry._ID));
-                    String txt = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_STRING));
+                    String txt = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_PRODUCT));
                     mClickHandler.onClick(id, txt);
                 }
             });

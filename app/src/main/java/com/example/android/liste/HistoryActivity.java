@@ -20,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.android.liste.data.ListContract;
 
@@ -42,7 +41,6 @@ public class HistoryActivity extends AppCompatActivity
     private static final int HISTORY_LOADER_ID = 99;
 
     private FloatingActionButton mFab;
-    private RecyclerView mRecyclerView;
     private View mEmptyView;
     private ProgressBar mProgressBar;
     private HistoryAdapter mAdapter;
@@ -72,11 +70,11 @@ public class HistoryActivity extends AppCompatActivity
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Set up the Recycler View with its Adapter
-        mRecyclerView = (RecyclerView) findViewById(R.id.history_recycler_view);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.history_recycler_view);
         RecyclerView.LayoutManager layoutManager = PreferenceUtils.getLayoutFromPrefs(this, sharedPreferences, getString(R.string.pref_history_layout_key));
-        mRecyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
         mAdapter = new HistoryAdapter(this, this);
-        mRecyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(mAdapter);
 
         mEmptyView = findViewById(R.id.empty_view);
 
@@ -167,7 +165,7 @@ public class HistoryActivity extends AppCompatActivity
         // and add elements with those texts to the list table.
         for (String value: selectedIds.values()) {
             cv = new ContentValues();
-            cv.put(ListContract.ListEntry.COLUMN_STRING, value);
+            cv.put(ListContract.ListEntry.COLUMN_PRODUCT, value);
             cv.put(ListContract.ListEntry.COLUMN_PRIORITY, ListActivity.DEFAULT_PRIORITY);
             newUri = getContentResolver().insert(uri, cv);
             if (newUri != null && !newUri.equals(Uri.EMPTY)) nb++;
@@ -186,7 +184,7 @@ public class HistoryActivity extends AppCompatActivity
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
         switch (id) {
             case HISTORY_LOADER_ID :
-                String order = ListContract.HistoryEntry.COLUMN_STRING + " COLLATE LOCALIZED ASC";
+                String order = ListContract.HistoryEntry.COLUMN_PRODUCT + " COLLATE LOCALIZED ASC";
                 return new CursorLoader(
                         this,    // Parent activity context
                         ListContract.HistoryEntry.CONTENT_URI,    // Table to query

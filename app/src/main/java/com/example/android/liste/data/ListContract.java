@@ -27,7 +27,8 @@ public class ListContract {
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_LIST);
         // The names of the columns of the table are defined here.
         // Only one column for now : the text identifying the item on the list.
-        public static final String COLUMN_STRING = "string";
+        public static final String COLUMN_PRODUCT = "product";
+        public static final String COLUMN_ANNOTATION = "annotation";
         public static final String COLUMN_PRIORITY = "priority";
         // Internal name for the table.
         static final String TABLE_NAME = "list";
@@ -40,7 +41,7 @@ public class ListContract {
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_HISTORY);
         // The names of the columns of the table are defined here.
         // Only one column for now : the text identifying the item of the history.
-        public static final String COLUMN_STRING = "string";
+        public static final String COLUMN_PRODUCT = "product";
         // Internal name for the table.
         static final String TABLE_NAME = "history";
     }

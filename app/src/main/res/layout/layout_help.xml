@@ -54,12 +54,12 @@
         android:id="@+id/importance_help_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_priority_high_24px"
+        android:drawableLeft="@drawable/ic_touch_app_24px"
         android:drawablePadding="24dp"
-        android:drawableStart="@drawable/ic_priority_high_24px"
+        android:drawableStart="@drawable/ic_touch_app_24px"
         android:gravity="center_vertical"
-        android:text="@string/help_importance_text"
+        android:text="@string/help_edition_text"
         android:textAppearance="?android:textAppearanceMedium"
-        tools:text="@string/help_importance_text"/>
+        tools:text="@string/help_edition_text"/>
 
 </LinearLayout>

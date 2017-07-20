@@ -58,10 +58,10 @@ class PreferenceUtils {
                 context.getString(R.string.pref_sort_order_name_value));
         if (sortOrder.equals(context.getString(R.string.pref_sort_order_priority_value))) {
             sortOrder = ListContract.ListEntry.COLUMN_PRIORITY + " ASC, "
-                    + ListContract.ListEntry.COLUMN_STRING + " COLLATE LOCALIZED ASC";
+                    + ListContract.ListEntry.COLUMN_PRODUCT + " COLLATE LOCALIZED ASC";
         } else {
             // Add COLLATE LOCALIZED to deal with special characters.
-            sortOrder = ListContract.ListEntry.COLUMN_STRING + " COLLATE LOCALIZED ASC";
+            sortOrder = ListContract.ListEntry.COLUMN_PRODUCT + " COLLATE LOCALIZED ASC";
         }
         return sortOrder;
     }
@@ -87,7 +87,7 @@ class PreferenceUtils {
     }
 
     // Sets the selected day of the alarm between the three possibles options:
-    // today, tomorrow, aftertomorrow
+    // today, tomorrow, after_tomorrow
     static void setDayOfAlarm(Context context, SharedPreferences sharedPreferences, String day) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(context.getString(R.string.day_alarm), day);

@@ -39,22 +39,19 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.FilterQueryProvider;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.example.android.liste.data.ListContract;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
-import static android.R.attr.priority;
-import static android.R.attr.value;
-import static android.R.id.undo;
 
 
 /**
@@ -72,8 +69,9 @@ public class ListActivity extends AppCompatActivity
         ListAdapter.ListAdapterOnClickListener
 {
 
-    public static final int DEFAULT_PRIORITY = 2;
     public static final int HIGH_PRIORITY = 1;
+    public static final int DEFAULT_PRIORITY = 2;
+    public static final int LOW_PRIORITY = 3;
     private static final int LIST_LOADER_ID = 77;
     private static final int HISTORY_LOADER_ID = 88;
     private static final int LIST_NOTIFICATION_ID = 101;
@@ -87,9 +85,6 @@ public class ListActivity extends AppCompatActivity
     private SharedPreferences mSharedPreferences;
     private AutoCompleteTextView mAutoCompleteTextView;
     private ProgressBar mProgressBar;
-
-    private String undoProduct;
-    private int undoPriority;
 
     // A CursorAdapter for suggestions from the history table when typing
     private SimpleCursorAdapter mCursorAdapter;
@@ -161,8 +156,6 @@ public class ListActivity extends AppCompatActivity
                 int id = (int) viewHolder.itemView.getTag();
                 deleteEntry(id);
             }
-
-
         };
         new ItemTouchHelper(mSimpleCallback).attachToRecyclerView(mRecyclerView);
 
@@ -240,7 +233,7 @@ public class ListActivity extends AppCompatActivity
                 this,
                 R.layout.hint_row,
                 null,
-                new String[] {ListContract.HistoryEntry.COLUMN_STRING},
+                new String[] {ListContract.HistoryEntry.COLUMN_PRODUCT},
                 new int[] {android.R.id.text1},
                 0
         );
@@ -268,7 +261,7 @@ public class ListActivity extends AppCompatActivity
         mCursorAdapter.setCursorToStringConverter(new SimpleCursorAdapter.CursorToStringConverter() {
             @Override
             public CharSequence convertToString(Cursor cursor) {
-                return cursor.getString(cursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_STRING));
+                return cursor.getString(cursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_PRODUCT));
             }
         });
     }
@@ -284,18 +277,18 @@ public class ListActivity extends AppCompatActivity
     // Helper method to get a Cursor that points to elements of the history table
     // that match the string passed as parameter.
     private Cursor getCursor(CharSequence str) {
-        String select = ListContract.HistoryEntry.COLUMN_STRING + " LIKE ? ";
+        String select = ListContract.HistoryEntry.COLUMN_PRODUCT + " LIKE ? ";
         String[]  selectArgs = { "%" + str + "%"};
         String[] contactsProjection = new String[] {
                 ListContract.HistoryEntry._ID,
-                ListContract.HistoryEntry.COLUMN_STRING  };
+                ListContract.HistoryEntry.COLUMN_PRODUCT};
         return getContentResolver().query(ListContract.HistoryEntry.CONTENT_URI, contactsProjection, select, selectArgs, null);
     }
 
     private void insertValueIntoTables(String value) {
         // Add value to the list table with a default priority, shows a message if it is already there
         ContentValues values = new ContentValues();
-        values.put(ListContract.ListEntry.COLUMN_STRING, value);
+        values.put(ListContract.ListEntry.COLUMN_PRODUCT, value);
         values.put(ListContract.ListEntry.COLUMN_PRIORITY, DEFAULT_PRIORITY);
         Uri uri = getContentResolver().insert(ListContract.ListEntry.CONTENT_URI, values);
         if (uri != null && uri.equals(Uri.EMPTY)) {
@@ -303,7 +296,7 @@ public class ListActivity extends AppCompatActivity
         }
         // Add text to the history
         ContentValues values2 = new ContentValues();
-        values2.put(ListContract.HistoryEntry.COLUMN_STRING, value);
+        values2.put(ListContract.HistoryEntry.COLUMN_PRODUCT, value);
         getContentResolver().insert(ListContract.HistoryEntry.CONTENT_URI, values2);
     }
 
@@ -361,16 +354,19 @@ public class ListActivity extends AppCompatActivity
         ContentResolver cr = getContentResolver();
 
         // Save values for undo operation
-        String[] projection  = { ListContract.ListEntry.COLUMN_STRING, ListContract.ListEntry.COLUMN_PRIORITY };
+        String[] projection  = { ListContract.ListEntry.COLUMN_PRODUCT, ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.COLUMN_ANNOTATION };
         Cursor cu = cr.query(uri, projection, null, null, null);
-        cu.moveToFirst();
-        String product = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_STRING));
-        int priority = cu.getInt(cu.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
-        cu.close();
+
+        if (cu!=null && cu.moveToFirst()) {
+            String product = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT));
+            int priority = cu.getInt(cu.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
+            String annotation = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_ANNOTATION));
+            cu.close();
+
+            showMessageWithAction("'" + product + "' " + getString(R.string.delete_product), product, priority, annotation);
+        }
 
         cr.delete(uri, null, null);
-
-        showMessageWithAction("'" + product + "' " + getString(R.string.delete_product), product, priority);
 
         // Make sure the FAB is visible as scrolling up may not be possible anymore
         // as elements are deleted.
@@ -392,7 +388,7 @@ public class ListActivity extends AppCompatActivity
                         sortOrder    // Default sort order
                 );
             case HISTORY_LOADER_ID :
-                String order = ListContract.HistoryEntry.COLUMN_STRING + " COLLATE LOCALIZED ASC";
+                String order = ListContract.HistoryEntry.COLUMN_PRODUCT + " COLLATE LOCALIZED ASC";
                 return new CursorLoader(
                         this,    // Parent activity context
                         ListContract.HistoryEntry.CONTENT_URI,    // Table to query
@@ -441,14 +437,15 @@ public class ListActivity extends AppCompatActivity
     /**
      * Shows long Snackbar message with an Action
      */
-    private void showMessageWithAction(final String message, final String product, final int priority) {
+    private void showMessageWithAction(final String message, final String product, final int priority, final String annotation) {
         Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_LONG)
                 .setAction(getString(R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         ContentValues cv = new ContentValues();
-                        cv.put(ListContract.ListEntry.COLUMN_STRING, product);
+                        cv.put(ListContract.ListEntry.COLUMN_PRODUCT, product);
                         cv.put(ListContract.ListEntry.COLUMN_PRIORITY, priority);
+                        if (annotation != null) cv.put(ListContract.ListEntry.COLUMN_ANNOTATION, annotation);
                         getContentResolver().insert(ListContract.ListEntry.CONTENT_URI, cv);
                     }
                 })
@@ -482,7 +479,8 @@ public class ListActivity extends AppCompatActivity
 
     @Override
     public void onClick(int id) {
-        updatePriority(id);
+        //updatePriority(id);
+        showEditionDialog(id);
     }
 
     private void updatePriority(int id) {
@@ -609,7 +607,7 @@ public class ListActivity extends AppCompatActivity
         String day = mSharedPreferences.getString(getString(R.string.day_alarm), getString(R.string.today));
         int current_day = cal.get(Calendar.DAY_OF_YEAR);
         if (day.equals(getString(R.string.tomorrow))) current_day += 1;
-        else if (day.equals(getString(R.string.aftertomorrow))) current_day += 2;
+        else if (day.equals(getString(R.string.after_tomorrow))) current_day += 2;
         cal.set(Calendar.DAY_OF_YEAR, current_day);
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
@@ -675,16 +673,16 @@ public class ListActivity extends AppCompatActivity
     private String getListAsString(boolean forNotification) {
         String list = "";
         Uri uri = ListContract.ListEntry.CONTENT_URI;
-        String[] projection  = {ListContract.ListEntry.COLUMN_STRING, ListContract.ListEntry.COLUMN_PRIORITY};
+        String[] projection  = {ListContract.ListEntry.COLUMN_PRODUCT, ListContract.ListEntry.COLUMN_PRIORITY};
         String sortOrder;
         if (!forNotification) sortOrder = PreferenceUtils.getSortOrderFromPrefs(this, mSharedPreferences);
         else sortOrder = ListContract.ListEntry.COLUMN_PRIORITY + " ASC, "
-                + ListContract.ListEntry.COLUMN_STRING + " COLLATE LOCALIZED ASC";
+                + ListContract.ListEntry.COLUMN_PRODUCT + " COLLATE LOCALIZED ASC";
         Cursor cursor = getContentResolver().query(uri, projection, null, null, sortOrder);
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 if (!forNotification) list = list + "- ";
-                list = list + cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_STRING));
+                list = list + cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT));
                 int p = cursor.getInt(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
                 if (p == HIGH_PRIORITY && !forNotification) list = list + " !";
                 if (!forNotification) list = list + "\n";
@@ -696,5 +694,73 @@ public class ListActivity extends AppCompatActivity
         // Remove extra ', '
         if (forNotification && !list.isEmpty()) list = list.substring(0, list.length()-2);
         return list;
+    }
+
+    private void showEditionDialog(int id) {
+
+        String stringId = Integer.toString(id);
+        Uri contentUri = ListContract.ListEntry.CONTENT_URI;
+        final Uri uri = contentUri.buildUpon().appendPath(stringId).build();
+
+        String[] columns = { ListContract.ListEntry.COLUMN_PRODUCT, ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.COLUMN_ANNOTATION};
+        String selection = ListContract.ListEntry._ID + "=?";
+        String [] selectionArgs = new String[] { stringId };
+        Cursor cursor = getContentResolver().query(uri, columns, selection, selectionArgs, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+
+            String product = cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT));
+            int priority = cursor.getInt(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
+            String annotation = cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_ANNOTATION));
+
+            LayoutInflater inflater = getLayoutInflater();
+            View view = inflater.inflate(R.layout.dialog_edition, null);
+            final RadioButton radioButton1 = view.findViewById(R.id.button_1);
+            final RadioButton radioButton2 = view.findViewById(R.id.button_2);
+            final RadioButton radioButton3 = view.findViewById(R.id.button_3);
+            switch(priority) {
+                case HIGH_PRIORITY:
+                    radioButton1.setChecked(true);
+                    break;
+                case LOW_PRIORITY:
+                    radioButton3.setChecked(true);
+                    break;
+                default:
+                    radioButton2.setChecked(true);
+            }
+            final EditText editText = view.findViewById(R.id.dialog_edit_text);
+            if (annotation != null) editText.setText(annotation);
+            else editText.setText("");
+
+            new AlertDialog.Builder(ListActivity.this)
+                    .setMessage(product)
+                    .setView(view)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            int newPriority;
+                            if (radioButton1.isChecked()) newPriority = HIGH_PRIORITY;
+                            else if (radioButton3.isChecked()) newPriority = LOW_PRIORITY;
+                            else newPriority = DEFAULT_PRIORITY;
+
+                            String newAnnotation = editText.getText().toString();
+
+                            ContentValues contentValues = new ContentValues();
+                            contentValues.put(ListContract.ListEntry.COLUMN_PRIORITY, newPriority);
+                            contentValues.put(ListContract.ListEntry.COLUMN_ANNOTATION, newAnnotation);
+
+                            getContentResolver().update(uri, contentValues, null, null);
+
+                            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                            v.vibrate(25);
+
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .create().show();
+
+            cursor.close();
+        }
     }
 }

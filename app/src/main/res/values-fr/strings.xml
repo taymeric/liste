@@ -57,7 +57,15 @@
     <string name="alarm_canceled">Rappel annulé.</string>
     <string name="today">Aujourd\'hui</string>
     <string name="tomorrow">Demain</string>
-    <string name="aftertomorrow">Après-demain</string>
+    <string name="after_tomorrow">Après-demain</string>
+
+    <!-- Strings for edition -->
+    <string name="note">Annotation (optionnel) :</string>
+    <string name="priority">Priorité :</string>
+    <string name="priority_high">Important (!)</string>
+    <string name="priority_normal">Normal</string>
+    <string name="priority_low">Pas sûr (?)</string>
+    <string name="annotation_hint">ex. Quantité</string>
 
     <!-- Strings for email sending -->
     <string name="send_email">Envoyer par email</string>
@@ -79,6 +87,11 @@
     <string name="pref_layout_linear_label">Une colonne</string>
     <string name="pref_layout_grid_label">Deux colonnes</string>
 
+    <!-- Strings for font settings -->
+    <string name="pref_font_label">Police de caractère</string>
+    <string name="pref_font_normal_label">Normale</string>
+    <string name="pref_font_handwritten_label">Manuscrite</string>
+
     <!--Strings for sort order -->
     <string name="pref_sort_order_label">Tri</string>
     <string name="pref_sort_order_by_name_label">Ordre alphabétique</string>
@@ -93,10 +106,7 @@
     <!-- Strings for Help screen -->
     <string name="help_title">Aide</string>
     <string name="help_add_text">Ajouter un produit dans la liste.</string>
-    <string name="help_swipe_text">Balayer vers la gauche ou la droite pour supprimer un produit de la liste.</string>
-    <string name="help_importance_text">Appuyer deux fois pour marquer un produit comme important.</string>
     <string name="help_history_text">Ajouter plus rapidement des produits depuis l\'historique.</string>
-    <string name="pref_font_label">Police de caractère</string>
-    <string name="pref_font_normal_label">Normale</string>
-    <string name="pref_font_handwritten_label">Manuscrite</string>
+    <string name="help_swipe_text">Balayer vers la gauche ou la droite pour supprimer un produit de la liste.</string>
+    <string name="help_edition_text">Appuyer deux fois pour marquer un produit comme important ou pour écrire une annotation.</string>
 </resources>

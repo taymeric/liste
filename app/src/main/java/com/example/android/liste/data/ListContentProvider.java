@@ -171,7 +171,7 @@ public class ListContentProvider extends ContentProvider {
         return rowsDeleted;
     }
 
-    // Update is only used for LIST_ID when updating priority
+    // Update is only used for LIST_ID when updating priority or annotation
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
         SQLiteDatabase db = mListDbHelper.getWritableDatabase();
