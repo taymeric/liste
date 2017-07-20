@@ -77,20 +77,12 @@ class PreferenceUtils {
         else return ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
     }
 
-    // Sets the value of 'alarm_on' which indicated if a reminder is planned.
+    // Sets the value of 'alarm_on' which indicates if a reminder is planned.
     // If it is on (true), then also sets the planned time as a String representation.
     static void setAlarmIndicator(Context context, SharedPreferences sharedPreferences, boolean is_on, String time) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(context.getString(R.string.alarm_on), is_on);
         if (is_on && time != null) editor.putString(context.getString(R.string.alarm_time), time);
-        editor.apply();
-    }
-
-    // Sets the selected day of the alarm between the three possibles options:
-    // today, tomorrow, after_tomorrow
-    static void setDayOfAlarm(Context context, SharedPreferences sharedPreferences, String day) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(context.getString(R.string.day_alarm), day);
         editor.apply();
     }
 

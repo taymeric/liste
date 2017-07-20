@@ -50,18 +50,15 @@
         <item quantity="one">%d product in the grocery list:</item>
         <item quantity="other">%d products in the grocery list:</item>
     </plurals>
-    <string name="notification_picker_message">Select time of notification:</string>
+    <string name="notification_time_picker_message">Select time of notification:</string>
+    <string name="notification_date_picker_message">Select day of notification:</string>
     <string name="alarm_on" translatable="false">alarm_on</string>
     <string name="alarm_time" translatable="false">alarm_time</string>
     <string name="alarm_set_message">A reminder notification will be triggered at</string>
     <string name="alarm_set_when">on</string>
     <string name="alarm_set">Reminder activated.</string>
     <string name="alarm_canceled">Reminder canceled.</string>
-    <string name="day_alarm" translatable="false">day_alarm</string>
     <string name="real_day_alarm" translatable="false">real_day_alarm</string>
-    <string name="today">Today</string>
-    <string name="tomorrow">Tomorrow</string>
-    <string name="after_tomorrow">After tomorrow</string>
 
     <!-- Strings for edition -->
     <string name="note">Annotation (optional):</string>

@@ -50,14 +50,12 @@
         <item quantity="one">%d produit dans la liste de course :</item>
         <item quantity="other">%d produits dans la liste de course :</item>
     </plurals>
-    <string name="notification_picker_message">Sélectionner l\'heure de la notification :</string>
+    <string name="notification_time_picker_message">Sélectionner l\'heure de la notification :</string>
+    <string name="notification_date_picker_message">Sélectionner le jour de la notification :</string>
     <string name="alarm_set_message">Une notification de rappel sera déclenchée à</string>
     <string name="alarm_set_when">le</string>
     <string name="alarm_set">Rappel activé.</string>
     <string name="alarm_canceled">Rappel annulé.</string>
-    <string name="today">Aujourd\'hui</string>
-    <string name="tomorrow">Demain</string>
-    <string name="after_tomorrow">Après-demain</string>
 
     <!-- Strings for edition -->
     <string name="note">Annotation (optionnel) :</string>

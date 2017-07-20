@@ -2,6 +2,7 @@ package com.example.android.liste;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.LoaderManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -39,6 +40,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FilterQueryProvider;
 import android.widget.ProgressBar;
@@ -52,6 +55,7 @@ import com.example.android.liste.data.ListContract;
 import java.util.Calendar;
 import java.util.Date;
 
+import static android.R.attr.y;
 
 
 /**
@@ -312,7 +316,7 @@ public class ListActivity extends AppCompatActivity
                 deleteListEntries();
                 return true;
             case R.id.action_notify:
-                showNotificationTimePicker();
+                showDatePicker();
                 return true;
             case R.id.action_alarm_info:
                 showNotificationCancelingDialog();
@@ -480,35 +484,9 @@ public class ListActivity extends AppCompatActivity
     @Override
     public void onClick(int id) {
         //updatePriority(id);
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(25);
         showEditionDialog(id);
-    }
-
-    private void updatePriority(int id) {
-
-        // Check which is the current value for priority
-        String stringId = Integer.toString(id);
-        Uri uri = ListContract.ListEntry.CONTENT_URI;
-        uri = uri.buildUpon().appendPath(stringId).build();
-        String[] columns = { ListContract.ListEntry.COLUMN_PRIORITY };
-        String selection = ListContract.ListEntry._ID + "=?";
-        String [] selectionArgs = new String[] { stringId };
-        Cursor cursor = getContentResolver().query(uri, columns, selection, selectionArgs, null);
-        //Cursor cursor = getContentResolver().query(uri, columns, null, null, null);
-
-        if (cursor != null && cursor.moveToFirst()) {
-            int priority = cursor.getInt(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
-            if (priority == DEFAULT_PRIORITY) priority = HIGH_PRIORITY;
-            else priority = DEFAULT_PRIORITY;
-
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(ListContract.ListEntry.COLUMN_PRIORITY, priority);
-            getContentResolver().update(uri, contentValues, null, null);
-
-            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            v.vibrate(25);
-
-            cursor.close();
-        }
     }
 
     private void updateItemTouchHelper() {
@@ -544,7 +522,32 @@ public class ListActivity extends AppCompatActivity
                 .create().show();
     }
 
-    private void showNotificationTimePicker() {
+    private void showDatePicker() {
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        final DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                showTimePicker(year, month, day);
+            }
+        };
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, listener, year, month, day);
+
+        // Create View for Custom title
+        LayoutInflater inflater = getLayoutInflater();
+        final ViewGroup nullParent = null;
+        View v = inflater.inflate(R.layout.dialog_date_picker_title, nullParent);
+
+        datePickerDialog.setCustomTitle(v);
+
+        datePickerDialog.show();
+    }
+
+    private void showTimePicker(final int year, final int month, final int day) {
         Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
@@ -552,11 +555,11 @@ public class ListActivity extends AppCompatActivity
         final TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                activateReminderTime(hour, minute);
+                activateReminderTime(year, month, day, hour, minute);
             }
         };
 
-        TimePickerDialog pickerDialog = new TimePickerDialog(
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
                 this,
                 listener,
                 hour,
@@ -566,34 +569,14 @@ public class ListActivity extends AppCompatActivity
         // Create View for Custom title
         LayoutInflater inflater = getLayoutInflater();
         final ViewGroup nullParent = null;
-        View v = inflater.inflate(R.layout.picker_layout, nullParent);
+        View v = inflater.inflate(R.layout.dialog_time_picker_title, nullParent);
 
-        // Set up day selection spinner
-        Spinner spinner = v.findViewById(R.id.spinner_day);
-        ArrayAdapter daySpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.day_selection, android.R.layout.simple_spinner_item);
-        daySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        spinner.setAdapter(daySpinnerAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                String selection = (String) adapterView.getItemAtPosition(position);
-                PreferenceUtils.setDayOfAlarm(ListActivity.this, mSharedPreferences, selection);
-            }
+        timePickerDialog.setCustomTitle(v);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                PreferenceUtils.setDayOfAlarm(ListActivity.this, mSharedPreferences,
-                        mSharedPreferences.getString(getString(R.string.day_alarm), getString(R.string.today)));
-            }
-        });
-
-        pickerDialog.setCustomTitle(v);
-
-        pickerDialog.show();
+        timePickerDialog.show();
     }
 
-    private void activateReminderTime(int hour, int minute) {
+    private void activateReminderTime(int year, int month, int day, int hour, int minute) {
 
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
         notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, LIST_NOTIFICATION_ID);
@@ -601,14 +584,11 @@ public class ListActivity extends AppCompatActivity
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, day);
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, minute);
-
-        String day = mSharedPreferences.getString(getString(R.string.day_alarm), getString(R.string.today));
-        int current_day = cal.get(Calendar.DAY_OF_YEAR);
-        if (day.equals(getString(R.string.tomorrow))) current_day += 1;
-        else if (day.equals(getString(R.string.after_tomorrow))) current_day += 2;
-        cal.set(Calendar.DAY_OF_YEAR, current_day);
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
@@ -698,6 +678,8 @@ public class ListActivity extends AppCompatActivity
 
     private void showEditionDialog(int id) {
 
+        final AlertDialog alertDialog;
+
         String stringId = Integer.toString(id);
         Uri contentUri = ListContract.ListEntry.CONTENT_URI;
         final Uri uri = contentUri.buildUpon().appendPath(stringId).build();
@@ -732,7 +714,7 @@ public class ListActivity extends AppCompatActivity
             if (annotation != null) editText.setText(annotation);
             else editText.setText("");
 
-            new AlertDialog.Builder(ListActivity.this)
+            alertDialog = new AlertDialog.Builder(ListActivity.this)
                     .setMessage(product)
                     .setView(view)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -751,14 +733,19 @@ public class ListActivity extends AppCompatActivity
                             contentValues.put(ListContract.ListEntry.COLUMN_ANNOTATION, newAnnotation);
 
                             getContentResolver().update(uri, contentValues, null, null);
-
-                            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                            v.vibrate(25);
-
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, null)
-                    .create().show();
+                    .create();
+            alertDialog.show();
+
+            editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                    alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
+                    return true;
+                }
+            });
 
             cursor.close();
         }
