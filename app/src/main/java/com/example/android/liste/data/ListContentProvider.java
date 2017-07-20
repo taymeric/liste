@@ -63,10 +63,12 @@ public class ListContentProvider extends ContentProvider {
                         s1);
                 break;
             case LIST_ID:
+                String selection = ListContract.ListEntry._ID + "=?";
+                String [] selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 cursor = db.query(ListContract.ListEntry.TABLE_NAME,
                         strings,
-                        s,
-                        strings1,
+                        selection,
+                        selectionArgs,
                         null,
                         null,
                         s1);

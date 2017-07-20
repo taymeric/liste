@@ -2,10 +2,11 @@
 <resources>
     <string name="app_name">Grocery List</string>
 
-    <string name="confirm">Yes</string>
-    <string name="cancel">No</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="cancel">Cancel</string>
 
-    <string name="empty_list">The list is empty</string>
+    <string name="empty_list">The list is empty.</string>
 
     <!-- Strings for deletion operations -->
     <string name="clear_list">Clear list</string>
@@ -16,9 +17,10 @@
         <item quantity="other">Clear selected products from history?</item>
     </plurals>
     <plurals name="products_cleared">
-        <item quantity="one">%d product cleared from history</item>
-        <item quantity="other">%d products cleared from history</item>
+        <item quantity="one">%d product cleared from history.</item>
+        <item quantity="other">%d products cleared from history.</item>
     </plurals>
+    <string name="delete_product">removed from the list.</string>
 
     <!-- Strings for addition operations -->
     <string name="add_hint">Add a product</string>
@@ -26,11 +28,11 @@
         <item quantity="one">Add selected element to the list?</item>
         <item quantity="other">Add selected elements to the list?</item>
     </plurals>
-    <string name="already">is already on the list</string>
-    <string name="no_new_product">No new product</string>
+    <string name="already">is already on the list.</string>
+    <string name="no_new_product">No new product.</string>
     <plurals name="new_products">
-        <item quantity="one">%d new product added to the list</item>
-        <item quantity="other">%d new products added to the list</item>
+        <item quantity="one">%d new product added to the list.</item>
+        <item quantity="other">%d new products added to the list.</item>
     </plurals>
 
     <!-- Strings for History activity -->
@@ -53,6 +55,8 @@
     <string name="alarm_time" translatable="false">alarm_time</string>
     <string name="alarm_set_message">A reminder notification will be triggered at</string>
     <string name="alarm_set_when">on</string>
+    <string name="alarm_set">Reminder activated.</string>
+    <string name="alarm_canceled">Reminder canceled.</string>
     <string name="day_alarm" translatable="false">day_alarm</string>
     <string name="real_day_alarm" translatable="false">real_day_alarm</string>
     <string name="today">Today</string>
@@ -123,8 +127,8 @@
     <!-- Strings for Help screen -->
     <string name="help_title">Help</string>
     <string name="help_key" translatable="false">help_key</string>
-    <string name="help_add_text">Type to add a product to the list.</string>
+    <string name="help_add_text">Add a product to the list.</string>
+    <string name="help_history_text">Add products quicker from history.</string>
     <string name="help_swipe_text">Swipe left or right to remove a product from the list.</string>
     <string name="help_importance_text">Double-tap to mark a product as important.</string>
-    <string name="help_history_text">Quickly add products from history.</string>
 </resources>

@@ -2,10 +2,11 @@
 <resources>
     <string name="app_name">Liste de course</string>
 
-    <string name="confirm">Oui</string>
-    <string name="cancel">Non</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="cancel">Annuler</string>
 
-    <string name="empty_list">La liste est vide</string>
+    <string name="empty_list">La liste est vide.</string>
 
     <!-- Strings for deletion operations -->
     <string name="clear_list">Effacer la liste</string>
@@ -16,9 +17,10 @@
         <item quantity="other">Effacer les produits sélectionnés de l\'historique ?</item>
     </plurals>
     <plurals name="products_cleared">
-        <item quantity="one">%d produit supprimé de l\'historique</item>
-        <item quantity="other">%d produits supprimés de l\'historique</item>
+        <item quantity="one">%d produit supprimé de l\'historique.</item>
+        <item quantity="other">%d produits supprimés de l\'historique.</item>
     </plurals>
+    <string name="delete_product">retiré de la liste.</string>
 
     <!-- Strings for addition operations -->
     <string name="add_hint">Ajouter un produit</string>
@@ -27,10 +29,10 @@
         <item quantity="other">Ajouter les éléments sélectionnés à la liste ?</item>
     </plurals>
     <string name="already">est déjà dans la liste</string>
-    <string name="no_new_product">Pas de nouveau produit</string>
+    <string name="no_new_product">Pas de nouveau produit.</string>
     <plurals name="new_products">
-        <item quantity="one">%d nouveau produit ajouté à la liste</item>
-        <item quantity="other">%d nouveaux produits ajoutés à la liste</item>
+        <item quantity="one">%d nouveau produit ajouté à la liste.</item>
+        <item quantity="other">%d nouveaux produits ajoutés à la liste.</item>
     </plurals>
 
     <!-- Strings for History activity -->
@@ -51,6 +53,8 @@
     <string name="notification_picker_message">Sélectionner l\'heure de la notification :</string>
     <string name="alarm_set_message">Une notification de rappel sera déclenchée à</string>
     <string name="alarm_set_when">le</string>
+    <string name="alarm_set">Rappel activé.</string>
+    <string name="alarm_canceled">Rappel annulé.</string>
     <string name="today">Aujourd\'hui</string>
     <string name="tomorrow">Demain</string>
     <string name="aftertomorrow">Après-demain</string>
@@ -88,10 +92,10 @@
 
     <!-- Strings for Help screen -->
     <string name="help_title">Aide</string>
-    <string name="help_add_text">Entrer un produit dans la liste.</string>
-    <string name="help_swipe_text">Balayer vers la gauche ou vers la droite pour supprimer un produit de la liste.</string>
+    <string name="help_add_text">Ajouter un produit dans la liste.</string>
+    <string name="help_swipe_text">Balayer vers la gauche ou la droite pour supprimer un produit de la liste.</string>
     <string name="help_importance_text">Appuyer deux fois pour marquer un produit comme important.</string>
-    <string name="help_history_text">Ajouter rapidement des produits depuis l\'historique.</string>
+    <string name="help_history_text">Ajouter plus rapidement des produits depuis l\'historique.</string>
     <string name="pref_font_label">Police de caractère</string>
     <string name="pref_font_normal_label">Normale</string>
     <string name="pref_font_handwritten_label">Manuscrite</string>

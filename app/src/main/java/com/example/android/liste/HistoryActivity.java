@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
@@ -105,14 +106,14 @@ public class HistoryActivity extends AppCompatActivity
                 if (selectedIds != null && !selectedIds.isEmpty()) {
                     new AlertDialog.Builder(HistoryActivity.this)
                             .setMessage(getResources().getQuantityString(R.plurals.add_selected_products, selectedIds.size()))
-                            .setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                            .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     addSelectedEntries();
                                     finish();
                                 }
                             })
-                            .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     setResult(RESULT_CANCELED, null);
@@ -133,7 +134,7 @@ public class HistoryActivity extends AppCompatActivity
     private void deleteSelectedEntries() {
         new AlertDialog.Builder(HistoryActivity.this)
                 .setMessage(getResources().getQuantityString(R.plurals.clear_selected_products, selectedIds.size()))
-                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         int nb = 0;
@@ -153,7 +154,7 @@ public class HistoryActivity extends AppCompatActivity
                         invalidateOptionsMenu();
                     }
                 })
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.no, null)
                 .create().show();
     }
 
@@ -217,10 +218,10 @@ public class HistoryActivity extends AppCompatActivity
     }
 
     /**
-     * Shows a toast message.
+     * Shows a short Snackbar message.
      */
     private void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Snackbar.make(findViewById(R.id.history), message, Snackbar.LENGTH_SHORT).show();
     }
 
     // Callback method of HistoryAdapter.AdapterOnClickHandler.

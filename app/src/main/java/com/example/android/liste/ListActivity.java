@@ -6,6 +6,7 @@ import android.app.LoaderManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -49,7 +50,11 @@ import com.example.android.liste.data.ListContract;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+import static android.R.attr.priority;
+import static android.R.attr.value;
+import static android.R.id.undo;
 
 
 /**
@@ -82,6 +87,9 @@ public class ListActivity extends AppCompatActivity
     private SharedPreferences mSharedPreferences;
     private AutoCompleteTextView mAutoCompleteTextView;
     private ProgressBar mProgressBar;
+
+    private String undoProduct;
+    private int undoPriority;
 
     // A CursorAdapter for suggestions from the history table when typing
     private SimpleCursorAdapter mCursorAdapter;
@@ -328,7 +336,7 @@ public class ListActivity extends AppCompatActivity
         if (mAdapter.getItemCount() != 0) {
             new AlertDialog.Builder(ListActivity.this)
                     .setMessage(getString(R.string.message_confirm_clear_list))
-                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             getContentResolver().delete(ListContract.ListEntry.CONTENT_URI, null, null);
@@ -337,7 +345,7 @@ public class ListActivity extends AppCompatActivity
                             if (!mFab.isShown()) mFab.show();
                         }
                     })
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.no, null)
                     .create().show();
         } else {
             showMessage(getString(R.string.empty_list));
@@ -350,7 +358,19 @@ public class ListActivity extends AppCompatActivity
         Uri uri = ListContract.ListEntry.CONTENT_URI;
         uri = uri.buildUpon().appendPath(stringId).build();
 
-        getContentResolver().delete(uri, null, null);
+        ContentResolver cr = getContentResolver();
+
+        // Save values for undo operation
+        String[] projection  = { ListContract.ListEntry.COLUMN_STRING, ListContract.ListEntry.COLUMN_PRIORITY };
+        Cursor cu = cr.query(uri, projection, null, null, null);
+        cu.moveToFirst();
+        String product = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_STRING));
+        int priority = cu.getInt(cu.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
+        cu.close();
+
+        cr.delete(uri, null, null);
+
+        showMessageWithAction("'" + product + "' " + getString(R.string.delete_product), product, priority);
 
         // Make sure the FAB is visible as scrolling up may not be possible anymore
         // as elements are deleted.
@@ -412,11 +432,27 @@ public class ListActivity extends AppCompatActivity
     }
 
     /**
-     * Shows a toast message.
+     * Shows a short Snackbar message.
      */
     private void showMessage(String message) {
-        //Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Shows long Snackbar message with an Action
+     */
+    private void showMessageWithAction(final String message, final String product, final int priority) {
+        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.cancel), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ContentValues cv = new ContentValues();
+                        cv.put(ListContract.ListEntry.COLUMN_STRING, product);
+                        cv.put(ListContract.ListEntry.COLUMN_PRIORITY, priority);
+                        getContentResolver().insert(ListContract.ListEntry.CONTENT_URI, cv);
+                    }
+                })
+                .show();
     }
 
     /**
@@ -490,6 +526,8 @@ public class ListActivity extends AppCompatActivity
 
         PreferenceUtils.setAlarmIndicator(this, mSharedPreferences, false, null);
         invalidateOptionsMenu();
+
+        showMessage(getString(R.string.alarm_canceled));
     }
 
     private void showNotificationCancelingDialog() {
@@ -587,6 +625,7 @@ public class ListActivity extends AppCompatActivity
         String date = formatter.format(timeDate);
         PreferenceUtils.setRealDayOfAlarm(this, mSharedPreferences, date);
 
+        showMessage(getString(R.string.alarm_set));
         invalidateOptionsMenu();
     }
 
