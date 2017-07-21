@@ -30,6 +30,7 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,8 +38,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -46,7 +45,6 @@ import android.widget.EditText;
 import android.widget.FilterQueryProvider;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -54,8 +52,6 @@ import com.example.android.liste.data.ListContract;
 
 import java.util.Calendar;
 import java.util.Date;
-
-import static android.R.attr.y;
 
 
 /**
@@ -235,7 +231,7 @@ public class ListActivity extends AppCompatActivity
 
         mCursorAdapter = new SimpleCursorAdapter(
                 this,
-                R.layout.hint_row,
+                R.layout.row_completion,
                 null,
                 new String[] {ListContract.HistoryEntry.COLUMN_PRODUCT},
                 new int[] {android.R.id.text1},
@@ -271,7 +267,7 @@ public class ListActivity extends AppCompatActivity
     }
 
     private void setupAlarmButtons(Menu menu) {
-        boolean isAlarmSet = mSharedPreferences.getBoolean(getString(R.string.alarm_on), false);
+        boolean isAlarmSet = PreferenceUtils.isAlarmOn(this, mSharedPreferences);
         MenuItem alarmSettingButton = menu.findItem(R.id.action_notify);
         alarmSettingButton.setVisible(!isAlarmSet);
         MenuItem alarmCancelButton = menu.findItem(R.id.action_alarm_info);
@@ -483,7 +479,6 @@ public class ListActivity extends AppCompatActivity
 
     @Override
     public void onClick(int id) {
-        //updatePriority(id);
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(25);
         showEditionDialog(id);
@@ -492,34 +487,6 @@ public class ListActivity extends AppCompatActivity
     private void updateItemTouchHelper() {
         int direction = PreferenceUtils.getDirectionFromPrefs(this, mSharedPreferences);
         mSimpleCallback.setDefaultSwipeDirs(direction);
-    }
-
-    private void cancelReminder() {
-        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
-
-        PreferenceUtils.setAlarmIndicator(this, mSharedPreferences, false, null);
-        invalidateOptionsMenu();
-
-        showMessage(getString(R.string.alarm_canceled));
-    }
-
-    private void showNotificationCancelingDialog() {
-        String time = mSharedPreferences.getString(getString(R.string.alarm_time) , "00:00");
-        new AlertDialog.Builder(ListActivity.this)
-                .setMessage(getString(R.string.alarm_set_message) + " " + time + " "
-                        + getString(R.string.alarm_set_when) + " "
-                        + mSharedPreferences.getString(getString(R.string.real_day_alarm), "") + ".")
-                .setPositiveButton(android.R.string.ok, null)
-                .setNegativeButton(R.string.deactivate, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        cancelReminder();
-                    }
-                })
-                .create().show();
     }
 
     private void showDatePicker() {
@@ -540,11 +507,15 @@ public class ListActivity extends AppCompatActivity
         // Create View for Custom title
         LayoutInflater inflater = getLayoutInflater();
         final ViewGroup nullParent = null;
-        View v = inflater.inflate(R.layout.dialog_date_picker_title, nullParent);
+        View v = inflater.inflate(R.layout.dialog_picker_date_title, nullParent);
 
         datePickerDialog.setCustomTitle(v);
 
         datePickerDialog.show();
+
+        // This call is after show() because Button are not created before...
+        Button confirmButton = datePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        if (confirmButton != null) confirmButton.setText(getString(R.string.next));
     }
 
     private void showTimePicker(final int year, final int month, final int day) {
@@ -555,7 +526,7 @@ public class ListActivity extends AppCompatActivity
         final TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                activateReminderTime(year, month, day, hour, minute);
+                setNotificationTime(year, month, day, hour, minute);
             }
         };
 
@@ -569,14 +540,14 @@ public class ListActivity extends AppCompatActivity
         // Create View for Custom title
         LayoutInflater inflater = getLayoutInflater();
         final ViewGroup nullParent = null;
-        View v = inflater.inflate(R.layout.dialog_time_picker_title, nullParent);
+        View v = inflater.inflate(R.layout.dialog_picker_time_title, nullParent);
 
         timePickerDialog.setCustomTitle(v);
 
         timePickerDialog.show();
     }
 
-    private void activateReminderTime(int year, int month, int day, int hour, int minute) {
+    private void setNotificationTime(int year, int month, int day, int hour, int minute) {
 
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
         notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, LIST_NOTIFICATION_ID);
@@ -589,22 +560,45 @@ public class ListActivity extends AppCompatActivity
         cal.set(Calendar.DAY_OF_MONTH, day);
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, minute);
+        long millis = cal.getTimeInMillis();
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
 
-        Date timeDate = cal.getTime();
+        String time = DateUtils.formatDateTime(this, millis, DateUtils.FORMAT_SHOW_TIME|DateUtils.FORMAT_SHOW_DATE);
 
-        java.text.DateFormat formatter = DateFormat.getTimeFormat(this);
-        String time = formatter.format(timeDate);
-        PreferenceUtils.setAlarmIndicator(this, mSharedPreferences, true, time);
+        PreferenceUtils.setAlarm(this, mSharedPreferences, true, time);
 
-        formatter = DateFormat.getMediumDateFormat(this);
-        String date = formatter.format(timeDate);
-        PreferenceUtils.setRealDayOfAlarm(this, mSharedPreferences, date);
+        showMessage(getString(R.string.alarm_set_message) + " " + time);
 
-        showMessage(getString(R.string.alarm_set));
         invalidateOptionsMenu();
+    }
+
+    private void showNotificationCancelingDialog() {
+        String time = PreferenceUtils.getAlarmTime(this, mSharedPreferences);
+        new AlertDialog.Builder(ListActivity.this)
+                .setMessage(getString(R.string.alarm_set_dialog_message) + " " + time + ".")
+                .setPositiveButton(android.R.string.ok, null)
+                .setNegativeButton(R.string.deactivate, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        cancelReminder();
+                    }
+                })
+                .create().show();
+    }
+
+    private void cancelReminder() {
+        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+
+        PreferenceUtils.setAlarm(this, mSharedPreferences, false, null);
+
+        invalidateOptionsMenu();
+
+        showMessage(getString(R.string.alarm_canceled));
     }
 
     // Method for creating the Notification object

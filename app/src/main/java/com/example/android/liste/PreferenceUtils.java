@@ -77,19 +77,19 @@ class PreferenceUtils {
         else return ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
     }
 
-    // Sets the value of 'alarm_on' which indicates if a reminder is planned.
-    // If it is on (true), then also sets the planned time as a String representation.
-    static void setAlarmIndicator(Context context, SharedPreferences sharedPreferences, boolean is_on, String time) {
+    // Sets the alarm 'on' or 'off'. If 'on', also saves the time as a String representation.
+    static void setAlarm(Context context, SharedPreferences sharedPreferences, boolean is_on, String time) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(context.getString(R.string.alarm_on), is_on);
         if (is_on && time != null) editor.putString(context.getString(R.string.alarm_time), time);
         editor.apply();
     }
 
-    // Sets the value in real time of the day of the alarm
-    static void setRealDayOfAlarm(Context context, SharedPreferences sharedPreferences, String realDay) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(context.getString(R.string.real_day_alarm), realDay);
-        editor.apply();
+    static boolean isAlarmOn(Context context, SharedPreferences sharedPreferences) {
+        return sharedPreferences.getBoolean(context.getString(R.string.alarm_on), false);
+    }
+
+    static String getAlarmTime(Context context, SharedPreferences sharedPreferences) {
+        return sharedPreferences.getString(context.getString(R.string.alarm_time), "");
     }
 }

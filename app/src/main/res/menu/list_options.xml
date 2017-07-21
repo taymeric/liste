@@ -6,7 +6,7 @@
         android:id="@+id/action_add"
         android:icon="@drawable/ic_create_white_24dp"
         android:title="@string/add_hint"
-        app:actionLayout="@layout/add_layout"
+        app:actionLayout="@layout/bar_edit_text_view"
         app:showAsAction="ifRoom|collapseActionView"/>
 
     <item android:id="@+id/action_alarm_info"

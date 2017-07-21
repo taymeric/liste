@@ -28,6 +28,6 @@ public class NotificationReceiver extends BroadcastReceiver {
         notificationManager.notify(id, notification);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        PreferenceUtils.setAlarmIndicator(context, sharedPreferences, false, null);
+        PreferenceUtils.setAlarm(context, sharedPreferences, false, null);
     }
 }
