@@ -111,7 +111,7 @@ public class ListActivity extends AppCompatActivity
 
         // Set up the Recycler View and its Adapter
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mLayoutManager = PreferenceUtils.getLayoutFromPrefs(this, mSharedPreferences, getString(R.string.pref_list_layout_key));
+        mLayoutManager = PreferenceUtils.getLayout(this, mSharedPreferences, getString(R.string.pref_list_layout_key));
         mRecyclerView.setLayoutManager(mLayoutManager);
         //mRecyclerView.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
         mAdapter = new ListAdapter(this, this);
@@ -142,7 +142,7 @@ public class ListActivity extends AppCompatActivity
 
         // ItemTouchHelper for delete on swipe
         mSimpleCallback = new ItemTouchHelper.SimpleCallback(0,
-                PreferenceUtils.getDirectionFromPrefs(this, mSharedPreferences)) {
+                PreferenceUtils.getSwipeDirection(this, mSharedPreferences)) {
 
             @Override
             public boolean onMove(RecyclerView recyclerView,
@@ -249,7 +249,7 @@ public class ListActivity extends AppCompatActivity
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 String text = mAutoCompleteTextView.getText().toString();
                 if (!text.equals("")) {
-                    insertValueIntoTables(text);
+                    DataUtils.insertProductIntoBothTables(ListActivity.this, text);
                     mAutoCompleteTextView.setText("");
                 }
                 menuItem.collapseActionView();
@@ -283,21 +283,6 @@ public class ListActivity extends AppCompatActivity
                 ListContract.HistoryEntry._ID,
                 ListContract.HistoryEntry.COLUMN_PRODUCT};
         return getContentResolver().query(ListContract.HistoryEntry.CONTENT_URI, contactsProjection, select, selectArgs, null);
-    }
-
-    private void insertValueIntoTables(String value) {
-        // Add value to the list table with a default priority, shows a message if it is already there
-        ContentValues values = new ContentValues();
-        values.put(ListContract.ListEntry.COLUMN_PRODUCT, value);
-        values.put(ListContract.ListEntry.COLUMN_PRIORITY, DEFAULT_PRIORITY);
-        Uri uri = getContentResolver().insert(ListContract.ListEntry.CONTENT_URI, values);
-        if (uri != null && uri.equals(Uri.EMPTY)) {
-            showMessage(value + " " + getString(R.string.already));
-        }
-        // Add text to the history
-        ContentValues values2 = new ContentValues();
-        values2.put(ListContract.HistoryEntry.COLUMN_PRODUCT, value);
-        getContentResolver().insert(ListContract.HistoryEntry.CONTENT_URI, values2);
     }
 
     @Override
@@ -377,7 +362,7 @@ public class ListActivity extends AppCompatActivity
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LIST_LOADER_ID:
-                String sortOrder = PreferenceUtils.getSortOrderFromPrefs(this, mSharedPreferences);
+                String sortOrder = PreferenceUtils.getSortOrder(this, mSharedPreferences);
                 // Returns a new CursorLoader
                 return new CursorLoader(
                         this,    // Parent activity context
@@ -462,7 +447,7 @@ public class ListActivity extends AppCompatActivity
             mAdapter.notifyDataSetChanged();
             if (!mFab.isShown()) mFab.show();
         } else if (s.equals(getString(R.string.pref_list_layout_key))) {
-            mLayoutManager = PreferenceUtils.getLayoutFromPrefs(this, mSharedPreferences, getString(R.string.pref_list_layout_key));
+            mLayoutManager = PreferenceUtils.getLayout(this, mSharedPreferences, getString(R.string.pref_list_layout_key));
             mRecyclerView.setLayoutManager(mLayoutManager);
             if (!mFab.isShown()) mFab.show();
         } else if (s.equals(getString(R.string.pref_sort_order_key))) {
@@ -485,7 +470,7 @@ public class ListActivity extends AppCompatActivity
     }
 
     private void updateItemTouchHelper() {
-        int direction = PreferenceUtils.getDirectionFromPrefs(this, mSharedPreferences);
+        int direction = PreferenceUtils.getSwipeDirection(this, mSharedPreferences);
         mSimpleCallback.setDefaultSwipeDirs(direction);
     }
 
@@ -603,7 +588,7 @@ public class ListActivity extends AppCompatActivity
 
     // Method for creating the Notification object
     private Notification getNotification() {
-        String list = getListAsString(true);
+        String list = DataUtils.getListAsStringForNotification(this, mSharedPreferences);
         int nbOfProducts = mAdapter.getItemCount();
         String title = getResources().getQuantityString(R.plurals.notification_title, nbOfProducts, nbOfProducts);
         NotificationCompat.Builder mBuilder = (NotificationCompat.Builder)
@@ -628,7 +613,7 @@ public class ListActivity extends AppCompatActivity
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setData(Uri.parse("mailto:")); // only email apps should handle this
             intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " " + getDate());
-            intent.putExtra(Intent.EXTRA_TEXT, getListAsString(false));
+            intent.putExtra(Intent.EXTRA_TEXT, DataUtils.getListAsStringForEmail(this, mSharedPreferences));
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);
             }
@@ -642,32 +627,6 @@ public class ListActivity extends AppCompatActivity
         Date date = c.getTime();
         java.text.DateFormat formatter = DateFormat.getDateFormat(this);
         return formatter.format(date);
-    }
-
-    private String getListAsString(boolean forNotification) {
-        String list = "";
-        Uri uri = ListContract.ListEntry.CONTENT_URI;
-        String[] projection  = {ListContract.ListEntry.COLUMN_PRODUCT, ListContract.ListEntry.COLUMN_PRIORITY};
-        String sortOrder;
-        if (!forNotification) sortOrder = PreferenceUtils.getSortOrderFromPrefs(this, mSharedPreferences);
-        else sortOrder = ListContract.ListEntry.COLUMN_PRIORITY + " ASC, "
-                + ListContract.ListEntry.COLUMN_PRODUCT + " COLLATE LOCALIZED ASC";
-        Cursor cursor = getContentResolver().query(uri, projection, null, null, sortOrder);
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                if (!forNotification) list = list + "- ";
-                list = list + cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT));
-                int p = cursor.getInt(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
-                if (p == HIGH_PRIORITY && !forNotification) list = list + " !";
-                if (!forNotification) list = list + "\n";
-                else list = list + ", ";
-
-            }
-            cursor.close();
-        }
-        // Remove extra ', '
-        if (forNotification && !list.isEmpty()) list = list.substring(0, list.length()-2);
-        return list;
     }
 
     private void showEditionDialog(int id) {
@@ -709,7 +668,7 @@ public class ListActivity extends AppCompatActivity
             else editText.setText("");
 
             alertDialog = new AlertDialog.Builder(ListActivity.this)
-                    .setMessage(product)
+                    .setMessage(product + " " + getString(R.string.additional_information))
                     .setView(view)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override

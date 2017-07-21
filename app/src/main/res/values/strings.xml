@@ -41,7 +41,7 @@
     <string name="history_instructions">Select products to add to the list:</string>
     <string name="empty_image_description">Pen icon</string>
     <string name="empty_view_title_text">History is empty. Start by adding products from the main screen.</string>
-    <string name="history_message" translatable="false">himessage</string>
+    <string name="history_message" translatable="false">history_message</string>
 
     <!-- Strings for Notification -->
     <string name="activate_reminder">Plan a reminder</string>
@@ -60,13 +60,13 @@
     <string name="alarm_canceled">Reminder canceled.</string>
 
     <!-- Strings for edition -->
+    <string name="additional_information">- Additional information</string>
     <string name="note">Annotation (optional):</string>
     <string name="priority">Priority:</string>
-    <string name="priority_high">Important (!)</string>
+    <string name="priority_high">Important</string>
     <string name="priority_normal">Normal</string>
-    <string name="priority_low">Not sure (?)</string>
+    <string name="priority_low">Optional</string>
     <string name="annotation_hint">e.g. Quantity</string>
-
 
     <!-- Strings for email sending -->
     <string name="send_email">Send by email</string>

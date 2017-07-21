@@ -31,7 +31,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     // An AdapterOnClickHandler is used to interact with History activity.
     HistoryAdapter(Context context, AdapterOnClickHandler clickHandler) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mTextSize = PreferenceUtils.getTextSizeFromPrefs(
+        mTextSize = PreferenceUtils.getTextSize(
                 context, sharedPreferences, context.getString(R.string.pref_history_size_key));
         mClickHandler = clickHandler;
         resetIsChecked();

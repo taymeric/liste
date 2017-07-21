@@ -47,7 +47,6 @@
     <string name="reminder_info">Informations sur le rappel</string>
     <string name="deactivate">Désactiver</string>
     <plurals name="notification_title">
-        <item quantity="zero">%d produit dans la liste de course :</item>
         <item quantity="one">%d produit dans la liste de course :</item>
         <item quantity="other">%d produits dans la liste de course :</item>
     </plurals>
@@ -58,11 +57,12 @@
     <string name="alarm_canceled">Rappel annulé.</string>
 
     <!-- Strings for edition -->
+    <string name="additional_information">- Informations complémentaires</string>
     <string name="note">Annotation (optionnel) :</string>
     <string name="priority">Priorité :</string>
-    <string name="priority_high">Important (!)</string>
+    <string name="priority_high">Important</string>
     <string name="priority_normal">Normal</string>
-    <string name="priority_low">Pas sûr (?)</string>
+    <string name="priority_low">Optionnel</string>
     <string name="annotation_hint">ex. Quantité</string>
 
     <!-- Strings for email sending -->

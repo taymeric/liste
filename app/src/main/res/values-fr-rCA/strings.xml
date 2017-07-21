@@ -17,7 +17,6 @@
     <string name="send_email">Envoyer par courriel</string>
 
     <plurals name="notification_title">
-        <item quantity="zero">%d produit dans la liste d\'épicerie :</item>
         <item quantity="one">%d produit dans la liste d\'épicerie :</item>
         <item quantity="other">%d produits dans la liste d\'épicerie :</item>
     </plurals>

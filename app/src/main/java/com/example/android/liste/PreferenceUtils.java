@@ -11,7 +11,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import com.example.android.liste.data.ListContract;
 
 /**
- * Utility methods to get settings values in accordance with preference settings
+ * Utility methods to get and set settings values of SharedPreferences
  */
 class PreferenceUtils {
 
@@ -19,7 +19,7 @@ class PreferenceUtils {
      * In this method, the parameter 'key' differentiate between the RecyclerView for the list
      * and the RecyclerView for the history.
      */
-    static float getTextSizeFromPrefs(
+    static float getTextSize(
             Context context, SharedPreferences sharedPreferences, String key) {
         float size;
         String sizeString = sharedPreferences.getString(
@@ -33,11 +33,16 @@ class PreferenceUtils {
         return size;
     }
 
+    static String getFont(Context context, SharedPreferences sharedPreferences) {
+        return sharedPreferences.getString(context.getString(R.string.pref_font_key),
+                context.getString(R.string.pref_font_normal_value));
+    }
+
     /*
      * In this method, the parameter 'key' differentiate between the RecyclerView for the list
      * and the RecyclerView for the history.
      */
-    static RecyclerView.LayoutManager getLayoutFromPrefs(
+    static RecyclerView.LayoutManager getLayout(
             Context context, SharedPreferences sharedPreferences, String key) {
 
         String value = sharedPreferences.getString(
@@ -52,7 +57,7 @@ class PreferenceUtils {
             return new LinearLayoutManager(context);
     }
 
-    static String getSortOrderFromPrefs(Context context, SharedPreferences sharedPreferences) {
+    static String getSortOrder(Context context, SharedPreferences sharedPreferences) {
         String sortOrder = sharedPreferences.getString(
                 context.getString(R.string.pref_sort_order_key),
                 context.getString(R.string.pref_sort_order_name_value));
@@ -66,7 +71,7 @@ class PreferenceUtils {
         return sortOrder;
     }
 
-    static int getDirectionFromPrefs(Context context, SharedPreferences sharedPreferences) {
+    static int getSwipeDirection(Context context, SharedPreferences sharedPreferences) {
         String directionString = sharedPreferences.getString(
                 context.getString(R.string.pref_direction_key),
                 context.getString(R.string.pref_direction_right_value));

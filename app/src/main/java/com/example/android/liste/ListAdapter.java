@@ -38,10 +38,9 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         mContext = context;
         mListAdapterOnClickListener = listener;
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        mTextSize = PreferenceUtils.getTextSizeFromPrefs(
+        mTextSize = PreferenceUtils.getTextSize(
                 mContext, mSharedPreferences, mContext.getString(R.string.pref_list_size_key));
-        mFontFamily = mSharedPreferences.getString(context.getString(R.string.pref_font_key),
-                context.getString(R.string.pref_font_normal_value));
+        mFontFamily = PreferenceUtils.getFont(mContext, mSharedPreferences);
 
         Drawable highPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_high_color);
         highPriorityMark.setBounds(new Rect(0, 0, (int) mTextSize, (int) mTextSize));
@@ -122,13 +121,12 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     }
 
     void reloadSize() {
-        mTextSize = PreferenceUtils.getTextSizeFromPrefs(
+        mTextSize = PreferenceUtils.getTextSize(
                 mContext, mSharedPreferences, mContext.getString(R.string.pref_list_size_key));
     }
 
     void reloadFont() {
-        mFontFamily = mSharedPreferences.getString(mContext.getString(R.string.pref_font_key),
-                mContext.getString(R.string.pref_font_normal_value));
+        mFontFamily = PreferenceUtils.getFont(mContext, mSharedPreferences);
     }
 
     interface ListAdapterOnClickListener {
