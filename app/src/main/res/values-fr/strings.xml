@@ -50,9 +50,9 @@
         <item quantity="one">%d produit dans la liste de course :</item>
         <item quantity="other">%d produits dans la liste de course :</item>
     </plurals>
-    <string name="notification_time_picker_message">2. Sélectionner l\'heure du rappel :</string>
     <string name="notification_date_picker_message">1. Sélectionner le jour du rappel :</string>
-    <string name="alarm_set_dialog_message">Une notification de rappel sera déclenchée à la date et à l\'heure suivantes :</string>
+    <string name="notification_time_picker_message">2. Sélectionner l\'heure du rappel :</string>
+    <string name="alarm_set_dialog_message">Date et heure du rappel :</string>
     <string name="alarm_set_message">Rappel activé :</string>
     <string name="alarm_canceled">Rappel annulé.</string>
 

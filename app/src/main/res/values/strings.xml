@@ -51,11 +51,11 @@
         <item quantity="one">%d product in the grocery list:</item>
         <item quantity="other">%d products in the grocery list:</item>
     </plurals>
-    <string name="notification_time_picker_message">2. Select time of reminder:</string>
     <string name="notification_date_picker_message">1. Select day of reminder:</string>
+    <string name="notification_time_picker_message">2. Select time of reminder:</string>
     <string name="alarm_on" translatable="false">alarm_on</string>
     <string name="alarm_time" translatable="false">alarm_time</string>
-    <string name="alarm_set_dialog_message">A reminder notification will be triggered at the following date and time:</string>
+    <string name="alarm_set_dialog_message">Date and time of reminder:</string>
     <string name="alarm_set_message">Reminder set:</string>
     <string name="alarm_canceled">Reminder canceled.</string>
 

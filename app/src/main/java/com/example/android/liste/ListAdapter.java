@@ -32,6 +32,8 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private Cursor mCursor;
     private float mTextSize;
     private String mFontFamily;
+    private Drawable mHighPriorityMark;
+    private Drawable mLowPriorityMark;
 
     // A Context is needed for PreferenceUtils methods.
     ListAdapter(Context context, ListAdapterOnClickListener listener) {
@@ -42,13 +44,11 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 mContext, mSharedPreferences, mContext.getString(R.string.pref_list_size_key));
         mFontFamily = PreferenceUtils.getFont(mContext, mSharedPreferences);
 
-        Drawable highPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_high_color);
-        highPriorityMark.setBounds(new Rect(0, 0, (int) mTextSize, (int) mTextSize));
-        highPriorityMark.setAlpha(127);
+        mHighPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_exclamation);
+        mHighPriorityMark.setBounds(new Rect(0, 0, (int) mTextSize, (int) mTextSize));
 
-        Drawable lowPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_low_color);
-        lowPriorityMark.setBounds(new Rect(0, 0, (int) mTextSize, (int) mTextSize));
-        lowPriorityMark.setAlpha(127);
+        mLowPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_question);
+        mLowPriorityMark.setBounds(new Rect(0, 0, (int) mTextSize, (int) mTextSize));
 
         setHasStableIds(true);
     }
@@ -70,29 +70,31 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             String product = mCursor.getString(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT));
             String annotation = mCursor.getString(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_ANNOTATION));
             int priority = mCursor.getInt(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
+
+            holder.mAnnotationTextView.setVisibility(View.GONE);
             if (annotation != null) {
                 annotation = annotation.trim();
-                if (!annotation.equals("")) product += "  ( " + annotation + " )";
+                if (!annotation.equals("")) {
+                    holder.mAnnotationTextView.setVisibility(View.VISIBLE);
+                    holder.mAnnotationTextView.setText(annotation);
+                }
             }
-            if (priority == ListActivity.HIGH_PRIORITY)
-                product += "  !";
-            else if (priority == ListActivity.LOW_PRIORITY)
-                product += "  ?";
-            product = "-  " + product;
-            holder.mTextView.setText(product);
+
+            holder.mProductTextView.setText(product);
 
             // The following two lines are not a efficient way to proceed.
             // Use viewType in onCreateViewHolder later.
-            holder.mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
-            holder.mTextView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
+            holder.mProductTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
+            holder.mProductTextView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
+            holder.mAnnotationTextView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
 
-            /*int priority = mCursor.getInt(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
+
             if (priority == ListActivity.HIGH_PRIORITY)
-                holder.mTextView.setCompoundDrawables(null, null, mHighPriorityMark, null);
+                holder.mProductTextView.setCompoundDrawables(null, null, mHighPriorityMark, null);
             else if (priority == ListActivity.LOW_PRIORITY)
-                holder.mTextView.setCompoundDrawables(null, null, mLowPriorityMark, null);
+                holder.mProductTextView.setCompoundDrawables(null, null, mLowPriorityMark, null);
             else
-                holder.mTextView.setCompoundDrawables(null, null, null, null);*/
+                holder.mProductTextView.setCompoundDrawables(null, null, null, null);
 
             // A tag containing the Id of the element in the table is needed
             // to handle delete-on-swipe from the List activity.
@@ -135,13 +137,14 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     // Provides a reference to the view(s) for each data item
     class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in our case
-        final TextView mTextView;
+        final TextView mProductTextView;
+        final TextView mAnnotationTextView;
         int id;
 
         ViewHolder(View itemView) {
             super(itemView);
-            mTextView = itemView.findViewById(R.id.item_text);
+            mProductTextView = itemView.findViewById(R.id.item_product);
+            mAnnotationTextView = itemView.findViewById(R.id.item_annotation);
 
             itemView.setOnTouchListener(new View.OnTouchListener() {
                 final private GestureDetector gestureDetector = new GestureDetector(

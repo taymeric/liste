@@ -12,21 +12,29 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:paddingBottom="12dp"
+        android:paddingEnd="24dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingStart="24dp"
+        android:paddingTop="12dp">
 
         <TextView
-            android:id="@+id/item_text"
+            android:id="@+id/item_product"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:drawablePadding="16dp"
-            android:paddingBottom="12dp"
-            android:paddingEnd="24dp"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
-            android:paddingStart="24dp"
-            android:paddingTop="12dp"
+            android:textAppearance="?android:textAppearance"
             tools:text="Text"/>
+
+        <TextView
+            android:id="@+id/item_annotation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceSmall"
+            tools:text="Subtext"/>
 
     </LinearLayout>
 

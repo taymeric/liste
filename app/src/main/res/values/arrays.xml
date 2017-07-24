@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Arrays for text size preferences -->
     <array name="pref_size_option_labels">
         <item>@string/pref_size_small_label</item>
         <item>@string/pref_size_big_label</item>
     </array>
-
     <array name="pref_size_option_values">
         <item>@string/pref_size_small_value</item>
         <item>@string/pref_size_big_value</item>
     </array>
 
+    <!-- Arrays for layout preferences -->
     <array name="pref_layout_option_labels">
         <item>@string/pref_layout_linear_label</item>
         <item>@string/pref_layout_grid_label</item>
     </array>
-
     <array name="pref_list_layout_option_values">
         <item>@string/pref_layout_linear_value</item>
         <item>@string/pref_layout_staggered_grid_value</item>
     </array>
-
     <array name="pref_history_layout_option_values">
         <item>@string/pref_layout_linear_value</item>
         <item>@string/pref_layout_grid_value</item>
     </array>
 
+    <!-- Arrays for font preference -->
     <array name="pref_font_labels">
         <item>@string/pref_font_normal_label</item>
         <item>@string/pref_font_handwritten_label</item>
     </array>
-
     <array name="pref_font_values">
         <item>@string/pref_font_normal_value</item>
         <item>@string/pref_font_handwritten_value</item>
     </array>
 
+    <!-- Arrays for sort order preference -->
     <array name="pref_sort_order_option_labels">
         <item>@string/pref_sort_order_by_name_label</item>
         <item>@string/pref_sort_order_by_priority_label</item>
     </array>
-
     <array name="pref_sort_order_option_values">
         <item>@string/pref_sort_order_name_value</item>
         <item>@string/pref_sort_order_priority_value</item>
     </array>
 
+    <!-- Arrays for direction of swipe preference -->
     <array name="pref_direction_option_labels">
         <item>@string/pref_direction_right_label</item>
         <item>@string/pref_direction_left_label</item>
         <item>@string/pref_direction_both_label</item>
     </array>
-
     <array name="pref_direction_option_values">
         <item>@string/pref_direction_right_value</item>
         <item>@string/pref_direction_left_value</item>

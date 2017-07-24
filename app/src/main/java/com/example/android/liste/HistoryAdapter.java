@@ -111,7 +111,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
         ViewHolder(final View itemView) {
             super(itemView);
-            mCheckBox = itemView.findViewById(R.id.item_text);
+            mCheckBox = itemView.findViewById(R.id.item_product);
         }
     }
 }

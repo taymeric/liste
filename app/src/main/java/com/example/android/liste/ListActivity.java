@@ -679,7 +679,7 @@ public class ListActivity extends AppCompatActivity
                             else if (radioButton3.isChecked()) newPriority = LOW_PRIORITY;
                             else newPriority = DEFAULT_PRIORITY;
 
-                            String newAnnotation = editText.getText().toString();
+                            String newAnnotation = editText.getText().toString().trim();
 
                             ContentValues contentValues = new ContentValues();
                             contentValues.put(ListContract.ListEntry.COLUMN_PRIORITY, newPriority);
