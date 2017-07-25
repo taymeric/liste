@@ -58,12 +58,12 @@
 
     <!-- Strings for edition -->
     <string name="additional_information">- Informations complémentaires</string>
-    <string name="note">Annotation (optionnel) :</string>
+    <string name="note">Annotation :</string>
     <string name="priority">Priorité :</string>
     <string name="priority_high">Important</string>
     <string name="priority_normal">Normal</string>
     <string name="priority_low">Optionnel</string>
-    <string name="annotation_hint">ex. Quantité</string>
+    <string name="annotation_hint">ex. quantité</string>
 
     <!-- Strings for email sending -->
     <string name="send_email">Envoyer par email</string>

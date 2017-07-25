@@ -61,12 +61,12 @@
 
     <!-- Strings for edition -->
     <string name="additional_information">- Additional information</string>
-    <string name="note">Annotation (optional):</string>
+    <string name="note">Annotation:</string>
     <string name="priority">Priority:</string>
     <string name="priority_high">Important</string>
     <string name="priority_normal">Normal</string>
     <string name="priority_low">Optional</string>
-    <string name="annotation_hint">e.g. Quantity</string>
+    <string name="annotation_hint">e.g. quantity</string>
 
     <!-- Strings for email sending -->
     <string name="send_email">Send by email</string>

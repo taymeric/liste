@@ -3,7 +3,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:baselineAligned="false"
-              android:orientation="horizontal"
+              android:orientation="vertical"
               android:paddingBottom="16dp"
               android:paddingEnd="32dp"
               android:paddingLeft="32dp"
@@ -13,74 +13,68 @@
 
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginBottom="8dp"
-        android:text="@string/priority"
-        android:textAppearance="?android:textAppearanceSmall"/>
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal">
 
-    <RadioGroup
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
-
-        <RadioButton
-            android:id="@+id/button_1"
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/priority_high"/>
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:text="@string/priority"
+            android:textAppearance="?android:textAppearanceSmall"/>
 
-        <RadioButton
-            android:id="@+id/button_2"
-            android:layout_width="wrap_content"
+        <RadioGroup
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/priority_normal"/>
+            android:layout_weight="2"
+            android:orientation="vertical"
+            >
 
-        <RadioButton
-            android:id="@+id/button_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/priority_low"/>
+            <RadioButton
+                android:id="@+id/button_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/priority_high"/>
 
-    </RadioGroup>
+            <RadioButton
+                android:id="@+id/button_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/priority_normal"/>
+
+            <RadioButton
+                android:id="@+id/button_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/priority_low"/>
+
+        </RadioGroup>
 
     </LinearLayout>
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@android:color/darker_gray"/>
-
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/note"
-        android:textAppearance="?android:textAppearanceSmall"/>
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/dialog_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/annotation_hint"
-        android:inputType="textCapSentences"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/note"
+            android:textAppearance="?android:textAppearanceSmall"/>
 
-</LinearLayout>
+        <EditText
+            android:id="@+id/dialog_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="@string/annotation_hint"
+            android:inputType="textCapSentences"/>
+
+    </LinearLayout>
 
 </LinearLayout>
