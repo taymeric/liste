@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -172,8 +173,10 @@ public class ListActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == HISTORY_FOR_RESULT) {
             if (resultCode == RESULT_OK) {
+                mFab.setImageResource(R.drawable.ic_check_white_24dp);
+                mFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(ListActivity.this, R.color.colorPrimaryDark)));
                 String message = data.getStringExtra(getString(R.string.history_message));
-                showMessage(message);
+                showMessageWithFabCallback(message);
             }
         }
     }
@@ -416,7 +419,23 @@ public class ListActivity extends AppCompatActivity
      * Shows a short Snackbar message.
      */
     private void showMessage(String message) {
-        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_SHORT)
+                .show();
+    }
+
+    /**
+     * Shows a short Snackbar message and set the Floating Action Button image back
+     */
+    private void showMessageWithFabCallback(String message) {
+        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_LONG)
+                .addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        mFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(ListActivity.this, R.color.colorAccent)));
+                        mFab.setImageResource(R.drawable.ic_shopping_basket_white_24dp);
+                    }
+                })
+                .show();
     }
 
     /**
@@ -536,7 +555,6 @@ public class ListActivity extends AppCompatActivity
 
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
         notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, LIST_NOTIFICATION_ID);
-        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, getNotification());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar cal = Calendar.getInstance();
@@ -584,28 +602,6 @@ public class ListActivity extends AppCompatActivity
         invalidateOptionsMenu();
 
         showMessage(getString(R.string.alarm_canceled));
-    }
-
-    // Method for creating the Notification object
-    private Notification getNotification() {
-        String list = DataUtils.getListAsStringForNotification(this, mSharedPreferences);
-        int nbOfProducts = mAdapter.getItemCount();
-        String title = getResources().getQuantityString(R.plurals.notification_title, nbOfProducts, nbOfProducts);
-        NotificationCompat.Builder mBuilder = (NotificationCompat.Builder)
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_shopping_basket_white_24dp)
-                        .setContentTitle(title)
-                        .setContentText(list)
-                        .setColor(ContextCompat.getColor(this, R.color.colorAccent))
-                        .setAutoCancel(true)
-                        .setDefaults(Notification.DEFAULT_VIBRATE);
-
-        // Creates an explicit intent for an Activity in the app
-        Intent resultIntent = new Intent(this, ListActivity.class);
-
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(resultPendingIntent);
-        return mBuilder.build();
     }
 
     private void sendByEmail() {

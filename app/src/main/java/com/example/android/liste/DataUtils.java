@@ -1,10 +1,15 @@
 package com.example.android.liste;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.NotificationCompat;
 
 import com.example.android.liste.data.ListContract;
 
@@ -32,12 +37,9 @@ class DataUtils {
         context.getContentResolver().insert(ListContract.HistoryEntry.CONTENT_URI, values);
     }
 
-    static String getListAsStringForNotification(Context context, SharedPreferences sharedPreferences) {
-
-        String list = "";
+    static Notification getNotification(Context context, SharedPreferences sharedPreferences) {
 
         Uri uri = ListContract.ListEntry.CONTENT_URI;
-
         // For notifications, the whole list may not be entirely visible, so we sort by priority,
         // regardless of the user's preference, in order to get important products first.
         String sortOrder = ListContract.ListEntry.COLUMN_PRIORITY + " ASC, "
@@ -47,17 +49,40 @@ class DataUtils {
 
         Cursor cursor = context.getContentResolver().query(uri, projection, null, null, sortOrder);
 
+        // Retrieve number of products on the list to set title of notification
+        int nbOfProducts;
+        if (cursor != null) nbOfProducts = cursor.getCount();
+        else nbOfProducts = 0;
+        String title = context.getResources().getQuantityString(R.plurals.notification_title, nbOfProducts, nbOfProducts);
+
+        // Build a String representation of all the products in the list by iterating through the cursor
+        String list = "";
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 list += cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT))
-                            + ", ";
+                        + ", ";
             }
+            // Don't forget to close the cursor
             cursor.close();
         }
         // Remove extra ', ' unless the list was empty
         if (!list.isEmpty()) list = list.substring(0, list.length()-2);
 
-        return list;
+        NotificationCompat.Builder mBuilder = (NotificationCompat.Builder)
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.ic_shopping_basket_white_24dp)
+                        .setContentTitle(title)
+                        .setContentText(list)
+                        .setColor(ContextCompat.getColor(context, R.color.colorAccent))
+                        .setAutoCancel(true)
+                        .setDefaults(Notification.DEFAULT_VIBRATE);
+
+        // Creates an explicit intent for an Activity in the app
+        Intent resultIntent = new Intent(context, ListActivity.class);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        return mBuilder.build();
     }
 
     static String getListAsStringForEmail(Context context, SharedPreferences sharedPreferences) {
