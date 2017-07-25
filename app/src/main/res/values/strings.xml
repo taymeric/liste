@@ -29,7 +29,6 @@
         <item quantity="one">Add selected element to the list?</item>
         <item quantity="other">Add selected elements to the list?</item>
     </plurals>
-    <string name="already">is already on the list.</string>
     <string name="no_new_product">No new product.</string>
     <plurals name="new_products">
         <item quantity="one">%d new product added to the list.</item>

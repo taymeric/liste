@@ -29,11 +29,11 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     final private Context mContext;
     final private SharedPreferences mSharedPreferences;
     final private ListAdapterOnClickListener mListAdapterOnClickListener;
+    private final Drawable mHighPriorityMark;
+    private final Drawable mLowPriorityMark;
     private Cursor mCursor;
     private float mTextSize;
     private String mFontFamily;
-    private Drawable mHighPriorityMark;
-    private Drawable mLowPriorityMark;
 
     // A Context is needed for PreferenceUtils methods.
     ListAdapter(Context context, ListAdapterOnClickListener listener) {

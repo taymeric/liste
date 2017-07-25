@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v7.preference.PreferenceManager;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 import static com.example.android.liste.NotificationReceiver.NOTIFICATION_ID;
 
 
@@ -24,12 +25,13 @@ public class NotificationIntentService extends IntentService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Notification notification = DataUtils.getNotification(this);
 
-        Notification notification = DataUtils.getNotification(this, sharedPreferences);
-        int id = intent.getIntExtra(NOTIFICATION_ID, 0);
+        int id = 0;
+        if (intent != null) id= intent.getIntExtra(NOTIFICATION_ID, 0);
         notificationManager.notify(id, notification);
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         PreferenceUtils.setAlarm(this, sharedPreferences, false, null);
 
     }
