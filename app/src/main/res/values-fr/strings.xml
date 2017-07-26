@@ -9,6 +9,8 @@
 
     <string name="empty_list">La liste est vide.</string>
 
+    <string name="priority_indicator">Indicateur de priorité</string>
+
     <!-- Strings for deletion operations -->
     <string name="clear_list">Effacer la liste</string>
     <string name="clear_history">Effacer la sélection</string>
@@ -56,13 +58,13 @@
     <string name="alarm_canceled">Rappel annulé.</string>
 
     <!-- Strings for edition -->
-    <string name="additional_information">- Informations complémentaires</string>
+    <string name="additional_information">- Plus</string>
     <string name="note">Annotation :</string>
     <string name="priority">Priorité :</string>
     <string name="priority_high">Important</string>
     <string name="priority_normal">Normal</string>
     <string name="priority_low">Optionnel</string>
-    <string name="annotation_hint">ex. quantité</string>
+    <string name="annotation_hint">Ex. quantité</string>
 
     <!-- Strings for email sending -->
     <string name="send_email">Envoyer par email</string>
@@ -100,5 +102,5 @@
     <string name="help_add_text">Ajouter un produit dans la liste.</string>
     <string name="help_history_text">Ajouter plus rapidement des produits depuis l\'historique.</string>
     <string name="help_swipe_text">Balayer vers la gauche ou la droite pour supprimer un produit de la liste.</string>
-    <string name="help_edition_text">Appuyer deux fois pour marquer un produit comme important ou pour écrire une annotation.</string>
+    <string name="help_edition_text">Appuyer deux fois pour marquer un produit comme important ou ajouter une annotation.</string>
 </resources>

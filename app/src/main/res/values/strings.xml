@@ -9,6 +9,8 @@
 
     <string name="empty_list">The list is empty.</string>
 
+    <string name="priority_indicator">Priority indicator</string>
+
     <!-- Strings for deletion operations -->
     <string name="clear_list">Clear list</string>
     <string name="clear_history">Clear selection</string>
@@ -59,13 +61,13 @@
     <string name="alarm_canceled">Reminder canceled.</string>
 
     <!-- Strings for edition -->
-    <string name="additional_information">- Additional information</string>
+    <string name="additional_information">- More</string>
     <string name="note">Annotation:</string>
     <string name="priority">Priority:</string>
     <string name="priority_high">Important</string>
     <string name="priority_normal">Normal</string>
     <string name="priority_low">Optional</string>
-    <string name="annotation_hint">e.g. quantity</string>
+    <string name="annotation_hint">E.g. quantity</string>
 
     <!-- Strings for email sending -->
     <string name="send_email">Send by email</string>
@@ -123,5 +125,5 @@
     <string name="help_add_text">Add a product to the list.</string>
     <string name="help_history_text">Add products quicker from history.</string>
     <string name="help_swipe_text">Swipe left or right to remove a product from the list.</string>
-    <string name="help_edition_text">Double-tap to mark a product as important or write an annotation.</string>
+    <string name="help_edition_text">Double-tap to mark a product as important or add an annotation.</string>
 </resources>

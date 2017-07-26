@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.liste.data.ListContract;
@@ -98,12 +99,21 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             holder.mProductTextView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
             holder.mAnnotationTextView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
 
-            if (priority == ListActivity.HIGH_PRIORITY)
-                holder.mProductTextView.setCompoundDrawables(null, null, mHighPriorityMark, null);
-            else if (priority == ListActivity.LOW_PRIORITY)
-                holder.mProductTextView.setCompoundDrawables(null, null, mLowPriorityMark, null);
-            else
+            if (priority == ListActivity.HIGH_PRIORITY) {
+                holder.mPriorityView.setImageDrawable(mHighPriorityMark);
+                holder.mPriorityView.setVisibility(View.VISIBLE);
+            }
+            else if (priority == ListActivity.LOW_PRIORITY) {
+                holder.mPriorityView.setImageDrawable(mLowPriorityMark);
+                holder.mPriorityView.setVisibility(View.VISIBLE);
+            }
+            else {
                 holder.mProductTextView.setCompoundDrawables(null, null, null, null);
+                if (mCurrentLayout == PreferenceUtils.NORMAL_LAYOUT_ITEM)
+                    holder.mPriorityView.setVisibility(View.INVISIBLE);
+                else
+                    holder.mPriorityView.setVisibility(View.GONE);
+            }
 
             // A tag containing the Id of the element in the table is needed
             // to handle delete-on-swipe from the List activity.
@@ -149,12 +159,14 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder {
         final TextView mProductTextView;
         final TextView mAnnotationTextView;
+        final ImageView mPriorityView;
         int id;
 
         ViewHolder(View itemView) {
             super(itemView);
             mProductTextView = itemView.findViewById(R.id.item_product);
             mAnnotationTextView = itemView.findViewById(R.id.item_annotation);
+            mPriorityView = itemView.findViewById(R.id.item_priority);
 
             itemView.setOnTouchListener(new View.OnTouchListener() {
                 final private GestureDetector gestureDetector = new GestureDetector(
