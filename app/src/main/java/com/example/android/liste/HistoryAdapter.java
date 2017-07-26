@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,8 @@ import com.example.android.liste.data.ListContract;
 
 class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
-    final private float mTextSize;
+    private final int mCurrentLayout;
+
     final private AdapterOnClickHandler mClickHandler;
     private Cursor mCursor;
     private boolean[] isChecked;
@@ -31,18 +31,30 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     // An AdapterOnClickHandler is used to interact with History activity.
     HistoryAdapter(Context context, AdapterOnClickHandler clickHandler) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mTextSize = PreferenceUtils.getTextSize(
-                context, sharedPreferences, context.getString(R.string.pref_history_size_key));
+
+        mCurrentLayout = PreferenceUtils.getHistoryLayoutType(context, sharedPreferences);
+
         mClickHandler = clickHandler;
         resetIsChecked();
         setHasStableIds(true);
     }
 
+    @Override
+    public int getItemViewType (int position) {
+        return mCurrentLayout;
+    }
+
     // Creates new views
     @Override
     public HistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_history, parent, false);
+        View v;
+        if (viewType == PreferenceUtils.NORMAL_LAYOUT_ITEM) {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_history_normal, parent, false);
+        } else {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_history_compact, parent, false);
+        }
         return new ViewHolder(v);
     }
 
@@ -54,7 +66,6 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
         if (mCursor.moveToPosition(position)) {
             String s = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_PRODUCT));
             holder.mCheckBox.setText(s);
-            holder.mCheckBox.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
 
             holder.mCheckBox.setOnCheckedChangeListener(null);
             holder.mCheckBox.setChecked(isChecked[position]);

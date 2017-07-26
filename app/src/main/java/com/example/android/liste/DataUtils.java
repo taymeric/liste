@@ -115,7 +115,7 @@ class DataUtils {
                 list += "- " + cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT));
 
                 String annotation = cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_ANNOTATION));
-                if (annotation != null && !annotation.equals("")) list += " ( " + annotation + " )";
+                if (annotation != null && !annotation.equals("")) list += " (" + annotation + ")";
 
                 int p = cursor.getInt(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
                 if (p == HIGH_PRIORITY) list = list + " !";

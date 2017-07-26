@@ -10,51 +10,70 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 
 import com.example.android.liste.data.ListContract;
 
+
 /**
  * Utility methods to get and set settings values of SharedPreferences
  */
 class PreferenceUtils {
 
-    /*
-     * In this method, the parameter 'key' differentiate between the RecyclerView for the list
-     * and the RecyclerView for the history.
-     */
-    static float getTextSize(
-            Context context, SharedPreferences sharedPreferences, String key) {
-        float size;
-        String sizeString = sharedPreferences.getString(
-                key,
-                context.getString(R.string.pref_size_big_value));
-        if (sizeString.equals(context.getString(R.string.pref_size_big_value))) {
-            size = context.getResources().getDimension(R.dimen.text_big);
-        } else {
-            size = context.getResources().getDimension(R.dimen.text_small);
-        }
-        return size;
+    static final int NORMAL_LAYOUT_ITEM = 1;
+    static final int COMPACT_LAYOUT_ITEM = 2;
+
+    static int getListLayoutType(Context context, SharedPreferences sharedPreferences) {
+        String layout_value = sharedPreferences.getString(context.getString(R.string.pref_list_layout_key),
+                context.getString(R.string.pref_layout_normal_value));
+        if (layout_value.equals(context.getString(R.string.pref_layout_compact_value)))
+            return COMPACT_LAYOUT_ITEM;
+        else
+            return NORMAL_LAYOUT_ITEM;
+    }
+
+    static int getHistoryLayoutType(Context context, SharedPreferences sharedPreferences) {
+        String layout_value = sharedPreferences.getString(context.getString(R.string.pref_history_layout_key),
+                context.getString(R.string.pref_layout_normal_value));
+        if (layout_value.equals(context.getString(R.string.pref_layout_compact_value)))
+            return COMPACT_LAYOUT_ITEM;
+        else
+            return NORMAL_LAYOUT_ITEM;
+    }
+
+    static RecyclerView.LayoutManager getListLayout(
+            Context context, SharedPreferences sharedPreferences) {
+
+        String value = sharedPreferences.getString(
+                context.getString(R.string.pref_list_layout_key),
+                context.getString(R.string.pref_layout_normal_value));
+        if (value.equals(context.getString(R.string.pref_layout_compact_value)))
+            return new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        else
+            return new LinearLayoutManager(context);
+    }
+
+    static RecyclerView.LayoutManager getHistoryLayout(
+            Context context, SharedPreferences sharedPreferences) {
+
+        String value = sharedPreferences.getString(
+                context.getString(R.string.pref_history_layout_key),
+                context.getString(R.string.pref_layout_normal_value));
+        if (value.equals(context.getString(R.string.pref_layout_compact_value)))
+            return new GridLayoutManager(context, 2);
+        else
+            return new LinearLayoutManager(context);
+    }
+
+    static float getIconSize(Context context, SharedPreferences sharedPreferences) {
+        String value = sharedPreferences.getString(
+                context.getString(R.string.pref_list_layout_key),
+                context.getString(R.string.pref_layout_normal_value));
+        if (value.equals(context.getString(R.string.pref_layout_compact_value)))
+            return context.getResources().getDimension(R.dimen.text_small);
+        else
+            return context.getResources().getDimension(R.dimen.text_big);
     }
 
     static String getFont(Context context, SharedPreferences sharedPreferences) {
         return sharedPreferences.getString(context.getString(R.string.pref_font_key),
                 context.getString(R.string.pref_font_normal_value));
-    }
-
-    /*
-     * In this method, the parameter 'key' differentiate between the RecyclerView for the list
-     * and the RecyclerView for the history.
-     */
-    static RecyclerView.LayoutManager getLayout(
-            Context context, SharedPreferences sharedPreferences, String key) {
-
-        String value = sharedPreferences.getString(
-                key,
-                context.getString(R.string.pref_layout_linear_value));
-        if (value.equals(context.getString(R.string.pref_layout_grid_value))) {
-            return new GridLayoutManager(context, 2);
-        } else if (value.equals(context.getString(R.string.pref_layout_staggered_grid_value))) {
-            return new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        }
-        else
-            return new LinearLayoutManager(context);
     }
 
     static String getSortOrder(Context context, SharedPreferences sharedPreferences) {

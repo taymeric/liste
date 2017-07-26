@@ -74,19 +74,14 @@
     <string name="information_label">Informations</string>
     <string name="version_title">Version</string>
 
-    <!-- Strings for size settings -->
-    <string name="pref_size_label">Taille du texte</string>
-    <string name="pref_size_small_label">Petit</string>
-    <string name="pref_size_big_label">Grand</string>
-
     <!-- Strings for layout settings-->
     <string name="pref_layout_label">Affichage</string>
-    <string name="pref_layout_linear_label">Une colonne</string>
-    <string name="pref_layout_grid_label">Deux colonnes</string>
+    <string name="pref_layout_linear_label">Normal</string>
+    <string name="pref_layout_grid_label">Compact</string>
 
     <!-- Strings for font settings -->
     <string name="pref_font_label">Police de caractère</string>
-    <string name="pref_font_normal_label">Normale</string>
+    <string name="pref_font_normal_label">Par défaut</string>
     <string name="pref_font_handwritten_label">Manuscrite</string>
 
     <!--Strings for sort order -->
@@ -98,7 +93,7 @@
     <string name="pref_direction_label">Balayer pour supprimer</string>
     <string name="pref_direction_left_label">Vers la gauche</string>
     <string name="pref_direction_right_label">Vers la droite</string>
-    <string name="pref_direction_both_label">Vers les deux directions (!)</string>
+    <string name="pref_direction_both_label">Vers les deux directions</string>
 
     <!-- Strings for Help screen -->
     <string name="help_title">Aide</string>

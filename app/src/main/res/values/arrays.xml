@@ -1,28 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Arrays for text size preferences -->
-    <array name="pref_size_option_labels">
-        <item>@string/pref_size_small_label</item>
-        <item>@string/pref_size_big_label</item>
-    </array>
-    <array name="pref_size_option_values">
-        <item>@string/pref_size_small_value</item>
-        <item>@string/pref_size_big_value</item>
-    </array>
-
     <!-- Arrays for layout preferences -->
     <array name="pref_layout_option_labels">
         <item>@string/pref_layout_linear_label</item>
         <item>@string/pref_layout_grid_label</item>
     </array>
     <array name="pref_list_layout_option_values">
-        <item>@string/pref_layout_linear_value</item>
-        <item>@string/pref_layout_staggered_grid_value</item>
+        <item>@string/pref_layout_normal_value</item>
+        <item>@string/pref_layout_compact_value</item>
     </array>
     <array name="pref_history_layout_option_values">
-        <item>@string/pref_layout_linear_value</item>
-        <item>@string/pref_layout_grid_value</item>
+        <item>@string/pref_layout_normal_value</item>
+        <item>@string/pref_layout_compact_value</item>
     </array>
 
     <!-- Arrays for font preference -->

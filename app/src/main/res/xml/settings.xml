@@ -6,18 +6,10 @@
     <PreferenceCategory
         android:title="@string/list_label">
         <ListPreference
-            android:defaultValue="@string/pref_size_big_value"
-            android:entries="@array/pref_size_option_labels"
-            android:entryValues="@array/pref_size_option_values"
-            android:icon="@drawable/ic_format_size_black_24dp"
-            android:key="@string/pref_list_size_key"
-            android:title="@string/pref_size_label"
-            />
-        <ListPreference
-            android:defaultValue="@string/pref_layout_linear_value"
+            android:defaultValue="@string/pref_layout_normal_value"
             android:entries="@array/pref_layout_option_labels"
             android:entryValues="@array/pref_list_layout_option_values"
-            android:icon="@drawable/ic_view_column_black_24dp"
+            android:icon="@drawable/ic_view_list_black_24dp"
             android:key="@string/pref_list_layout_key"
             android:title="@string/pref_layout_label"
             />
@@ -49,18 +41,10 @@
     <PreferenceCategory
         android:title="@string/history_label">
         <ListPreference
-            android:defaultValue="@string/pref_size_big_value"
-            android:entries="@array/pref_size_option_labels"
-            android:entryValues="@array/pref_size_option_values"
-            android:icon="@drawable/ic_format_size_black_24dp"
-            android:key="@string/pref_history_size_key"
-            android:title="@string/pref_size_label"
-            />
-        <ListPreference
-            android:defaultValue="@string/pref_layout_linear_value"
+            android:defaultValue="@string/pref_layout_normal_value"
             android:entries="@array/pref_layout_option_labels"
             android:entryValues="@array/pref_history_layout_option_values"
-            android:icon="@drawable/ic_view_column_black_24dp"
+            android:icon="@drawable/ic_view_list_black_24dp"
             android:key="@string/pref_history_layout_key"
             android:title="@string/pref_layout_label"
             />

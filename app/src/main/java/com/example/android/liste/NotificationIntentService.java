@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v7.preference.PreferenceManager;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 import static com.example.android.liste.NotificationReceiver.NOTIFICATION_ID;
 
 

@@ -10,15 +10,11 @@
     >
 
     <LinearLayout
+        android:id="@+id/item_list_layout"
+        style="@style/NormalLayout.List"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="12dp"
-        android:paddingEnd="24dp"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:paddingStart="24dp"
-        android:paddingTop="12dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/item_product"
@@ -27,6 +23,7 @@
             android:layout_gravity="center_vertical"
             android:drawablePadding="16dp"
             android:textAppearance="?android:textAppearance"
+            android:textSize="@dimen/text_big"
             tools:text="Text"/>
 
         <TextView
@@ -34,6 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceSmall"
+            android:textSize="@dimen/text_annotation_big"
             tools:text="Subtext"/>
 
     </LinearLayout>

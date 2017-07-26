@@ -78,30 +78,19 @@
     <string name="version_title">Version</string>
     <string name="version_number" translatable="false">1.0</string>
 
-    <!-- Strings for size settings -->
-    <string name="pref_size_label">Text size</string>
-    <string name="pref_size_small_label">Small</string>
-    <string name="pref_size_big_label">Big</string>
-
-    <string name="pref_list_size_key" translatable="false">list_size</string>
-    <string name="pref_history_size_key" translatable="false">history_size</string>
-    <string name="pref_size_small_value" translatable="false">small</string>
-    <string name="pref_size_big_value" translatable="false">big</string>
-
     <!-- Strings for layout settings -->
     <string name="pref_layout_label">Layout</string>
-    <string name="pref_layout_linear_label">One column</string>
-    <string name="pref_layout_grid_label">Two columns</string>
+    <string name="pref_layout_linear_label">Normal</string>
+    <string name="pref_layout_grid_label">Compact</string>
 
     <string name="pref_list_layout_key" translatable="false">list_layout</string>
     <string name="pref_history_layout_key" translatable="false">history_layout</string>
-    <string name="pref_layout_linear_value" translatable="false">linear</string>
-    <string name="pref_layout_grid_value" translatable="false">grid</string>
-    <string name="pref_layout_staggered_grid_value" translatable="false">staggered</string>
+    <string name="pref_layout_normal_value" translatable="false">normal</string>
+    <string name="pref_layout_compact_value" translatable="false">compact</string>
 
     <!-- Strings for font settings -->
     <string name="pref_font_label">Font</string>
-    <string name="pref_font_normal_label">Normal</string>
+    <string name="pref_font_normal_label">By default</string>
     <string name="pref_font_handwritten_label">Handwritten</string>
 
     <string name="pref_font_key" translatable="false">font</string>
@@ -121,7 +110,7 @@
     <string name="pref_direction_label">Swipe to delete</string>
     <string name="pref_direction_right_label">To the right</string>
     <string name="pref_direction_left_label">To the left</string>
-    <string name="pref_direction_both_label">To both directions (!)</string>
+    <string name="pref_direction_both_label">To both directions</string>
 
     <string name="pref_direction_key" translatable="false">direction</string>
     <string name="pref_direction_right_value" translatable="false">right</string>

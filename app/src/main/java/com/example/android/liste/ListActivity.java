@@ -110,9 +110,8 @@ public class ListActivity extends AppCompatActivity
 
         // Set up the Recycler View and its Adapter
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mLayoutManager = PreferenceUtils.getLayout(this, mSharedPreferences, getString(R.string.pref_list_layout_key));
+        mLayoutManager = PreferenceUtils.getListLayout(this, mSharedPreferences);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        //mRecyclerView.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
         mAdapter = new ListAdapter(this, this);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -459,13 +458,11 @@ public class ListActivity extends AppCompatActivity
      */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if (s.equals(getString(R.string.pref_list_size_key))) {
-            mAdapter.reloadSize();
-            mAdapter.notifyDataSetChanged();
-            if (!mFab.isShown()) mFab.show();
-        } else if (s.equals(getString(R.string.pref_list_layout_key))) {
-            mLayoutManager = PreferenceUtils.getLayout(this, mSharedPreferences, getString(R.string.pref_list_layout_key));
+        if (s.equals(getString(R.string.pref_list_layout_key))) {
+            mLayoutManager = PreferenceUtils.getListLayout(this, mSharedPreferences);
             mRecyclerView.setLayoutManager(mLayoutManager);
+            mAdapter.reloadLayout();
+            mAdapter.notifyDataSetChanged();
             if (!mFab.isShown()) mFab.show();
         } else if (s.equals(getString(R.string.pref_sort_order_key))) {
             getLoaderManager().restartLoader(LIST_LOADER_ID, null, this);

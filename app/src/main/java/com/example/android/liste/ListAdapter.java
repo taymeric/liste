@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -31,8 +30,8 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     final private ListAdapterOnClickListener mListAdapterOnClickListener;
     private final Drawable mHighPriorityMark;
     private final Drawable mLowPriorityMark;
+    private int mCurrentLayout;
     private Cursor mCursor;
-    private float mTextSize;
     private String mFontFamily;
 
     // A Context is needed for PreferenceUtils methods.
@@ -40,24 +39,38 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         mContext = context;
         mListAdapterOnClickListener = listener;
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        mTextSize = PreferenceUtils.getTextSize(
-                mContext, mSharedPreferences, mContext.getString(R.string.pref_list_size_key));
+
         mFontFamily = PreferenceUtils.getFont(mContext, mSharedPreferences);
 
+        mCurrentLayout = PreferenceUtils.getListLayoutType(mContext, mSharedPreferences);
+
+        float iconSize = PreferenceUtils.getIconSize(mContext, mSharedPreferences);
+
         mHighPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_exclamation);
-        mHighPriorityMark.setBounds(new Rect(0, 0, (int) mTextSize, (int) mTextSize));
+        mHighPriorityMark.setBounds(new Rect(0, 0, (int) iconSize, (int) iconSize));
 
         mLowPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_question);
-        mLowPriorityMark.setBounds(new Rect(0, 0, (int) mTextSize, (int) mTextSize));
+        mLowPriorityMark.setBounds(new Rect(0, 0, (int) iconSize, (int) iconSize));
 
         setHasStableIds(true);
+    }
+
+    @Override
+    public int getItemViewType (int position) {
+        return mCurrentLayout;
     }
 
     // Creates new views
     @Override
     public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_list, parent, false);
+        View v;
+        if (viewType == PreferenceUtils.NORMAL_LAYOUT_ITEM) {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_list_normal, parent, false);
+        } else {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_list_compact, parent, false);
+        }
         return new ViewHolder(v);
     }
 
@@ -82,12 +95,8 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
             holder.mProductTextView.setText(product);
 
-            // The following two lines are not a efficient way to proceed.
-            // Use viewType in onCreateViewHolder later.
-            holder.mProductTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
             holder.mProductTextView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
             holder.mAnnotationTextView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
-
 
             if (priority == ListActivity.HIGH_PRIORITY)
                 holder.mProductTextView.setCompoundDrawables(null, null, mHighPriorityMark, null);
@@ -122,13 +131,14 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    void reloadSize() {
-        mTextSize = PreferenceUtils.getTextSize(
-                mContext, mSharedPreferences, mContext.getString(R.string.pref_list_size_key));
-    }
-
     void reloadFont() {
         mFontFamily = PreferenceUtils.getFont(mContext, mSharedPreferences);
+        notifyDataSetChanged();
+    }
+
+    void reloadLayout() {
+        mCurrentLayout = PreferenceUtils.getListLayoutType(mContext, mSharedPreferences);
+        notifyDataSetChanged();
     }
 
     interface ListAdapterOnClickListener {
