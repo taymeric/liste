@@ -11,11 +11,7 @@ public class ListQueryHandler extends AsyncQueryHandler {
     public static final int INSERTION_LIST = 1;
     public static final int INSERTION_HISTORY = 2;
     public static final int DELETION_LIST = 3;
-    public static final int DELETION_HISTORY = 4;
-    public static final int QUERY_LIST = 5;
-    public static final int QUERY_HISTORY = 6;
-    public static final int UPDATE_LIST = 7;
-
+    public static final int UPDATE_LIST = 4;
 
     public ListQueryHandler(ContentResolver cr) {
         super(cr);

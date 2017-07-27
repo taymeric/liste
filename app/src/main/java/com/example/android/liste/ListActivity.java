@@ -339,25 +339,22 @@ public class ListActivity extends AppCompatActivity
         Uri uri = ListContract.ListEntry.CONTENT_URI;
         uri = uri.buildUpon().appendPath(stringId).build();
 
-        ContentResolver cr = getContentResolver();
+        String[] projection  = { ListContract.ListEntry.COLUMN_PRODUCT, ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.COLUMN_ANNOTATION };
 
         // Save values for undo operation
-        String[] projection  = { ListContract.ListEntry.COLUMN_PRODUCT, ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.COLUMN_ANNOTATION };
-        Cursor cu = cr.query(uri, projection, null, null, null);
+        // (No AsyncQueryHandler in this part to avoid having to deal with synchronizing issues.)
+        Cursor cu = getContentResolver().query(uri, projection, null, null, null);
 
         if (cu!=null && cu.moveToFirst()) {
             String product = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT));
             int priority = cu.getInt(cu.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
             String annotation = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_ANNOTATION));
             cu.close();
-
+            mListQueryHandler.startDelete(ListQueryHandler.DELETION_LIST, null, uri, null, null);
             showMessageWithAction("'" + product + "' " + getString(R.string.delete_product), product, priority, annotation);
         }
 
-        cr.delete(uri, null, null);
-
-        // Make sure the FAB is visible as scrolling up may not be possible anymore
-        // as elements are deleted.
+        // Make sure the FAB is visible as deletion affects scrolling
         if (!mFab.isShown()) mFab.show();
     }
 
@@ -619,6 +616,8 @@ public class ListActivity extends AppCompatActivity
         String[] columns = { ListContract.ListEntry.COLUMN_PRODUCT, ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.COLUMN_ANNOTATION};
         String selection = ListContract.ListEntry._ID + "=?";
         String [] selectionArgs = new String[] { stringId };
+        // Here, we don't use AsyncQueryHandler because we need to use the result of the query
+        // to create the UI. I don't see a simple way to refactor this part.
         Cursor cursor = getContentResolver().query(uri, columns, selection, selectionArgs, null);
 
         if (cursor != null && cursor.moveToFirst()) {

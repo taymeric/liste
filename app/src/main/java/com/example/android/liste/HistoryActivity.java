@@ -172,6 +172,10 @@ public class HistoryActivity extends AppCompatActivity
             i++;
         }
 
+        // Here we use bulkinsert() to insert multiples lines at once as it is more efficient than
+        // calling insert() multiple times. We could also use ContentProviderOperations.
+        // We don't use an AsyncQueryHandler as it is not straightforward to refactor this code
+        // with it and I also don't know if it is suited for bulk operations.
         int nb = getContentResolver().bulkInsert(uri, cv_all);
         Intent intent = new Intent();
         if (nb == 0)
