@@ -74,7 +74,6 @@ public class ListActivity extends AppCompatActivity
     public static final int DEFAULT_PRIORITY = 2;
     public static final int LOW_PRIORITY = 3;
     private static final int LIST_LOADER_ID = 77;
-    private static final int HISTORY_LOADER_ID = 88;
     private static final int LIST_NOTIFICATION_ID = 101;
     private static final int HISTORY_FOR_RESULT = 44;
 
@@ -237,7 +236,7 @@ public class ListActivity extends AppCompatActivity
         mCursorAdapter = new SimpleCursorAdapter(
                 this,
                 R.layout.row_completion,
-                null,
+                null, //cursor
                 new String[] {ListContract.HistoryEntry.COLUMN_PRODUCT},
                 new int[] {android.R.id.text1},
                 0
@@ -284,10 +283,10 @@ public class ListActivity extends AppCompatActivity
     private Cursor getCursor(CharSequence str) {
         String select = ListContract.HistoryEntry.COLUMN_PRODUCT + " LIKE ? ";
         String[]  selectArgs = { "%" + str + "%"};
-        String[] contactsProjection = new String[] {
+        String[] projection = new String[] {
                 ListContract.HistoryEntry._ID,
                 ListContract.HistoryEntry.COLUMN_PRODUCT};
-        return getContentResolver().query(ListContract.HistoryEntry.CONTENT_URI, contactsProjection, select, selectArgs, null);
+        return getContentResolver().query(ListContract.HistoryEntry.CONTENT_URI, projection, select, selectArgs, null);
     }
 
     @Override
@@ -376,16 +375,6 @@ public class ListActivity extends AppCompatActivity
                         null,    // No selection arguments
                         sortOrder    // Default sort order
                 );
-            case HISTORY_LOADER_ID :
-                String order = ListContract.HistoryEntry.COLUMN_PRODUCT + " COLLATE LOCALIZED ASC";
-                return new CursorLoader(
-                        this,    // Parent activity context
-                        ListContract.HistoryEntry.CONTENT_URI,    // Table to query
-                        null,    // Projection to return
-                        null,    // No selection clause
-                        null,    // No selection arguments
-                        order    // Default sort order
-                );
             default:
                 // An invalid id was passed in
                 return null;
@@ -399,9 +388,6 @@ public class ListActivity extends AppCompatActivity
             // Swap cursor in order to display List items when List Loader has finished
             mProgressBar.setVisibility(View.GONE);
             mAdapter.swapCursor(data);
-        } else if (id == HISTORY_LOADER_ID) {
-            // Swap cursor in order to enable suggestions when History Loader has finished
-            mCursorAdapter.swapCursor(data);
         }
     }
 
@@ -411,8 +397,6 @@ public class ListActivity extends AppCompatActivity
         if (id == LIST_LOADER_ID) {
             mProgressBar.setVisibility(View.VISIBLE);
             mAdapter.swapCursor(null);
-        } else if (id == HISTORY_LOADER_ID) {
-            mCursorAdapter.swapCursor(null);
         }
     }
 
