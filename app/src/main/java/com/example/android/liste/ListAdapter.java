@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.liste.data.ListContract;
+import com.example.android.liste.data.ListQueryHandler;
 
 
 /**
@@ -108,7 +110,6 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 holder.mPriorityView.setVisibility(View.VISIBLE);
             }
             else {
-                holder.mProductTextView.setCompoundDrawables(null, null, null, null);
                 if (mCurrentLayout == PreferenceUtils.NORMAL_LAYOUT_ITEM)
                     holder.mPriorityView.setVisibility(View.INVISIBLE);
                 else

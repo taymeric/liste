@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 
 import com.example.android.liste.data.ListContract;
+import com.example.android.liste.data.ListQueryHandler;
 
 import static com.example.android.liste.ListActivity.DEFAULT_PRIORITY;
 import static com.example.android.liste.ListActivity.HIGH_PRIORITY;
@@ -26,18 +27,18 @@ import static com.example.android.liste.ListActivity.LOW_PRIORITY;
 
 class DataUtils {
 
-    static void insertProductIntoBothTables(Context context, String product) {
+    static void insertProductIntoBothTables(ListQueryHandler listQueryHandler, String product) {
 
         // Add value to the list table with a default priority
         ContentValues values = new ContentValues();
         values.put(ListContract.ListEntry.COLUMN_PRODUCT, product);
         values.put(ListContract.ListEntry.COLUMN_PRIORITY, DEFAULT_PRIORITY);
-        context.getContentResolver().insert(ListContract.ListEntry.CONTENT_URI, values);
+        listQueryHandler.startInsert(ListQueryHandler.INSERTION_LIST, null, ListContract.ListEntry.CONTENT_URI, values);
 
         // Add text to the history table
         values = new ContentValues();
         values.put(ListContract.HistoryEntry.COLUMN_PRODUCT, product);
-        context.getContentResolver().insert(ListContract.HistoryEntry.CONTENT_URI, values);
+        listQueryHandler.startInsert(ListQueryHandler.INSERTION_HISTORY, null, ListContract.HistoryEntry.CONTENT_URI, values);
     }
 
     static Notification getNotification(Context context) {

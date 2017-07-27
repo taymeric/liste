@@ -84,7 +84,9 @@
     <!-- Strings for font settings -->
     <string name="pref_font_label">Police de caractère</string>
     <string name="pref_font_normal_label">Par défaut</string>
+    <string name="pref_font_serif_label">Sérif</string>
     <string name="pref_font_handwritten_label">Manuscrite</string>
+    <string name="pref_font_typewriter_label">Machine à écrire</string>
 
     <!--Strings for sort order -->
     <string name="pref_sort_order_label">Tri</string>

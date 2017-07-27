@@ -48,9 +48,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.android.liste.data.ListContract;
+import com.example.android.liste.data.ListQueryHandler;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -84,6 +86,7 @@ public class ListActivity extends AppCompatActivity
     private SharedPreferences mSharedPreferences;
     private AutoCompleteTextView mAutoCompleteTextView;
     private ProgressBar mProgressBar;
+    private ListQueryHandler mListQueryHandler;
 
     // A CursorAdapter for suggestions from the history table when typing
     private SimpleCursorAdapter mCursorAdapter;
@@ -156,6 +159,8 @@ public class ListActivity extends AppCompatActivity
             }
         };
         new ItemTouchHelper(mSimpleCallback).attachToRecyclerView(mRecyclerView);
+
+        mListQueryHandler = new ListQueryHandler(getContentResolver());
 
         getLoaderManager().initLoader(LIST_LOADER_ID, null, this);
     }
@@ -249,7 +254,7 @@ public class ListActivity extends AppCompatActivity
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 String text = mAutoCompleteTextView.getText().toString();
                 if (!text.equals("")) {
-                    DataUtils.insertProductIntoBothTables(ListActivity.this, text);
+                    DataUtils.insertProductIntoBothTables(mListQueryHandler, text);
                     mAutoCompleteTextView.setText("");
                 }
                 menuItem.collapseActionView();
@@ -317,9 +322,8 @@ public class ListActivity extends AppCompatActivity
                     .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            getContentResolver().delete(ListContract.ListEntry.CONTENT_URI, null, null);
-                            // Make sure FAB is visible as scrolling is not possible anymore
-                            // when the list is empty
+                            mListQueryHandler.startDelete(ListQueryHandler.DELETION_LIST, null, ListContract.ListEntry.CONTENT_URI, null, null);
+                            // Make sure FAB is visible as deletion affects scrolling
                             if (!mFab.isShown()) mFab.show();
                         }
                     })
@@ -447,7 +451,7 @@ public class ListActivity extends AppCompatActivity
                         cv.put(ListContract.ListEntry.COLUMN_PRODUCT, product);
                         cv.put(ListContract.ListEntry.COLUMN_PRIORITY, priority);
                         if (annotation != null) cv.put(ListContract.ListEntry.COLUMN_ANNOTATION, annotation);
-                        getContentResolver().insert(ListContract.ListEntry.CONTENT_URI, cv);
+                        mListQueryHandler.startInsert(ListQueryHandler.INSERTION_LIST, null, ListContract.ListEntry.CONTENT_URI, cv);
                     }
                 })
                 .show();
@@ -676,7 +680,7 @@ public class ListActivity extends AppCompatActivity
                             contentValues.put(ListContract.ListEntry.COLUMN_PRIORITY, newPriority);
                             contentValues.put(ListContract.ListEntry.COLUMN_ANNOTATION, newAnnotation);
 
-                            getContentResolver().update(uri, contentValues, null, null);
+                            mListQueryHandler.startUpdate(ListQueryHandler.UPDATE_LIST, null, uri, contentValues, null, null);
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, null)

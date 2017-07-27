@@ -25,6 +25,8 @@ import com.example.android.liste.data.ListContract;
 
 import java.util.HashMap;
 
+import static android.R.attr.value;
+
 
 /**
  * HistoryActivity displays the items in the history table.
@@ -158,19 +160,19 @@ public class HistoryActivity extends AppCompatActivity
 
     private void addSelectedEntries() {
         Uri uri = ListContract.ListEntry.CONTENT_URI;
-        int nb = 0;
-        ContentValues cv;
-        Uri newUri;
+        ContentValues[] cv_all = new ContentValues[selectedIds.size()];
         // Iterate through all the text values contained in the HasMap of selected elements
         // and add elements with those texts to the list table.
+        int i = 0;
         for (String value: selectedIds.values()) {
-            cv = new ContentValues();
+            ContentValues cv = new ContentValues();
             cv.put(ListContract.ListEntry.COLUMN_PRODUCT, value);
             cv.put(ListContract.ListEntry.COLUMN_PRIORITY, ListActivity.DEFAULT_PRIORITY);
-            newUri = getContentResolver().insert(uri, cv);
-            if (newUri != null && !newUri.equals(Uri.EMPTY)) nb++;
+            cv_all[i] = cv;
+            i++;
         }
 
+        int nb = getContentResolver().bulkInsert(uri, cv_all);
         Intent intent = new Intent();
         if (nb == 0)
             intent.putExtra(getString(R.string.history_message), getString(R.string.no_new_product));

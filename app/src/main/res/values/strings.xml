@@ -93,11 +93,15 @@
     <!-- Strings for font settings -->
     <string name="pref_font_label">Font</string>
     <string name="pref_font_normal_label">By default</string>
+    <string name="pref_font_serif_label">Serif</string>
     <string name="pref_font_handwritten_label">Handwritten</string>
+    <string name="pref_font_typewriter_label">Typewriter</string>
 
     <string name="pref_font_key" translatable="false">font</string>
     <string name="pref_font_normal_value" translatable="false">sans-serif</string>
+    <string name="pref_font_serif_value" translatable="false">serif</string>
     <string name="pref_font_handwritten_value" translatable="false">casual</string>
+    <string name="pref_font_typewriter_value" translatable="false">monospace</string>
 
     <!--Strings for sort order -->
     <string name="pref_sort_order_label">Sort</string>

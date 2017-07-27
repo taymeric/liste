@@ -7,4 +7,5 @@
     <dimen name="text_annotation_big">16.0sp</dimen>
     <dimen name="text_small">16.0sp</dimen>
     <dimen name="text_big">18.0sp</dimen>
+    <dimen name="text_extra_big">22.0sp</dimen>
 </resources>

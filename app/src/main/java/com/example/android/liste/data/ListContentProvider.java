@@ -196,4 +196,17 @@ public class ListContentProvider extends ContentProvider {
         }
         return rowsUpdated;
     }
+
+    // Returns the number of new rows
+    @Override
+    public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
+
+        Uri newUri;
+        int nb = 0;
+        for (ContentValues cv : values) {
+            newUri = insert(uri, cv);
+            if (newUri != null && !newUri.equals(Uri.EMPTY)) nb++;
+        }
+        return nb;
+    }
 }
