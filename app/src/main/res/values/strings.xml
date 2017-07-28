@@ -7,6 +7,9 @@
     <string name="cancel">Cancel</string>
     <string name="next">Next</string>
 
+    <string name="important_mark" translatable="false">!</string>
+    <string name="optional_mark" translatable="false">\?</string>
+
     <string name="empty_list">The list is empty.</string>
 
     <string name="priority_indicator">Priority indicator</string>

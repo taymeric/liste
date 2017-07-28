@@ -31,8 +31,8 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     final private Context mContext;
     final private SharedPreferences mSharedPreferences;
     final private ListAdapterOnClickListener mListAdapterOnClickListener;
-    private final Drawable mHighPriorityMark;
-    private final Drawable mLowPriorityMark;
+    //private final Drawable mHighPriorityMark;
+    //private final Drawable mLowPriorityMark;
     private int mCurrentLayout;
     private Cursor mCursor;
     private String mFontFamily;
@@ -49,11 +49,11 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         float iconSize = PreferenceUtils.getIconSize(mContext, mSharedPreferences);
 
-        mHighPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_exclamation);
-        mHighPriorityMark.setBounds(new Rect(0, 0, (int) iconSize, (int) iconSize));
+        //mHighPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_exclamation);
+        //mHighPriorityMark.setBounds(new Rect(0, 0, (int) iconSize, (int) iconSize));
 
-        mLowPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_question);
-        mLowPriorityMark.setBounds(new Rect(0, 0, (int) iconSize, (int) iconSize));
+        //mLowPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_question);
+        //mLowPriorityMark.setBounds(new Rect(0, 0, (int) iconSize, (int) iconSize));
 
         setHasStableIds(true);
     }
@@ -100,13 +100,16 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
             holder.mProductTextView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
             holder.mAnnotationTextView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
+            holder.mPriorityView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
 
             if (priority == ListActivity.HIGH_PRIORITY) {
-                holder.mPriorityView.setImageDrawable(mHighPriorityMark);
+                //holder.mPriorityView.setImageDrawable(mHighPriorityMark);
+                holder.mPriorityView.setText(mContext.getString(R.string.important_mark));
                 holder.mPriorityView.setVisibility(View.VISIBLE);
             }
             else if (priority == ListActivity.LOW_PRIORITY) {
-                holder.mPriorityView.setImageDrawable(mLowPriorityMark);
+                //holder.mPriorityView.setImageDrawable(mLowPriorityMark);
+                holder.mPriorityView.setText(mContext.getString(R.string.optional_mark));
                 holder.mPriorityView.setVisibility(View.VISIBLE);
             }
             else {
@@ -160,7 +163,8 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder {
         final TextView mProductTextView;
         final TextView mAnnotationTextView;
-        final ImageView mPriorityView;
+        //final ImageView mPriorityView;
+        final TextView mPriorityView;
         int id;
 
         ViewHolder(View itemView) {

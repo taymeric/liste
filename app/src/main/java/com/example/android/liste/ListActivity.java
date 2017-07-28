@@ -154,6 +154,8 @@ public class ListActivity extends AppCompatActivity
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 // The Adapter stores the Id of the element in the viewHolder
                 int id = (int) viewHolder.itemView.getTag();
+                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(25);
                 deleteEntry(id);
             }
         };

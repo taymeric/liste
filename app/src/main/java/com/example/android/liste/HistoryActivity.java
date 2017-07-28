@@ -2,20 +2,25 @@ package com.example.android.liste;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.OperationApplicationException;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +28,7 @@ import android.widget.ProgressBar;
 
 import com.example.android.liste.data.ListContract;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static android.R.attr.value;
@@ -137,16 +143,33 @@ public class HistoryActivity extends AppCompatActivity
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        // We use ContentProviderOperations to delete the selected products in one
+                        // batch operation.
+                        // First, we iterate through all the Ids contained in the HashMap of selected
+                        // products and create our list of deletion operations to be performed.
                         int nb = 0;
                         Uri uri;
-                        // Iterate through all the Ids contained in the HasMap of selected elements
-                        // and remove elements with those Ids from the history table.
+                        ArrayList<ContentProviderOperation> deleteOperations = new ArrayList<>();
+                        ContentProviderOperation operation;
                         for (String id : selectedIds.keySet()) {
                             uri = ListContract.HistoryEntry.CONTENT_URI;
                             uri = uri.buildUpon().appendPath(id).build();
-                            nb += getContentResolver().delete(uri, null, null);
+                            operation = ContentProviderOperation.newDelete(uri).build();
+                            deleteOperations.add(operation);
                         }
+                        try {
+                            ContentProviderResult[] results = getContentResolver().applyBatch(ListContract.CONTENT_AUTHORITY, deleteOperations);
+
+                            // Check for results of deletion operations
+                            for (int j=0; j<results.length; j++) {
+                                nb += results[j].count;
+                            }
+
+                        }
+                        catch (RemoteException | OperationApplicationException exception) {}
+
                         showMessage(getResources().getQuantityString(R.plurals.products_cleared, nb, nb));
+
                         selectedIds.clear();
                         setFabVisibility();
                         setEmptyViewVisibility();

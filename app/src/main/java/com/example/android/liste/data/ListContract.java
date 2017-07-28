@@ -10,7 +10,7 @@ import android.provider.BaseColumns;
 public class ListContract {
 
     // The name of the Content Provider
-    static final String CONTENT_AUTHORITY = "com.example.android.liste";
+    public static final String CONTENT_AUTHORITY = "com.example.android.liste";
     // Each table has a specific identifier appended to the base Uri.
     static final String PATH_LIST = "list";
     static final String PATH_HISTORY = "history";
