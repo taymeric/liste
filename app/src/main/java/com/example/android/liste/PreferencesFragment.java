@@ -13,12 +13,12 @@ import android.support.v7.preference.PreferenceScreen;
 /**
  * Fragment that displays the user settings.
  */
-public class SettingsFragment extends PreferenceFragmentCompat
+public class PreferencesFragment extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        addPreferencesFromResource(R.xml.settings);
+        addPreferencesFromResource(R.xml.preferences);
 
         // Go through all of the preferences, and set up their preference summary.
         PreferenceScreen prefScreen = getPreferenceScreen();

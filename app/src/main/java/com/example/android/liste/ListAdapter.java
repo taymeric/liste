@@ -3,23 +3,17 @@ package com.example.android.liste;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.liste.data.ListContract;
-import com.example.android.liste.data.ListQueryHandler;
 
 
 /**
@@ -31,8 +25,6 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     final private Context mContext;
     final private SharedPreferences mSharedPreferences;
     final private ListAdapterOnClickListener mListAdapterOnClickListener;
-    //private final Drawable mHighPriorityMark;
-    //private final Drawable mLowPriorityMark;
     private int mCurrentLayout;
     private Cursor mCursor;
     private String mFontFamily;
@@ -46,14 +38,6 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         mFontFamily = PreferenceUtils.getFont(mContext, mSharedPreferences);
 
         mCurrentLayout = PreferenceUtils.getListLayoutType(mContext, mSharedPreferences);
-
-        float iconSize = PreferenceUtils.getIconSize(mContext, mSharedPreferences);
-
-        //mHighPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_exclamation);
-        //mHighPriorityMark.setBounds(new Rect(0, 0, (int) iconSize, (int) iconSize));
-
-        //mLowPriorityMark = ContextCompat.getDrawable(mContext, R.drawable.ic_priority_question);
-        //mLowPriorityMark.setBounds(new Rect(0, 0, (int) iconSize, (int) iconSize));
 
         setHasStableIds(true);
     }
@@ -103,13 +87,11 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             holder.mPriorityView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
 
             if (priority == ListActivity.HIGH_PRIORITY) {
-                //holder.mPriorityView.setImageDrawable(mHighPriorityMark);
-                holder.mPriorityView.setText(mContext.getString(R.string.important_mark));
+                holder.mPriorityView.setText(mContext.getString(R.string.list_high_priority_mark));
                 holder.mPriorityView.setVisibility(View.VISIBLE);
             }
             else if (priority == ListActivity.LOW_PRIORITY) {
-                //holder.mPriorityView.setImageDrawable(mLowPriorityMark);
-                holder.mPriorityView.setText(mContext.getString(R.string.optional_mark));
+                holder.mPriorityView.setText(mContext.getString(R.string.list_low_priority_mark));
                 holder.mPriorityView.setVisibility(View.VISIBLE);
             }
             else {
@@ -163,7 +145,6 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder {
         final TextView mProductTextView;
         final TextView mAnnotationTextView;
-        //final ImageView mPriorityView;
         final TextView mPriorityView;
         int id;
 

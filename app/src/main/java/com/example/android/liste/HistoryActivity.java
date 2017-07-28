@@ -20,7 +20,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,8 +29,6 @@ import com.example.android.liste.data.ListContract;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static android.R.attr.value;
 
 
 /**
@@ -111,15 +108,15 @@ public class HistoryActivity extends AppCompatActivity
             case android.R.id.home:
                 if (selectedIds != null && !selectedIds.isEmpty()) {
                     new AlertDialog.Builder(HistoryActivity.this)
-                            .setMessage(getResources().getQuantityString(R.plurals.add_selected_products, selectedIds.size()))
-                            .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                            .setMessage(getResources().getQuantityString(R.plurals.history_add_selected_products, selectedIds.size()))
+                            .setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     addSelectedEntries();
                                     finish();
                                 }
                             })
-                            .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                            .setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     setResult(RESULT_CANCELED, null);
@@ -139,8 +136,8 @@ public class HistoryActivity extends AppCompatActivity
 
     private void deleteSelectedEntries() {
         new AlertDialog.Builder(HistoryActivity.this)
-                .setMessage(getResources().getQuantityString(R.plurals.clear_selected_products, selectedIds.size()))
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                .setMessage(getResources().getQuantityString(R.plurals.history_clear_selection_title, selectedIds.size()))
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // We use ContentProviderOperations to delete the selected products in one
@@ -161,14 +158,14 @@ public class HistoryActivity extends AppCompatActivity
                             ContentProviderResult[] results = getContentResolver().applyBatch(ListContract.CONTENT_AUTHORITY, deleteOperations);
 
                             // Check for results of deletion operations
-                            for (int j=0; j<results.length; j++) {
-                                nb += results[j].count;
+                            for (ContentProviderResult result : results) {
+                                nb += result.count;
                             }
 
                         }
                         catch (RemoteException | OperationApplicationException exception) {}
 
-                        showMessage(getResources().getQuantityString(R.plurals.products_cleared, nb, nb));
+                        showMessage(getResources().getQuantityString(R.plurals.history_products_cleared_message, nb, nb));
 
                         selectedIds.clear();
                         setFabVisibility();
@@ -177,7 +174,7 @@ public class HistoryActivity extends AppCompatActivity
                         invalidateOptionsMenu();
                     }
                 })
-                .setNegativeButton(R.string.no, null)
+                .setNegativeButton(android.R.string.no, null)
                 .create().show();
     }
 
@@ -202,9 +199,9 @@ public class HistoryActivity extends AppCompatActivity
         int nb = getContentResolver().bulkInsert(uri, cv_all);
         Intent intent = new Intent();
         if (nb == 0)
-            intent.putExtra(getString(R.string.history_message), getString(R.string.no_new_product));
+            intent.putExtra(getString(R.string.history_message_to_list), getString(R.string.list_no_new_product_message));
         else
-            intent.putExtra(getString(R.string.history_message), getResources().getQuantityString(R.plurals.new_products, nb, nb));
+            intent.putExtra(getString(R.string.history_message_to_list), getResources().getQuantityString(R.plurals.list_new_products_message, nb, nb));
         setResult(RESULT_OK, intent);
 
     }

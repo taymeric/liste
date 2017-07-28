@@ -8,6 +8,6 @@
         android:id="@+id/text_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/notification_date_picker_message"/>
+        android:text="@string/list_reminder_date_picker_message"/>
 
 </RelativeLayout>

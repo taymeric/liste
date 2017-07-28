@@ -34,8 +34,8 @@
         </activity>
 
         <activity
-            android:name="com.example.android.liste.SettingsActivity"
-            android:label="@string/settings"
+            android:name="com.example.android.liste.PreferencesActivity"
+            android:label="@string/pref_title"
             android:screenOrientation="sensorPortrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

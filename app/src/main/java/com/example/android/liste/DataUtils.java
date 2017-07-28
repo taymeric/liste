@@ -57,7 +57,7 @@ class DataUtils {
         int nbOfProducts;
         if (cursor != null) nbOfProducts = cursor.getCount();
         else nbOfProducts = 0;
-        String title = context.getResources().getQuantityString(R.plurals.notification_title, nbOfProducts, nbOfProducts);
+        String title = context.getResources().getQuantityString(R.plurals.list_reminder_notification_title, nbOfProducts, nbOfProducts);
 
         // Build a String representation of all the products in the list by iterating through the cursor
         String list = "";
@@ -119,8 +119,8 @@ class DataUtils {
                 if (annotation != null && !annotation.equals("")) list += " (" + annotation + ")";
 
                 int p = cursor.getInt(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
-                if (p == HIGH_PRIORITY) list = list + " !";
-                else if (p == LOW_PRIORITY) list = list + " ?";
+                if (p == HIGH_PRIORITY) list = list + " " + context.getString(R.string.list_high_priority_mark);
+                else if (p == LOW_PRIORITY) list = list + " " + context.getString(R.string.list_low_priority_mark);
 
                 list = list + "\n";
             }

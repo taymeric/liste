@@ -61,16 +61,6 @@ class PreferenceUtils {
             return new LinearLayoutManager(context);
     }
 
-    static float getIconSize(Context context, SharedPreferences sharedPreferences) {
-        String value = sharedPreferences.getString(
-                context.getString(R.string.pref_list_layout_key),
-                context.getString(R.string.pref_layout_normal_value));
-        if (value.equals(context.getString(R.string.pref_layout_compact_value)))
-            return context.getResources().getDimension(R.dimen.text_small);
-        else
-            return context.getResources().getDimension(R.dimen.text_big);
-    }
-
     static String getFont(Context context, SharedPreferences sharedPreferences) {
         return sharedPreferences.getString(context.getString(R.string.pref_font_key),
                 context.getString(R.string.pref_font_normal_value));
@@ -104,16 +94,16 @@ class PreferenceUtils {
     // Sets the alarm 'on' or 'off'. If 'on', also saves the time as a String representation.
     static void setAlarm(Context context, SharedPreferences sharedPreferences, boolean is_on, String time) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(context.getString(R.string.alarm_on), is_on);
-        if (is_on && time != null) editor.putString(context.getString(R.string.alarm_time), time);
+        editor.putBoolean(context.getString(R.string.list_reminder_alarm_on), is_on);
+        if (is_on && time != null) editor.putString(context.getString(R.string.list_reminder_alarm_time), time);
         editor.apply();
     }
 
     static boolean isAlarmOn(Context context, SharedPreferences sharedPreferences) {
-        return sharedPreferences.getBoolean(context.getString(R.string.alarm_on), false);
+        return sharedPreferences.getBoolean(context.getString(R.string.list_reminder_alarm_on), false);
     }
 
     static String getAlarmTime(Context context, SharedPreferences sharedPreferences) {
-        return sharedPreferences.getString(context.getString(R.string.alarm_time), "");
+        return sharedPreferences.getString(context.getString(R.string.list_reminder_alarm_time), "");
     }
 }

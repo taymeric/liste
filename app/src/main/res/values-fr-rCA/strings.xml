@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Liste d\'épicerie</string>
 
-    <string name="message_confirm_clear_list">Effacer la liste actuelle?</string>
+    <string name="list_clear_title">Effacer la liste actuelle?</string>
 
-    <string name="send_email">Envoyer par courriel</string>
+    <string name="list_menu_send_email">Envoyer par courriel</string>
+    <string name="list_email_title">Liste d\'épicerie du %1$s</string>
 
-
-    <plurals name="clear_selected_products">
+    <plurals name="history_clear_selection_title">
         <item quantity="one">Effacer le produit sélectionné de l\'historique?</item>
         <item quantity="other">Effacer les produits sélectionnés de l\'historique?</item>
     </plurals>
 
-    <plurals name="add_selected_products">
+    <plurals name="history_add_selected_products">
         <item quantity="one">Ajouter l\'élément sélectionné à la liste?</item>
         <item quantity="other">Ajouter les éléments sélectionnés à la liste?</item>
     </plurals>
 
-
-    <plurals name="notification_title">
+    <plurals name="list_reminder_notification_title">
         <item quantity="one">%d produit dans la liste d\'épicerie :</item>
         <item quantity="other">%d produits dans la liste d\'épicerie :</item>
     </plurals>
-
 
 </resources>

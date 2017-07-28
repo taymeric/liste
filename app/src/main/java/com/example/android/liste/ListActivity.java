@@ -6,7 +6,6 @@ import android.app.DatePickerDialog;
 import android.app.LoaderManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -52,7 +51,6 @@ import com.example.android.liste.data.ListQueryHandler;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -86,9 +84,6 @@ public class ListActivity extends AppCompatActivity
     private AutoCompleteTextView mAutoCompleteTextView;
     private ProgressBar mProgressBar;
     private ListQueryHandler mListQueryHandler;
-
-    // A CursorAdapter for suggestions from the history table when typing
-    private SimpleCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,7 +173,7 @@ public class ListActivity extends AppCompatActivity
             if (resultCode == RESULT_OK) {
                 mFab.setImageResource(R.drawable.ic_check_white_24dp);
                 mFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(ListActivity.this, R.color.colorPrimaryDark)));
-                String message = data.getStringExtra(getString(R.string.history_message));
+                String message = data.getStringExtra(getString(R.string.history_message_to_list));
                 showMessageWithFabCallback(message);
             }
         }
@@ -235,17 +230,17 @@ public class ListActivity extends AppCompatActivity
 
         mAutoCompleteTextView = v.findViewById(R.id.add_text_view);
 
-        mCursorAdapter = new SimpleCursorAdapter(
+        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(
                 this,
                 R.layout.row_completion,
                 null, //cursor
-                new String[] {ListContract.HistoryEntry.COLUMN_PRODUCT},
-                new int[] {android.R.id.text1},
+                new String[]{ListContract.HistoryEntry.COLUMN_PRODUCT},
+                new int[]{android.R.id.text1},
                 0
         );
 
         // Filter for suggestions from the history table.
-        mCursorAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+        cursorAdapter.setFilterQueryProvider(new FilterQueryProvider() {
             public Cursor runQuery(CharSequence str) {
                 return getCursor(str);
             } });
@@ -263,8 +258,8 @@ public class ListActivity extends AppCompatActivity
             }
         });
 
-        if (mCursorAdapter != null) mAutoCompleteTextView.setAdapter(mCursorAdapter);
-        mCursorAdapter.setCursorToStringConverter(new SimpleCursorAdapter.CursorToStringConverter() {
+        if (cursorAdapter != null) mAutoCompleteTextView.setAdapter(cursorAdapter);
+        cursorAdapter.setCursorToStringConverter(new SimpleCursorAdapter.CursorToStringConverter() {
             @Override
             public CharSequence convertToString(Cursor cursor) {
                 return cursor.getString(cursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_PRODUCT));
@@ -295,9 +290,9 @@ public class ListActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch(id) {
-            case R.id.action_settings:
-                Intent settingsIntent = new Intent(this, SettingsActivity.class);
-                startActivity(settingsIntent);
+            case R.id.action_preferences:
+                Intent preferencesIntent = new Intent(this, PreferencesActivity.class);
+                startActivity(preferencesIntent);
                 return true;
             case R.id.action_clear:
                 deleteListEntries();
@@ -306,7 +301,7 @@ public class ListActivity extends AppCompatActivity
                 showDatePicker();
                 return true;
             case R.id.action_alarm_info:
-                showNotificationCancelingDialog();
+                showReminderCancelingDialog();
                 return true;
             case R.id.action_email:
                 sendByEmail();
@@ -319,8 +314,8 @@ public class ListActivity extends AppCompatActivity
     private void deleteListEntries() {
         if (mAdapter.getItemCount() != 0) {
             new AlertDialog.Builder(ListActivity.this)
-                    .setMessage(getString(R.string.message_confirm_clear_list))
-                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    .setMessage(getString(R.string.list_clear_title))
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             mListQueryHandler.startDelete(ListQueryHandler.DELETION_LIST, null, ListContract.ListEntry.CONTENT_URI, null, null);
@@ -328,10 +323,10 @@ public class ListActivity extends AppCompatActivity
                             if (!mFab.isShown()) mFab.show();
                         }
                     })
-                    .setNegativeButton(R.string.no, null)
+                    .setNegativeButton(android.R.string.no, null)
                     .create().show();
         } else {
-            showMessage(getString(R.string.empty_list));
+            showMessage(getString(R.string.list_empty));
         }
     }
 
@@ -353,7 +348,9 @@ public class ListActivity extends AppCompatActivity
             String annotation = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_ANNOTATION));
             cu.close();
             mListQueryHandler.startDelete(ListQueryHandler.DELETION_LIST, null, uri, null, null);
-            showMessageWithAction("'" + product + "' " + getString(R.string.delete_product), product, priority, annotation);
+            showMessageWithAction(
+                    getResources().getString(R.string.list_removed_product_message, product),
+                    product, priority, annotation);
         }
 
         // Make sure the FAB is visible as deletion affects scrolling
@@ -425,9 +422,9 @@ public class ListActivity extends AppCompatActivity
     /**
      * Shows long Snackbar message with an Action
      */
-    private void showMessageWithAction(final String message, final String product, final int priority, final String annotation) {
+    private void showMessageWithAction(String message, final String product, final int priority, final String annotation) {
         Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_LONG)
-                .setAction(getString(R.string.cancel), new View.OnClickListener() {
+                .setAction(getString(android.R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         ContentValues cv = new ContentValues();
@@ -455,7 +452,7 @@ public class ListActivity extends AppCompatActivity
             getLoaderManager().restartLoader(LIST_LOADER_ID, null, this);
         } else if (s.equals(getString(R.string.pref_direction_key))) {
             updateItemTouchHelper();
-        } else if (s.equals(getString(R.string.alarm_on))) {
+        } else if (s.equals(getString(R.string.list_reminder_alarm_on))) {
             invalidateOptionsMenu();
         } else if (s.equals(getString(R.string.pref_font_key))) {
             mAdapter.reloadFont();
@@ -501,7 +498,7 @@ public class ListActivity extends AppCompatActivity
 
         // This call is after show() because Button are not created before...
         Button confirmButton = datePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        if (confirmButton != null) confirmButton.setText(getString(R.string.next));
+        if (confirmButton != null) confirmButton.setText(getString(R.string.list_reminder_pickers_next_button));
     }
 
     private void showTimePicker(final int year, final int month, final int day) {
@@ -512,7 +509,7 @@ public class ListActivity extends AppCompatActivity
         final TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                setNotificationTime(year, month, day, hour, minute);
+                setReminderTime(year, month, day, hour, minute);
             }
         };
 
@@ -533,7 +530,7 @@ public class ListActivity extends AppCompatActivity
         timePickerDialog.show();
     }
 
-    private void setNotificationTime(int year, int month, int day, int hour, int minute) {
+    private void setReminderTime(int year, int month, int day, int hour, int minute) {
 
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
         notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, LIST_NOTIFICATION_ID);
@@ -554,17 +551,17 @@ public class ListActivity extends AppCompatActivity
 
         PreferenceUtils.setAlarm(this, mSharedPreferences, true, time);
 
-        showMessage(getString(R.string.alarm_set_message) + " " + time);
+        showMessage(getResources().getString(R.string.list_reminder_set_message, time));
 
         invalidateOptionsMenu();
     }
 
-    private void showNotificationCancelingDialog() {
+    private void showReminderCancelingDialog() {
         String time = PreferenceUtils.getAlarmTime(this, mSharedPreferences);
         new AlertDialog.Builder(ListActivity.this)
-                .setMessage(getString(R.string.alarm_set_dialog_message) + " " + time + ".")
+                .setMessage(getResources().getString(R.string.list_reminder_information_dialog_message, time))
                 .setPositiveButton(android.R.string.ok, null)
-                .setNegativeButton(R.string.deactivate, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.list_menu_deactivate_reminder, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         cancelReminder();
@@ -583,20 +580,20 @@ public class ListActivity extends AppCompatActivity
 
         invalidateOptionsMenu();
 
-        showMessage(getString(R.string.alarm_canceled));
+        showMessage(getString(R.string.list_reminder_canceled_message));
     }
 
     private void sendByEmail() {
         if (mAdapter.getItemCount() != 0) {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setData(Uri.parse("mailto:")); // only email apps should handle this
-            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) + " " + getDate());
+            intent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.list_email_title, getDate()));
             intent.putExtra(Intent.EXTRA_TEXT, DataUtils.getListAsStringForEmail(this, mSharedPreferences));
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);
             }
         } else {
-            showMessage(getString(R.string.empty_list));
+            showMessage(getString(R.string.list_empty));
         }
     }
 
@@ -648,7 +645,7 @@ public class ListActivity extends AppCompatActivity
             else editText.setText("");
 
             alertDialog = new AlertDialog.Builder(ListActivity.this)
-                    .setMessage(product + " " + getString(R.string.additional_information))
+                    .setMessage(getResources().getString(R.string.list_edition_title, product))
                     .setView(view)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override

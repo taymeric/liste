@@ -2,10 +2,11 @@ package com.example.android.liste.data;
 
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
-import android.database.Cursor;
-import android.net.Uri;
 
-
+/**
+ * AsyncQueryHandler is used from the main thread to perform simple Content Provider operations
+ * on a background thread.
+ */
 public class ListQueryHandler extends AsyncQueryHandler {
 
     public static final int INSERTION_LIST = 1;
@@ -17,23 +18,4 @@ public class ListQueryHandler extends AsyncQueryHandler {
         super(cr);
     }
 
-    @Override
-    protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-        super.onQueryComplete(token, cookie, cursor);
-    }
-
-    @Override
-    protected void onInsertComplete(int token, Object cookie, Uri uri) {
-        super.onInsertComplete(token, cookie, uri);
-    }
-
-    @Override
-    protected void onUpdateComplete(int token, Object cookie, int result) {
-        super.onUpdateComplete(token, cookie, result);
-    }
-
-    @Override
-    protected void onDeleteComplete(int token, Object cookie, int result) {
-        super.onDeleteComplete(token, cookie, result);
-    }
 }

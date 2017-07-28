@@ -1,89 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Grocery List</string>
 
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="cancel">Cancel</string>
-    <string name="next">Next</string>
+    <!-- Strings for List activity -->
 
-    <string name="important_mark" translatable="false">!</string>
-    <string name="optional_mark" translatable="false">\?</string>
+    <string name="list_empty">The list is empty.</string>
 
-    <string name="empty_list">The list is empty.</string>
+    <string name="list_high_priority_mark" translatable="false">!</string>
+    <string name="list_low_priority_mark" translatable="false">\?</string>
 
-    <string name="priority_indicator">Priority indicator</string>
+    <!-- Strings for edition -->
+    <string name="list_edition_title">%1$s - More</string>
+    <string name="list_edition_annotation_label">Annotation:</string>
+    <string name="list_edition_priority_label">Priority:</string>
+    <string name="list_edition_priority_high_label">Important</string>
+    <string name="list_edition_priority_normal_label">Normal</string>
+    <string name="list_edition_priority_low_label">Optional</string>
+    <string name="list_edition_annotation_hint">E.g. quantity</string>
 
-    <!-- Strings for deletion operations -->
-    <string name="clear_list">Clear list</string>
-    <string name="clear_history">Clear selection</string>
-    <string name="message_confirm_clear_list">Clear current list?</string>
-    <plurals name="clear_selected_products">
-        <item quantity="one">Clear selected product from history?</item>
-        <item quantity="other">Clear selected products from history?</item>
-    </plurals>
-    <plurals name="products_cleared">
-        <item quantity="one">%d product cleared from history.</item>
-        <item quantity="other">%d products cleared from history.</item>
-    </plurals>
-    <string name="delete_product">removed from the list.</string>
-
-    <!-- Strings for addition operations -->
-    <string name="add_hint">Add a product</string>
-    <plurals name="add_selected_products">
-        <item quantity="one">Add selected element to the list?</item>
-        <item quantity="other">Add selected elements to the list?</item>
-    </plurals>
-    <string name="no_new_product">No new product.</string>
-    <plurals name="new_products">
+    <!-- Strings for addition -->
+    <string name="list_menu_add_hint">Add a product</string>
+    <string name="list_no_new_product_message">No new product.</string>
+    <plurals name="list_new_products_message">
         <item quantity="one">%d new product added to the list.</item>
         <item quantity="other">%d new products added to the list.</item>
     </plurals>
 
-    <!-- Strings for History activity -->
-    <string name="history_title">History</string>
-    <string name="history_instructions">Select products to add to the list:</string>
-    <string name="empty_image_description">Pen icon</string>
-    <string name="empty_view_title_text">History is empty. Start by adding products from the main screen.</string>
-    <string name="history_message" translatable="false">history_message</string>
+    <!-- Strings for deletion -->
+    <string name="list_menu_clear">Clear list</string>
+    <string name="list_clear_title">Clear current list?</string>
+    <string name="list_removed_product_message">\'%1$s\' removed from the list.</string>
 
-    <!-- Strings for Notification -->
-    <string name="activate_reminder">Plan a reminder</string>
-    <string name="reminder_info">Get reminder info</string>
-    <string name="deactivate">Deactivate</string>
-    <plurals name="notification_title">
+    <!-- Strings for reminder -->
+    <string name="list_menu_activate_reminder">Plan a reminder</string>
+    <string name="list_menu_deactivate_reminder">Deactivate</string>
+    <string name="list_menu_reminder_information">Get reminder information</string>
+    <string name="list_reminder_information_dialog_message">Date and time of reminder: %1$s</string>
+    <string name="list_reminder_set_message">Reminder set: %1$s</string>
+    <string name="list_reminder_canceled_message">Reminder canceled.</string>
+    <string name="list_reminder_date_picker_message">1. Select day of reminder:</string>
+    <string name="list_reminder_time_picker_message">2. Select time of reminder:</string>
+    <string name="list_reminder_pickers_next_button">Next</string>
+    <plurals name="list_reminder_notification_title">
         <item quantity="one">%d product in the grocery list:</item>
         <item quantity="other">%d products in the grocery list:</item>
     </plurals>
-    <string name="notification_date_picker_message">1. Select day of reminder:</string>
-    <string name="notification_time_picker_message">2. Select time of reminder:</string>
-    <string name="alarm_on" translatable="false">alarm_on</string>
-    <string name="alarm_time" translatable="false">alarm_time</string>
-    <string name="alarm_set_dialog_message">Date and time of reminder:</string>
-    <string name="alarm_set_message">Reminder set:</string>
-    <string name="alarm_canceled">Reminder canceled.</string>
+    <string name="list_reminder_alarm_on" translatable="false">alarm_on</string>
+    <string name="list_reminder_alarm_time" translatable="false">alarm_time</string>
 
-    <!-- Strings for edition -->
-    <string name="additional_information">- More</string>
-    <string name="note">Annotation:</string>
-    <string name="priority">Priority:</string>
-    <string name="priority_high">Important</string>
-    <string name="priority_normal">Normal</string>
-    <string name="priority_low">Optional</string>
-    <string name="annotation_hint">E.g. quantity</string>
+    <!-- Strings for email -->
+    <string name="list_menu_send_email">Send by email</string>
+    <string name="list_email_title">Grocery List for %1$s</string>
 
-    <!-- Strings for email sending -->
-    <string name="send_email">Send by email</string>
+    <!-- Strings for History activity -->
 
-    <!-- Strings for Settings -->
-    <string name="settings">Settings</string>
-    <string name="list_label">List</string>
-    <string name="history_label">History</string>
-    <string name="information_label">Information</string>
-    <string name="version_title">Version</string>
-    <string name="version_number" translatable="false">1.0</string>
+    <string name="history_title">History</string>
+    <string name="history_instructions">Select products to add to the list:</string>
+    <string name="history_empty_view_image_description">Pen icon</string>
+    <string name="history_empty_view_text">History is empty. Start by adding products from the main screen.</string>
 
-    <!-- Strings for layout settings -->
+    <string name="history_menu_clear">Clear selection</string>
+    <plurals name="history_clear_selection_title">
+        <item quantity="one">Clear selected product from history?</item>
+        <item quantity="other">Clear selected products from history?</item>
+    </plurals>
+    <plurals name="history_products_cleared_message">
+        <item quantity="one">%d product cleared from history.</item>
+        <item quantity="other">%d products cleared from history.</item>
+    </plurals>
+
+    <plurals name="history_add_selected_products">
+        <item quantity="one">Add selected element to the list?</item>
+        <item quantity="other">Add selected elements to the list?</item>
+    </plurals>
+
+    <string name="history_message_to_list" translatable="false">history_message</string>
+
+    <!-- Strings for Preferences activity -->
+
+    <string name="pref_title">Preferences</string>
+    <string name="pref_list_label">List</string>
+    <string name="pref_history_label">History</string>
+    <string name="pref_information_label">Information</string>
+    <string name="pref_version_number_label">Version</string>
+    <string name="pref_version_number" translatable="false">1.0</string>
+
+    <!-- Strings for layout preference -->
     <string name="pref_layout_label">Layout</string>
     <string name="pref_layout_linear_label">Normal</string>
     <string name="pref_layout_grid_label">Compact</string>
@@ -93,7 +96,7 @@
     <string name="pref_layout_normal_value" translatable="false">normal</string>
     <string name="pref_layout_compact_value" translatable="false">compact</string>
 
-    <!-- Strings for font settings -->
+    <!-- Strings for font preference -->
     <string name="pref_font_label">Font</string>
     <string name="pref_font_normal_label">By default</string>
     <string name="pref_font_serif_label">Serif</string>
@@ -106,7 +109,7 @@
     <string name="pref_font_handwritten_value" translatable="false">casual</string>
     <string name="pref_font_typewriter_value" translatable="false">monospace</string>
 
-    <!--Strings for sort order -->
+    <!--Strings for sort order preference -->
     <string name="pref_sort_order_label">Sort</string>
     <string name="pref_sort_order_by_name_label">By name</string>
     <string name="pref_sort_order_by_priority_label">By priority</string>
@@ -115,7 +118,7 @@
     <string name="pref_sort_order_name_value" translatable="false">by_name</string>
     <string name="pref_sort_order_priority_value" translatable="false">by_priority</string>
 
-    <!--Strings for direction of swipe -->
+    <!--Strings for direction of swipe preference -->
     <string name="pref_direction_label">Swipe to delete</string>
     <string name="pref_direction_right_label">To the right</string>
     <string name="pref_direction_left_label">To the left</string>
@@ -126,11 +129,12 @@
     <string name="pref_direction_left_value" translatable="false">left</string>
     <string name="pref_direction_both_value" translatable="false">both</string>
 
-    <!-- Strings for Help screen -->
-    <string name="help_title">Help</string>
-    <string name="help_key" translatable="false">help_key</string>
-    <string name="help_add_text">Add a product to the list.</string>
-    <string name="help_history_text">Add products quicker from history.</string>
-    <string name="help_swipe_text">Swipe left or right to remove a product from the list.</string>
-    <string name="help_edition_text">Double-tap to mark a product as important or add an annotation.</string>
+    <!-- Strings for help dialog in preference screen -->
+    <string name="pref_help_key" translatable="false">help_key</string>
+    <string name="pref_help_title">Help</string>
+    <string name="pref_help_add_text">Add a product to the list.</string>
+    <string name="pref_help_history_text">Add products quicker from history.</string>
+    <string name="pref_help_swipe_text">Swipe left or right to remove a product from the list.</string>
+    <string name="pref_help_edition_text">Double-tap to mark a product as important or add an annotation.</string>
+
 </resources>

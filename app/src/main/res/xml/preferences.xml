@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:title="@string/settings">
+    android:title="@string/pref_title">
 
     <PreferenceCategory
-        android:title="@string/list_label">
+        android:title="@string/pref_list_label">
         <ListPreference
             android:defaultValue="@string/pref_layout_normal_value"
             android:entries="@array/pref_layout_option_labels"
@@ -39,7 +39,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/history_label">
+        android:title="@string/pref_history_label">
         <ListPreference
             android:defaultValue="@string/pref_layout_normal_value"
             android:entries="@array/pref_layout_option_labels"
@@ -51,16 +51,16 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/information_label">
+        android:title="@string/pref_information_label">
 
         <com.example.android.liste.HelpDialogPreference
-            android:key="@string/help_key"
-            android:title="@string/help_title"/>
+            android:key="@string/pref_help_key"
+            android:title="@string/pref_help_title"/>
 
         <Preference
             android:icon="@drawable/ic_info_black_24dp"
-            android:summary="@string/version_number"
-            android:title="@string/version_title"
+            android:summary="@string/pref_version_number"
+            android:title="@string/pref_version_number_label"
             />
 
     </PreferenceCategory>

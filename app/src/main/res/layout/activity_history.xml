@@ -62,7 +62,7 @@
             android:paddingLeft="40dp"
             android:paddingRight="40dp"
             android:paddingStart="40dp"
-            android:text="@string/empty_view_title_text"
+            android:text="@string/history_empty_view_text"
             android:textAlignment="center"
             android:textAppearance="?android:textAppearanceLarge"/>
 
@@ -74,7 +74,7 @@
             android:layout_centerHorizontal="true"
             android:layout_margin="16dp"
             android:background="@drawable/ic_create_black_48px"
-            android:contentDescription="@string/empty_image_description"/>
+            android:contentDescription="@string/history_empty_view_image_description"/>
 
     </RelativeLayout>
 
