@@ -1,6 +1,5 @@
 package com.example.android.liste;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -60,7 +59,6 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
     // Replaces the contents of a view
     @Override
-    @SuppressLint("PrivateResource")
     public void onBindViewHolder(HistoryAdapter.ViewHolder holder, int position) {
         // Gets element at position and replaces the contents of the view with that element
         if (mCursor.moveToPosition(position)) {

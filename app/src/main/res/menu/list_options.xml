@@ -6,34 +6,30 @@
         android:id="@+id/action_add"
         android:icon="@drawable/ic_create_white_24dp"
         android:title="@string/list_menu_add_hint"
-        app:actionLayout="@layout/bar_edit_text_view"
+        app:actionLayout="@layout/action_bar_edit_text_view"
         app:showAsAction="ifRoom|collapseActionView"/>
 
     <item android:id="@+id/action_alarm_info"
-          android:icon="@drawable/ic_alarm_on_white_24dp"
+          android:icon="@drawable/ic_alarm_white_24dp"
           android:title="@string/list_menu_reminder_information"
           app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_clear"
-        android:icon="@drawable/ic_delete_white_24dp"
         android:title="@string/list_menu_clear"
         app:showAsAction="never"/>
 
     <item android:id="@+id/action_notify"
-          android:icon="@drawable/ic_alarm_white_24dp"
           android:title="@string/list_menu_activate_reminder"
           app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_email"
-        android:icon="@drawable/ic_email_white_24dp"
         android:title="@string/list_menu_send_email"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_preferences"
-        android:icon="@drawable/ic_settings_white_24dp"
         android:title="@string/pref_title"
         app:showAsAction="never"/>
 

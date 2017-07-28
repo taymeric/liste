@@ -106,33 +106,12 @@ public class HistoryActivity extends AppCompatActivity
                 deleteSelectedEntries();
                 return true;
             case android.R.id.home:
-                if (selectedIds != null && !selectedIds.isEmpty()) {
-                    new AlertDialog.Builder(HistoryActivity.this)
-                            .setMessage(getResources().getQuantityString(R.plurals.history_add_selected_products, selectedIds.size()))
-                            .setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    addSelectedEntries();
-                                    finish();
-                                }
-                            })
-                            .setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    setResult(RESULT_CANCELED, null);
-                                    finish();
-                                }
-                            })
-                            .create().show();
-                } else {
-                    finish();
-                }
+                showConfirmationDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
     private void deleteSelectedEntries() {
         new AlertDialog.Builder(HistoryActivity.this)
@@ -176,6 +155,30 @@ public class HistoryActivity extends AppCompatActivity
                 })
                 .setNegativeButton(android.R.string.no, null)
                 .create().show();
+    }
+
+    private void showConfirmationDialog() {
+        if (selectedIds != null && !selectedIds.isEmpty()) {
+            new AlertDialog.Builder(HistoryActivity.this)
+                    .setMessage(getResources().getQuantityString(R.plurals.history_add_selected_products, selectedIds.size()))
+                    .setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            addSelectedEntries();
+                            finish();
+                        }
+                    })
+                    .setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            setResult(RESULT_CANCELED, null);
+                            finish();
+                        }
+                    })
+                    .create().show();
+        } else {
+            finish();
+        }
     }
 
     private void addSelectedEntries() {
@@ -224,8 +227,6 @@ public class HistoryActivity extends AppCompatActivity
                 return null;
         }
     }
-
-
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {

@@ -12,12 +12,12 @@ import com.example.android.liste.data.ListContract;
 
 
 /**
- * Utility methods to get and set settings values of SharedPreferences
+ * Utility methods to get and set preferences values of SharedPreferences
  */
 class PreferenceUtils {
 
     static final int NORMAL_LAYOUT_ITEM = 1;
-    static final int COMPACT_LAYOUT_ITEM = 2;
+    private static final int COMPACT_LAYOUT_ITEM = 2;
 
     static int getListLayoutType(Context context, SharedPreferences sharedPreferences) {
         String layout_value = sharedPreferences.getString(context.getString(R.string.pref_list_layout_key),

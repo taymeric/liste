@@ -490,7 +490,9 @@ public class ListActivity extends AppCompatActivity
         // Create View for Custom title
         LayoutInflater inflater = getLayoutInflater();
         final ViewGroup nullParent = null;
-        View v = inflater.inflate(R.layout.dialog_picker_date_title, nullParent);
+        View v = inflater.inflate(R.layout.dialog_picker_title, nullParent);
+        TextView tv = v.findViewById(R.id.text_title);
+        tv.setText(getString(R.string.list_reminder_date_picker_message));
 
         datePickerDialog.setCustomTitle(v);
 
@@ -523,7 +525,9 @@ public class ListActivity extends AppCompatActivity
         // Create View for Custom title
         LayoutInflater inflater = getLayoutInflater();
         final ViewGroup nullParent = null;
-        View v = inflater.inflate(R.layout.dialog_picker_time_title, nullParent);
+        View v = inflater.inflate(R.layout.dialog_picker_title, nullParent);
+        TextView tv = v.findViewById(R.id.text_title);
+        tv.setText(getString(R.string.list_reminder_time_picker_message));
 
         timePickerDialog.setCustomTitle(v);
 
