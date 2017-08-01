@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:id="@+id/item_list_layout"
-        style="@style/CompactLayoutList"
+        style="@style/ListLayout.Compact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -40,16 +40,6 @@
                 tools:text="Subtext"/>
 
         </LinearLayout>
-
-        <!--<ImageView
-            android:id="@+id/item_priority"
-            android:layout_width="@dimen/text_small"
-            android:layout_height="@dimen/text_small"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:contentDescription="@string/priority_indicator"
-            android:gravity="end"/>-->
 
         <TextView
             android:id="@+id/item_priority"

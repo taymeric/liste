@@ -32,7 +32,6 @@
         android:layout_below="@+id/history_text_view"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:paddingBottom="72dp"
         android:scrollbars="vertical"
         />
 

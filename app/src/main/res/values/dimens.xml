@@ -8,4 +8,6 @@
     <dimen name="text_annotation_big">20.0sp</dimen>
     <dimen name="text_small">18.0sp</dimen>
     <dimen name="text_big">22.0sp</dimen>
+    <dimen name="text_history_small">16.0sp</dimen>
+    <dimen name="text_history_big">18.0sp</dimen>
 </resources>

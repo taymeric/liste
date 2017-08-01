@@ -3,10 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_product"
-    style="@style/CompactLayoutHistory"
+    style="@style/HistoryLayout.Compact"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textColor="@android:color/tertiary_text_light"
-    android:textSize="@dimen/text_small"
+    android:textSize="@dimen/text_history_small"
     tools:text="Text"
     />
