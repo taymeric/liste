@@ -41,7 +41,7 @@ class DataUtils {
         listQueryHandler.startInsert(ListQueryHandler.INSERTION_HISTORY, null, ListContract.HistoryEntry.CONTENT_URI, values);
     }
 
-    static Notification getNotification(Context context) {
+    static Notification createNotification(Context context) {
 
         Uri uri = ListContract.ListEntry.CONTENT_URI;
         // For notifications, the whole list may not be entirely visible, so we sort by priority,

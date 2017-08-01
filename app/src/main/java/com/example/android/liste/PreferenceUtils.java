@@ -10,9 +10,11 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 
 import com.example.android.liste.data.ListContract;
 
+import static android.R.attr.value;
+
 
 /**
- * Utility methods to get and set preferences values of SharedPreferences
+ * Utility methods related to SharedPreferences,
  */
 class PreferenceUtils {
 
@@ -37,25 +39,19 @@ class PreferenceUtils {
             return NORMAL_LAYOUT_ITEM;
     }
 
-    static RecyclerView.LayoutManager getListLayout(
+    static RecyclerView.LayoutManager getListLayoutManager(
             Context context, SharedPreferences sharedPreferences) {
-
-        String value = sharedPreferences.getString(
-                context.getString(R.string.pref_list_layout_key),
-                context.getString(R.string.pref_layout_normal_value));
-        if (value.equals(context.getString(R.string.pref_layout_compact_value)))
+        int type = getListLayoutType(context, sharedPreferences);
+        if (type == COMPACT_LAYOUT_ITEM)
             return new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         else
             return new LinearLayoutManager(context);
     }
 
-    static RecyclerView.LayoutManager getHistoryLayout(
+    static RecyclerView.LayoutManager getHistoryLayoutManager(
             Context context, SharedPreferences sharedPreferences) {
-
-        String value = sharedPreferences.getString(
-                context.getString(R.string.pref_history_layout_key),
-                context.getString(R.string.pref_layout_normal_value));
-        if (value.equals(context.getString(R.string.pref_layout_compact_value)))
+        int type = getHistoryLayoutType(context, sharedPreferences);
+        if (type == COMPACT_LAYOUT_ITEM)
             return new GridLayoutManager(context, 2);
         else
             return new LinearLayoutManager(context);

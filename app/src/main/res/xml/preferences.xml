@@ -29,7 +29,7 @@
             android:title="@string/pref_sort_order_label"
             />
         <ListPreference
-            android:defaultValue="@string/pref_direction_right_value"
+            android:defaultValue="@string/pref_direction_both_value"
             android:entries="@array/pref_direction_option_labels"
             android:entryValues="@array/pref_direction_option_values"
             android:icon="@drawable/ic_touch_app_black_24dp"

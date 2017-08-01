@@ -95,6 +95,8 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 holder.mPriorityView.setVisibility(View.VISIBLE);
             }
             else {
+                // For compact layout, we save space by using View.GONE when the priority marker is
+                // not visible. For normal layout, View.INVISIBLE makes for a better alignment.
                 if (mCurrentLayout == PreferenceUtils.NORMAL_LAYOUT_ITEM)
                     holder.mPriorityView.setVisibility(View.INVISIBLE);
                 else

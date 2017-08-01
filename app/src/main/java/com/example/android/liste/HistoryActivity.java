@@ -76,7 +76,7 @@ public class HistoryActivity extends AppCompatActivity
 
         // Set up the Recycler View with its Adapter
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.history_recycler_view);
-        RecyclerView.LayoutManager layoutManager = PreferenceUtils.getHistoryLayout(this, sharedPreferences);
+        RecyclerView.LayoutManager layoutManager = PreferenceUtils.getHistoryLayoutManager(this, sharedPreferences);
         recyclerView.setLayoutManager(layoutManager);
         mAdapter = new HistoryAdapter(this, this);
         recyclerView.setAdapter(mAdapter);
