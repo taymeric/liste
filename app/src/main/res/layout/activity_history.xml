@@ -32,6 +32,7 @@
         android:layout_below="@+id/history_text_view"
         android:clipToPadding="false"
         android:overScrollMode="never"
+        android:paddingBottom="@dimen/layout_bottom_padding_for_fab"
         android:scrollbars="vertical"
         />
 

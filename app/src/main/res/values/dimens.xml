@@ -2,6 +2,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="fab_size">56dp</dimen>
+    <dimen name="layout_bottom_padding_for_fab">88dp</dimen>
 
     <!-- Text sizes -->
     <dimen name="text_annotation_small">16.0sp</dimen>

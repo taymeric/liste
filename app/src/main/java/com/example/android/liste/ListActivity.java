@@ -196,7 +196,7 @@ public class ListActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.list_options, menu);
+        getMenuInflater().inflate(R.menu.activity_list, menu);
         setupAlarmButtons(menu);
         setupActionView(menu);
         return true;
@@ -273,7 +273,7 @@ public class ListActivity extends AppCompatActivity
             }
         });
 
-        if (cursorAdapter != null) mAutoCompleteTextView.setAdapter(cursorAdapter);
+        mAutoCompleteTextView.setAdapter(cursorAdapter);
         cursorAdapter.setCursorToStringConverter(new SimpleCursorAdapter.CursorToStringConverter() {
             @Override
             public CharSequence convertToString(Cursor cursor) {
@@ -481,7 +481,7 @@ public class ListActivity extends AppCompatActivity
      */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if (s.equals(getString(R.string.pref_list_layout_key))) {
+        if (s.equals(getString(R.string.pref_list_compact_layout_key))) {
             mLayoutManager = PreferenceUtils.getListLayoutManager(this, mSharedPreferences);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mAdapter.reloadLayout();

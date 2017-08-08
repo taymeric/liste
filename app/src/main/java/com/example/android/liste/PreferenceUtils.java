@@ -22,18 +22,18 @@ class PreferenceUtils {
     private static final int COMPACT_LAYOUT_ITEM = 2;
 
     static int getListLayoutType(Context context, SharedPreferences sharedPreferences) {
-        String layout_value = sharedPreferences.getString(context.getString(R.string.pref_list_layout_key),
-                context.getString(R.string.pref_layout_normal_value));
-        if (layout_value.equals(context.getString(R.string.pref_layout_compact_value)))
+        boolean compact_layout_value = sharedPreferences.getBoolean(context.getString(R.string.pref_list_compact_layout_key),
+                false);
+        if (compact_layout_value)
             return COMPACT_LAYOUT_ITEM;
         else
             return NORMAL_LAYOUT_ITEM;
     }
 
     static int getHistoryLayoutType(Context context, SharedPreferences sharedPreferences) {
-        String layout_value = sharedPreferences.getString(context.getString(R.string.pref_history_layout_key),
-                context.getString(R.string.pref_layout_normal_value));
-        if (layout_value.equals(context.getString(R.string.pref_layout_compact_value)))
+        boolean compact_layout_value = sharedPreferences.getBoolean(context.getString(R.string.pref_history_compact_layout_key),
+                true);
+        if (compact_layout_value)
             return COMPACT_LAYOUT_ITEM;
         else
             return NORMAL_LAYOUT_ITEM;

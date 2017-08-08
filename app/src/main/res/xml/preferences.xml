@@ -5,14 +5,11 @@
 
     <PreferenceCategory
         android:title="@string/pref_list_label">
-        <ListPreference
-            android:defaultValue="@string/pref_layout_normal_value"
-            android:entries="@array/pref_layout_option_labels"
-            android:entryValues="@array/pref_list_layout_option_values"
-            android:icon="@drawable/ic_view_list_black_24dp"
-            android:key="@string/pref_list_layout_key"
-            android:title="@string/pref_layout_label"
-            />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:icon="@drawable/ic_dashboard_black_24dp"
+            android:key="@string/pref_list_compact_layout_key"
+            android:title="@string/pref_compact_layout_label"/>
         <ListPreference
             android:defaultValue="@string/pref_font_normal_value"
             android:entries="@array/pref_font_labels"
@@ -40,14 +37,11 @@
 
     <PreferenceCategory
         android:title="@string/pref_history_label">
-        <ListPreference
-            android:defaultValue="@string/pref_layout_normal_value"
-            android:entries="@array/pref_layout_option_labels"
-            android:entryValues="@array/pref_history_layout_option_values"
-            android:icon="@drawable/ic_view_list_black_24dp"
-            android:key="@string/pref_history_layout_key"
-            android:title="@string/pref_layout_label"
-            />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:icon="@drawable/ic_dashboard_black_24dp"
+            android:key="@string/pref_history_compact_layout_key"
+            android:title="@string/pref_compact_layout_label"/>
     </PreferenceCategory>
 
     <PreferenceCategory

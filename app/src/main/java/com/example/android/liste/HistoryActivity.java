@@ -91,7 +91,7 @@ public class HistoryActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.history_options, menu);
+        getMenuInflater().inflate(R.menu.activity_history, menu);
         MenuItem trash = menu.findItem(R.id.action_clear);
         if (selectedIds != null) trash.setVisible(!selectedIds.isEmpty());
         else trash.setVisible(false);

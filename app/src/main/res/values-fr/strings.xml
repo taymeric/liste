@@ -83,9 +83,7 @@
     <string name="pref_version_number_label">Version</string>
 
     <!-- Strings for layout preference-->
-    <string name="pref_layout_label">Affichage</string>
-    <string name="pref_layout_linear_label">Normal</string>
-    <string name="pref_layout_grid_label">Compact</string>
+    <string name="pref_compact_layout_label">Affichage compact</string>
 
     <!-- Strings for font preference -->
     <string name="pref_font_label">Police de caractère</string>
