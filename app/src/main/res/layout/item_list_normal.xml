@@ -48,13 +48,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
             android:gravity="end"
             android:textAppearance="?android:textAppearance"
             android:textSize="@dimen/text_big"
             android:textStyle="bold"
             tools:text="!"/>
+
+        <ImageView
+            android:id="@+id/item_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="More"
+            android:src="@drawable/ic_more_horiz_black_24dp"
+            />
 
     </LinearLayout>
 

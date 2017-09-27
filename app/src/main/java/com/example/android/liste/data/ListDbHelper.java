@@ -6,6 +6,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.Locale;
 
+
+/**
+ * A helper class for database creation and management.
+ */
 class ListDbHelper extends SQLiteOpenHelper {
 
     // To be incremented every time the database schema is changed.

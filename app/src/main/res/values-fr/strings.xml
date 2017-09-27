@@ -4,7 +4,7 @@
     <string name="app_name">Liste de course</string>
 
 
-    <!-- Strings for List activity -->
+    <!-- Strings for List activity start -->
 
     <string name="list_empty">La liste est vide.</string>
 
@@ -30,7 +30,6 @@
     <string name="list_clear_title">Effacer la liste actuelle ?</string>
     <string name="list_removed_product_message">\'%1$s\' retiré de la liste.</string>
 
-
     <!-- Strings for reminder -->
     <string name="list_menu_activate_reminder">Planifier un rappel</string>
     <string name="list_menu_deactivate_reminder">Désactiver</string>
@@ -50,8 +49,10 @@
     <string name="list_menu_send_email">Envoyer par email</string>
     <string name="list_email_title">Liste de course du %1$s</string>
 
+    <!-- Strings for List activity end -->
 
-    <!-- Strings for History activity -->
+
+    <!-- Strings for History activity start -->
 
     <string name="history_title">Historique</string>
     <string name="history_instructions">Sélectionner les produits à ajouter à la liste :</string>
@@ -73,8 +74,10 @@
         <item quantity="other">Ajouter les éléments sélectionnés à la liste ?</item>
     </plurals>
 
+    <!-- Strings for History activity end -->
 
-    <!-- Strings for Preferences activity -->
+
+    <!-- Strings for Preferences activity start -->
 
     <string name="pref_title">Préférences</string>
     <string name="pref_list_label">Liste</string>
@@ -107,6 +110,8 @@
     <string name="pref_help_add_text">Ajouter un produit dans la liste.</string>
     <string name="pref_help_history_text">Ajouter plus rapidement des produits depuis l\'historique.</string>
     <string name="pref_help_swipe_text">Balayer vers la gauche ou la droite pour supprimer un produit de la liste.</string>
-    <string name="pref_help_edition_text">Appuyer deux fois pour marquer un produit comme important ou ajouter une annotation.</string>
+    <string name="pref_help_edition_text">Appuyer longuement pour marquer un produit comme important ou ajouter une annotation.</string>
+
+    <!-- Strings for Preferences activity end -->
 
 </resources>

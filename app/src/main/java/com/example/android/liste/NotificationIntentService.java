@@ -9,7 +9,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v7.preference.PreferenceManager;
 
-import static com.example.android.liste.NotificationReceiver.NOTIFICATION_ID;
+import static com.example.android.liste.NotificationReceiver.NOTIFICATION_ID_KEY;
 
 
 public class NotificationIntentService extends IntentService {
@@ -27,7 +27,7 @@ public class NotificationIntentService extends IntentService {
         Notification notification = DataUtils.createNotification(this);
 
         int id = 0;
-        if (intent != null) id= intent.getIntExtra(NOTIFICATION_ID, 0);
+        if (intent != null) id= intent.getIntExtra(NOTIFICATION_ID_KEY, 0);
         notificationManager.notify(id, notification);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);

@@ -17,10 +17,6 @@ import android.support.v7.app.NotificationCompat;
 import com.example.android.liste.data.ListContract;
 import com.example.android.liste.data.ListQueryHandler;
 
-import static com.example.android.liste.ListActivity.DEFAULT_PRIORITY;
-import static com.example.android.liste.ListActivity.HIGH_PRIORITY;
-import static com.example.android.liste.ListActivity.LOW_PRIORITY;
-
 /**
  * Utility methods for database-related operations.
  */
@@ -32,7 +28,7 @@ class DataUtils {
         // Add value to the list table with a default priority
         ContentValues values = new ContentValues();
         values.put(ListContract.ListEntry.COLUMN_PRODUCT, product);
-        values.put(ListContract.ListEntry.COLUMN_PRIORITY, DEFAULT_PRIORITY);
+        values.put(ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.DEFAULT_PRIORITY_PRODUCT);
         listQueryHandler.startInsert(ListQueryHandler.INSERTION_LIST, null, ListContract.ListEntry.CONTENT_URI, values);
 
         // Add text to the history table
@@ -119,8 +115,10 @@ class DataUtils {
                 if (annotation != null && !annotation.equals("")) list += " (" + annotation + ")";
 
                 int p = cursor.getInt(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
-                if (p == HIGH_PRIORITY) list = list + " " + context.getString(R.string.list_high_priority_mark);
-                else if (p == LOW_PRIORITY) list = list + " " + context.getString(R.string.list_low_priority_mark);
+                if (p == ListContract.ListEntry.HIGH_PRIORITY_PRODUCT)
+                    list = list + " " + context.getString(R.string.list_high_priority_mark);
+                else if (p == ListContract.ListEntry.LOW_PRIORITY_PRODUCT)
+                    list = list + " " + context.getString(R.string.list_low_priority_mark);
 
                 list = list + "\n";
             }

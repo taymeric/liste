@@ -19,6 +19,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -76,8 +77,9 @@ public class HistoryActivity extends AppCompatActivity
 
         // Set up the Recycler View with its Adapter
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.history_recycler_view);
-        RecyclerView.LayoutManager layoutManager = PreferenceUtils.getHistoryLayoutManager(this, sharedPreferences);
+        LinearLayoutManager layoutManager = (LinearLayoutManager) PreferenceUtils.getHistoryLayoutManager(this, sharedPreferences);
         recyclerView.setLayoutManager(layoutManager);
+
         mAdapter = new HistoryAdapter(this, this);
         recyclerView.setAdapter(mAdapter);
 
@@ -190,7 +192,7 @@ public class HistoryActivity extends AppCompatActivity
         for (String value: selectedIds.values()) {
             ContentValues cv = new ContentValues();
             cv.put(ListContract.ListEntry.COLUMN_PRODUCT, value);
-            cv.put(ListContract.ListEntry.COLUMN_PRIORITY, ListActivity.DEFAULT_PRIORITY);
+            cv.put(ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.DEFAULT_PRIORITY_PRODUCT);
             cv_all[i] = cv;
             i++;
         }

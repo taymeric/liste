@@ -54,35 +54,61 @@ import java.util.Date;
 
 
 /**
- * ListActivity is the main Activity and displays the items of the 'list' table.
- * The User can:
- *  - Add a new element to the list by using the text field in the AppBar
- *  - Go to HistoryActivity by using the FAB
- *  - Delete individual elements from the list by swiping
+ * ListActivity is the main Activity of the app and displays the products of the 'list' table
+ * in a RecyclerView.
+ * From this RecyclerView, the user can:
+ *  - Swipe left and/or right an element to delete it from the list
+ *  - Long-press an element to open a dialog to set the product's priority and an optional annotation
+ * Additionally, from the AppBar, the user can:
+ *  - Add a new element to the list (and to the two database tables: list and history)
  *  - Delete the whole list
- *  - Access the settings
+ *  - Set up a scheduled reminder notification
+ *  - Send the content of the list by email
+ *  - Access the settings (ie SettingsActivity)
+ * Finally, the user can start HistoryActivity by tapping the Floating Action Button.
  */
 public class ListActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor>,
         SharedPreferences.OnSharedPreferenceChangeListener,
         ListAdapter.ListAdapterOnClickListener
 {
+    /* Helps the LoaderManager identify the loader for the list */
+    private static final int LIST_LOADER_ID = 100;
 
-    public static final int HIGH_PRIORITY = 1;
-    public static final int DEFAULT_PRIORITY = 2;
-    public static final int LOW_PRIORITY = 3;
-    private static final int LIST_LOADER_ID = 77;
-    private static final int LIST_NOTIFICATION_ID = 101;
-    private static final int HISTORY_FOR_RESULT = 44;
+    /* Used by NotificationManager to identify the notification within the app */
+    private static final int NOTIFICATION_ID = 200;
 
+    /* Used by onActivityResult to identifies that the result comes from HistoryActivity */
+    private static final int HISTORY_FOR_RESULT_ID = 300;
+
+    /* The Floating Action Button that launches HistoryActivity */
     private FloatingActionButton mFab;
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private ItemTouchHelper.SimpleCallback mSimpleCallback;
-    private ListAdapter mAdapter;
-    private SharedPreferences mSharedPreferences;
-    private AutoCompleteTextView mAutoCompleteTextView;
+
+    /* A ProgressBar that is only 'visible' when the list is loading (otherwise it is 'gone')*/
     private ProgressBar mProgressBar;
+
+    /* A Reference to the Shared Preferences of the app, used by many methods to adjust the behavior
+     * of the app to the user's preferences */
+    private SharedPreferences mSharedPreferences;
+
+    /* The RecyclerView that displays the items of the list */
+    private RecyclerView mRecyclerView;
+
+    /* The LayoutManager that defines if the RecyclerView has one or two columns, depending on the
+     * user's preferences */
+    private RecyclerView.LayoutManager mLayoutManager;
+
+    /* The Adapter that binds the data from the table to the Recycler View */
+    private ListAdapter mAdapter;
+
+    /* A callback method to manage deletion when an item is swiped */
+    private ItemTouchHelper.SimpleCallback mSimpleCallback;
+
+    /* A field in the AppBar that allows typing new products to add to the list and suggests products
+    * from the history */
+    private AutoCompleteTextView mAutoCompleteTextView;
+
+    /* Used to perform Content Provider operations on a background thread */
     private ListQueryHandler mListQueryHandler;
 
     @Override
@@ -98,44 +124,18 @@ public class ListActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
             Intent intent = new Intent(ListActivity.this, HistoryActivity.class);
-            startActivityForResult(intent, HISTORY_FOR_RESULT);
+            startActivityForResult(intent, HISTORY_FOR_RESULT_ID);
             }
         });
 
-        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        mProgressBar.setVisibility(View.VISIBLE);
-
-        // Set up the Recycler View and its Adapter
+        // Set up the RecyclerView and its Adapter
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mLayoutManager = PreferenceUtils.getListLayoutManager(this, mSharedPreferences);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new ListAdapter(this, this);
         mRecyclerView.setAdapter(mAdapter);
 
-        // Hides FAB when scrolling down
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
-        {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
-            {
-                super.onScrolled(recyclerView, dx, dy);
-
-                if (dy >0) {
-                    // Scroll Down
-                    if (mFab.isShown()) {
-                        mFab.hide();
-                    }
-                }
-                else if (dy <0) {
-                    // Scroll Up
-                    if (!mFab.isShown()) {
-                        mFab.show();
-                    }
-                }
-            }
-        });
-
-        // ItemTouchHelper for delete on swipe
+        // The ItemTouchHelper class manages deletion of a RecyclerView item that is swiped
         mSimpleCallback = new ItemTouchHelper.SimpleCallback(0,
                 PreferenceUtils.getSwipeDirection(this, mSharedPreferences)) {
 
@@ -147,7 +147,7 @@ public class ListActivity extends AppCompatActivity
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                // The Adapter stores the Id of the element in the viewHolder
+                // The Adapter class stores the id of the element as a tag in the viewHolder
                 int id = (int) viewHolder.itemView.getTag();
                 Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 v.vibrate(25);
@@ -156,36 +156,15 @@ public class ListActivity extends AppCompatActivity
         };
         new ItemTouchHelper(mSimpleCallback).attachToRecyclerView(mRecyclerView);
 
+        // Create the ListQueryHandler used to perform Content Provider operations
         mListQueryHandler = new ListQueryHandler(getContentResolver());
 
+        // Upon creation, make the progress bar visible until the list has finished loading
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        mProgressBar.setVisibility(View.VISIBLE);
+
+        // Initiate loading of the list to populate the RecyclerView
         getLoaderManager().initLoader(LIST_LOADER_ID, null, this);
-    }
-
-    private void deleteSingleEntry(int id) {
-        String stringId = Integer.toString(id);
-
-        Uri uri = ListContract.ListEntry.CONTENT_URI;
-        uri = uri.buildUpon().appendPath(stringId).build();
-
-        String[] projection  = { ListContract.ListEntry.COLUMN_PRODUCT, ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.COLUMN_ANNOTATION };
-
-        // Save values for undo operation
-        // (No AsyncQueryHandler in this part to avoid having to deal with synchronizing issues.)
-        Cursor cu = getContentResolver().query(uri, projection, null, null, null);
-
-        if (cu!=null && cu.moveToFirst()) {
-            String product = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT));
-            int priority = cu.getInt(cu.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
-            String annotation = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_ANNOTATION));
-            cu.close();
-            mListQueryHandler.startDelete(ListQueryHandler.DELETION_LIST, null, uri, null, null);
-            showMessageWithUndoAction(
-                    getResources().getString(R.string.list_removed_product_message, product),
-                    product, priority, annotation);
-        }
-
-        // Make sure the FAB is visible as deletion affects scrolling
-        if (!mFab.isShown()) mFab.show();
     }
 
     @Override
@@ -197,108 +176,9 @@ public class ListActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_list, menu);
-        setupAlarmButtons(menu);
-        setupActionView(menu);
+        setupReminderButtons(menu);
+        setupAddButton(menu);
         return true;
-    }
-
-    private void setupActionView(Menu menu) {
-
-        final MenuItem menuItem = menu.findItem(R.id.action_add);
-        View v = menuItem.getActionView();
-
-        MenuItemCompat.OnActionExpandListener expandListener = new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                if (mAutoCompleteTextView != null) {
-                    mAutoCompleteTextView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAutoCompleteTextView.clearFocus();
-                            mAutoCompleteTextView.setText("");
-                            final InputMethodManager inputMethodManager
-                                    = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                            inputMethodManager.hideSoftInputFromWindow(findViewById(R.id.main).getWindowToken(), 0);
-                        }
-                    });
-                }
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                if (mAutoCompleteTextView != null) {
-                    mAutoCompleteTextView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAutoCompleteTextView.requestFocusFromTouch();
-                            final InputMethodManager inputMethodManager
-                                    = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                            inputMethodManager.showSoftInput(mAutoCompleteTextView, InputMethodManager.SHOW_IMPLICIT);
-                        }
-                    });
-                }
-                return true;
-            }
-        };
-        MenuItemCompat.setOnActionExpandListener(menuItem, expandListener);
-
-        mAutoCompleteTextView = v.findViewById(R.id.add_text_view);
-
-        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(
-                this,
-                R.layout.row_completion,
-                null, //cursor
-                new String[]{ListContract.HistoryEntry.COLUMN_PRODUCT},
-                new int[]{android.R.id.text1},
-                0
-        );
-
-        // Filter for suggestions from the history table.
-        cursorAdapter.setFilterQueryProvider(new FilterQueryProvider() {
-            public Cursor runQuery(CharSequence str) {
-                return getCursor(str);
-            } });
-
-        mAutoCompleteTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                String text = mAutoCompleteTextView.getText().toString();
-                if (!text.equals("")) {
-                    DataUtils.insertProductIntoBothTables(mListQueryHandler, text);
-                    mAutoCompleteTextView.setText("");
-                }
-                menuItem.collapseActionView();
-                return true;
-            }
-        });
-
-        mAutoCompleteTextView.setAdapter(cursorAdapter);
-        cursorAdapter.setCursorToStringConverter(new SimpleCursorAdapter.CursorToStringConverter() {
-            @Override
-            public CharSequence convertToString(Cursor cursor) {
-                return cursor.getString(cursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_PRODUCT));
-            }
-        });
-    }
-
-    private void setupAlarmButtons(Menu menu) {
-        boolean isAlarmSet = PreferenceUtils.isAlarmOn(this, mSharedPreferences);
-        MenuItem alarmSettingButton = menu.findItem(R.id.action_notify);
-        alarmSettingButton.setVisible(!isAlarmSet);
-        MenuItem alarmCancelButton = menu.findItem(R.id.action_alarm_info);
-        alarmCancelButton.setVisible(isAlarmSet);
-    }
-
-    // Helper method to get a Cursor that points to elements of the history table
-    // that match the string passed as parameter.
-    private Cursor getCursor(CharSequence str) {
-        String select = ListContract.HistoryEntry.COLUMN_PRODUCT + " LIKE ? ";
-        String[]  selectArgs = { "%" + str + "%"};
-        String[] projection = new String[] {
-                ListContract.HistoryEntry._ID,
-                ListContract.HistoryEntry.COLUMN_PRODUCT};
-        return getContentResolver().query(ListContract.HistoryEntry.CONTENT_URI, projection, select, selectArgs, null);
     }
 
     @Override
@@ -310,70 +190,19 @@ public class ListActivity extends AppCompatActivity
                 startActivity(preferencesIntent);
                 return true;
             case R.id.action_clear:
-                deleteListEntries();
+                showDeleteAllDialog();
                 return true;
             case R.id.action_notify:
-                showReminderSettingDialog();
+                showReminderSetupDialogs();
                 return true;
             case R.id.action_alarm_info:
-                showReminderCancelingDialog();
+                showReminderInformationAndCancelingDialog();
                 return true;
             case R.id.action_email:
                 sendByEmail();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void deleteListEntries() {
-        if (mAdapter.getItemCount() != 0) {
-            new AlertDialog.Builder(ListActivity.this)
-                    .setMessage(getString(R.string.list_clear_title))
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            mListQueryHandler.startDelete(ListQueryHandler.DELETION_LIST, null, ListContract.ListEntry.CONTENT_URI, null, null);
-                            // Make sure FAB is visible as deletion affects scrolling
-                            if (!mFab.isShown()) mFab.show();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, null)
-                    .create().show();
-        } else {
-            showMessage(getString(R.string.list_empty));
-        }
-    }
-
-    private void showReminderSettingDialog() {
-        showDatePicker();
-    }
-
-    private void showReminderCancelingDialog() {
-        String time = PreferenceUtils.getAlarmTime(this, mSharedPreferences);
-        new AlertDialog.Builder(ListActivity.this)
-                .setMessage(getResources().getString(R.string.list_reminder_information_dialog_message, time))
-                .setPositiveButton(android.R.string.ok, null)
-                .setNegativeButton(R.string.list_menu_deactivate_reminder, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        cancelReminder();
-                    }
-                })
-                .create().show();
-    }
-
-    private void sendByEmail() {
-        if (mAdapter.getItemCount() != 0) {
-            Intent intent = new Intent(Intent.ACTION_SENDTO);
-            intent.setData(Uri.parse("mailto:")); // only email apps should handle this
-            intent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.list_email_title, getDate()));
-            intent.putExtra(Intent.EXTRA_TEXT, DataUtils.getListAsStringForEmail(this, mSharedPreferences));
-            if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivity(intent);
-            }
-        } else {
-            showMessage(getString(R.string.list_empty));
         }
     }
 
@@ -418,7 +247,7 @@ public class ListActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == HISTORY_FOR_RESULT) {
+        if (requestCode == HISTORY_FOR_RESULT_ID) {
             if (resultCode == RESULT_OK) {
                 String message = data.getStringExtra(getString(R.string.history_message_to_list));
                 showMessageWithFabChange(message);
@@ -426,67 +255,14 @@ public class ListActivity extends AppCompatActivity
         }
     }
 
-    /**
-     * Shows a Snackbar message and changes the Floating Action Button icon
-     */
-    private void showMessageWithFabChange(String message) {
-
-        // Change FAB icon to a check mark
-        mFab.setImageResource(R.drawable.ic_check_white_24dp);
-        mFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(ListActivity.this, R.color.colorPrimaryDark)));
-
-        // Show a long Snackbar with the message
-        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_LONG)
-                .addCallback(new Snackbar.Callback() {
-                    @Override
-                    public void onDismissed(Snackbar transientBottomBar, int event) {
-                        // Change FAB icon back to basket when the message has ended
-                        mFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(ListActivity.this, R.color.colorAccent)));
-                        mFab.setImageResource(R.drawable.ic_shopping_basket_white_24dp);
-                    }
-                })
-                .show();
-    }
-
-    /**
-     * Shows a short Snackbar message.
-     */
-    private void showMessage(String message) {
-        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_SHORT)
-                .show();
-    }
-
-
-    /**
-     * Shows long Snackbar message with an Action
-     */
-    private void showMessageWithUndoAction(String message, final String product, final int priority, final String annotation) {
-        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_LONG)
-                .setAction(getString(android.R.string.cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // When Undo button is clicked, add the item back to the list
-                        ContentValues cv = new ContentValues();
-                        cv.put(ListContract.ListEntry.COLUMN_PRODUCT, product);
-                        cv.put(ListContract.ListEntry.COLUMN_PRIORITY, priority);
-                        if (annotation != null) cv.put(ListContract.ListEntry.COLUMN_ANNOTATION, annotation);
-                        mListQueryHandler.startInsert(ListQueryHandler.INSERTION_LIST, null, ListContract.ListEntry.CONTENT_URI, cv);
-                    }
-                })
-                .show();
-    }
-
-    /**
-     * If a preference has been modified, makes the necessary calls in order to update display
-     */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        // If a preference has been modified, makes the necessary calls in order to update the display
         if (s.equals(getString(R.string.pref_list_compact_layout_key))) {
             mLayoutManager = PreferenceUtils.getListLayoutManager(this, mSharedPreferences);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mAdapter.reloadLayout();
             mAdapter.notifyDataSetChanged();
-            if (!mFab.isShown()) mFab.show();
         } else if (s.equals(getString(R.string.pref_sort_order_key))) {
             getLoaderManager().restartLoader(LIST_LOADER_ID, null, this);
         } else if (s.equals(getString(R.string.pref_direction_key))) {
@@ -499,15 +275,6 @@ public class ListActivity extends AppCompatActivity
         }
     }
 
-    private void updateItemTouchHelper() {
-        int direction = PreferenceUtils.getSwipeDirection(this, mSharedPreferences);
-        mSimpleCallback.setDefaultSwipeDirs(direction);
-    }
-
-    /**
-     * Method for ListAdapterOnClickListener
-     * @param id the _id in the list SQL table of the click item
-     */
     @Override
     public void onClick(int id) {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -515,6 +282,118 @@ public class ListActivity extends AppCompatActivity
         showEditionDialog(id);
     }
 
+    /* This method makes sure that when a reminder is scheduled, a informative menu item appears on
+     * the AppBar and that the menu entry for settings up a reminder does not appear anymore.  */
+    private void setupReminderButtons(Menu menu) {
+        boolean isAlarmSet = PreferenceUtils.isAlarmOn(this, mSharedPreferences);
+        MenuItem alarmSettingButton = menu.findItem(R.id.action_notify);
+        alarmSettingButton.setVisible(!isAlarmSet);
+        MenuItem alarmCancelButton = menu.findItem(R.id.action_alarm_info);
+        alarmCancelButton.setVisible(isAlarmSet);
+    }
+
+    /* This method sets up the button that allows adding elements to the list.
+     * The button is an ActionView which reveals when expanded an AutoCompleteTextView
+     * that provides suggestions based on the history table. */
+    private void setupAddButton(Menu menu) {
+
+        final MenuItem menuItem = menu.findItem(R.id.action_add);
+        View v = menuItem.getActionView();
+
+        MenuItemCompat.OnActionExpandListener expandListener = new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                // When the ActionView is collapsed, hide the soft keyboard and clear the TextView field.
+                if (mAutoCompleteTextView != null) {
+                    mAutoCompleteTextView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAutoCompleteTextView.clearFocus();
+                            mAutoCompleteTextView.setText("");
+                            final InputMethodManager inputMethodManager
+                                    = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            inputMethodManager.hideSoftInputFromWindow(findViewById(R.id.main).getWindowToken(), 0);
+                        }
+                    });
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                // When the ActionView is expanded, display the soft keyboard and request focus
+                if (mAutoCompleteTextView != null) {
+                    mAutoCompleteTextView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAutoCompleteTextView.requestFocusFromTouch();
+                            final InputMethodManager inputMethodManager
+                                    = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            inputMethodManager.showSoftInput(mAutoCompleteTextView, InputMethodManager.SHOW_IMPLICIT);
+                        }
+                    });
+                }
+                return true;
+            }
+        };
+        MenuItemCompat.setOnActionExpandListener(menuItem, expandListener);
+
+        mAutoCompleteTextView = v.findViewById(R.id.add_text_view);
+
+        // A SimpleCursorAdapter to help populate the list of suggestions with entries from the history table.
+        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(
+                this,
+                R.layout.row_completion,
+                null, //cursor
+                new String[]{ListContract.HistoryEntry.COLUMN_PRODUCT},
+                new int[]{android.R.id.text1},
+                0
+        );
+
+        // Filter for suggestions from the history table based on the input character sequence.
+        cursorAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+            public Cursor runQuery(CharSequence str) {
+                return getCursor(str);
+            } });
+
+        // Inserts the typed character sequence as an entry to both tables, when the user types 'enter'
+        mAutoCompleteTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                String text = mAutoCompleteTextView.getText().toString();
+                if (!text.equals("")) {
+                    DataUtils.insertProductIntoBothTables(mListQueryHandler, text);
+                    mAutoCompleteTextView.setText("");
+                }
+                menuItem.collapseActionView();
+                return true;
+            }
+        });
+
+        mAutoCompleteTextView.setAdapter(cursorAdapter);
+        // In order to display the correct suggestion, we need to implement the conversion from Cursor
+        // to the desired String field to display.
+        cursorAdapter.setCursorToStringConverter(new SimpleCursorAdapter.CursorToStringConverter() {
+            @Override
+            public CharSequence convertToString(Cursor cursor) {
+                return cursor.getString(cursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_PRODUCT));
+            }
+        });
+    }
+
+    /* Helper method to get a Cursor that points to elements of the history table
+     * that match the string passed as parameter. */
+    private Cursor getCursor(CharSequence str) {
+        String select = ListContract.HistoryEntry.COLUMN_PRODUCT + " LIKE ? ";
+        String[]  selectArgs = { "%" + str + "%"};
+        String[] projection = new String[] {
+                ListContract.HistoryEntry._ID,
+                ListContract.HistoryEntry.COLUMN_PRODUCT};
+        return getContentResolver().query(ListContract.HistoryEntry.CONTENT_URI, projection, select, selectArgs, null);
+    }
+
+    /* Shows a popup dialog that allows to add or edit an annotation to a product of the list,
+    * as well as changing the priority setting for that product. */
     private void showEditionDialog(int id) {
 
         final AlertDialog alertDialog;
@@ -523,11 +402,12 @@ public class ListActivity extends AppCompatActivity
         Uri contentUri = ListContract.ListEntry.CONTENT_URI;
         final Uri uri = contentUri.buildUpon().appendPath(stringId).build();
 
-        String[] columns = { ListContract.ListEntry.COLUMN_PRODUCT, ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.COLUMN_ANNOTATION};
+        String[] columns = { ListContract.ListEntry.COLUMN_PRODUCT, ListContract.ListEntry.COLUMN_PRIORITY,
+                ListContract.ListEntry.COLUMN_ANNOTATION};
         String selection = ListContract.ListEntry._ID + "=?";
         String [] selectionArgs = new String[] { stringId };
         // Here, we don't use AsyncQueryHandler because we need to use the result of the query
-        // to create the UI. I don't see a simple way to refactor this part.
+        // for the creation of the UI which is done right away.
         Cursor cursor = getContentResolver().query(uri, columns, selection, selectionArgs, null);
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -542,10 +422,10 @@ public class ListActivity extends AppCompatActivity
             final RadioButton radioButton2 = view.findViewById(R.id.button_2);
             final RadioButton radioButton3 = view.findViewById(R.id.button_3);
             switch(priority) {
-                case HIGH_PRIORITY:
+                case ListContract.ListEntry.HIGH_PRIORITY_PRODUCT:
                     radioButton1.setChecked(true);
                     break;
-                case LOW_PRIORITY:
+                case ListContract.ListEntry.LOW_PRIORITY_PRODUCT:
                     radioButton3.setChecked(true);
                     break;
                 default:
@@ -563,9 +443,11 @@ public class ListActivity extends AppCompatActivity
                         public void onClick(DialogInterface dialogInterface, int i) {
 
                             int newPriority;
-                            if (radioButton1.isChecked()) newPriority = HIGH_PRIORITY;
-                            else if (radioButton3.isChecked()) newPriority = LOW_PRIORITY;
-                            else newPriority = DEFAULT_PRIORITY;
+                            if (radioButton1.isChecked())
+                                newPriority = ListContract.ListEntry.HIGH_PRIORITY_PRODUCT;
+                            else if (radioButton3.isChecked())
+                                newPriority = ListContract.ListEntry.LOW_PRIORITY_PRODUCT;
+                            else newPriority = ListContract.ListEntry.DEFAULT_PRIORITY_PRODUCT;
 
                             String newAnnotation = editText.getText().toString().trim();
 
@@ -573,7 +455,8 @@ public class ListActivity extends AppCompatActivity
                             contentValues.put(ListContract.ListEntry.COLUMN_PRIORITY, newPriority);
                             contentValues.put(ListContract.ListEntry.COLUMN_ANNOTATION, newAnnotation);
 
-                            mListQueryHandler.startUpdate(ListQueryHandler.UPDATE_LIST, null, uri, contentValues, null, null);
+                            mListQueryHandler.startUpdate(ListQueryHandler.UPDATE_LIST, null, uri,
+                                    contentValues, null, null);
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, null)
@@ -592,6 +475,67 @@ public class ListActivity extends AppCompatActivity
         }
     }
 
+    /* Deletes a single entry from the list based on its id in the table.*/
+    private void deleteSingleEntry(int id) {
+        String stringId = Integer.toString(id);
+
+        Uri uri = ListContract.ListEntry.CONTENT_URI;
+        uri = uri.buildUpon().appendPath(stringId).build();
+
+        String[] projection  = { ListContract.ListEntry.COLUMN_PRODUCT,
+                ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.COLUMN_ANNOTATION };
+
+        // No AsyncQueryHandler in this part to avoid having to deal with synchronizing issues.
+        Cursor cu = getContentResolver().query(uri, projection, null, null, null);
+
+        if (cu!=null && cu.moveToFirst()) {
+            // Save values for undo operation
+            String product = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT));
+            int priority = cu.getInt(cu.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
+            String annotation = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_ANNOTATION));
+            cu.close();
+            // Call for actual deletion
+            mListQueryHandler.startDelete(ListQueryHandler.DELETION_LIST, null, uri, null, null);
+            // Show confirmation message along with 'undo' button
+            showMessageWithUndoAction(
+                    getResources().getString(R.string.list_removed_product_message, product),
+                    product, priority, annotation);
+        }
+
+    }
+
+    /* Updates the direction of the swipe (for deletion) according to user preferences. */
+    private void updateItemTouchHelper() {
+        int direction = PreferenceUtils.getSwipeDirection(this, mSharedPreferences);
+        mSimpleCallback.setDefaultSwipeDirs(direction);
+    }
+
+    /* Shows a confirmation dialog to delete all entries from the list. */
+    private void showDeleteAllDialog() {
+        if (mAdapter.getItemCount() != 0) {
+            new AlertDialog.Builder(ListActivity.this)
+                    .setMessage(getString(R.string.list_clear_title))
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // The 'yes' button has been clicked, call for actual deletion
+                            mListQueryHandler.startDelete(ListQueryHandler.DELETION_LIST, null,
+                                    ListContract.ListEntry.CONTENT_URI, null, null);
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .create().show();
+        } else {
+            showMessage(getString(R.string.list_empty));
+        }
+    }
+
+    /* Nesting method launching the first step of the Reminder setup. */
+    private void showReminderSetupDialogs() {
+        showDatePicker();
+    }
+
+    /* Shows a dialog for the selection of the date of the reminder. */
     private void showDatePicker() {
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
@@ -601,6 +545,7 @@ public class ListActivity extends AppCompatActivity
         final DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                // When the date for the reminder has been selected, launch the second step of the Reminder setup.
                 showTimePicker(year, month, day);
             }
         };
@@ -618,11 +563,13 @@ public class ListActivity extends AppCompatActivity
 
         datePickerDialog.show();
 
-        // This call is after show() because Button are not created before...
+        // This call is after show() because Button are not created before
         Button confirmButton = datePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         if (confirmButton != null) confirmButton.setText(getString(R.string.list_reminder_pickers_next_button));
     }
 
+    /* Shows a dialog for the selection of the time for the reminder. The previously selected date
+     * is passed as parameter. */
     private void showTimePicker(final int year, final int month, final int day) {
         Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -631,6 +578,8 @@ public class ListActivity extends AppCompatActivity
         final TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                // When the time for the reminder has been selected along with the date, launch the
+                // final step of the Reminder setup.
                 setReminderTime(year, month, day, hour, minute);
             }
         };
@@ -654,11 +603,14 @@ public class ListActivity extends AppCompatActivity
         timePickerDialog.show();
     }
 
+    /* Sets the time of the scheduled reminder notification acccording to the time and date passed
+     * as parameters. */
     private void setReminderTime(int year, int month, int day, int hour, int minute) {
 
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
-        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, LIST_NOTIFICATION_ID);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID_KEY, NOTIFICATION_ID);
+        PendingIntent pendingIntent =
+                PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
@@ -680,6 +632,23 @@ public class ListActivity extends AppCompatActivity
         invalidateOptionsMenu();
     }
 
+    /* Shows a dialog with the time and date of the scheduled reminder, as well as an option
+     * to cancel this reminder. */
+    private void showReminderInformationAndCancelingDialog() {
+        String time = PreferenceUtils.getAlarmTime(this, mSharedPreferences);
+        new AlertDialog.Builder(ListActivity.this)
+                .setMessage(getResources().getString(R.string.list_reminder_information_dialog_message, time))
+                .setPositiveButton(android.R.string.ok, null)
+                .setNegativeButton(R.string.list_menu_deactivate_reminder, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        cancelReminder();
+                    }
+                })
+                .create().show();
+    }
+
+    /* Cancels the scheduled reminder and recreates the menu. */
     private void cancelReminder() {
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -693,6 +662,24 @@ public class ListActivity extends AppCompatActivity
         showMessage(getString(R.string.list_reminder_canceled_message));
     }
 
+    /* Sends an implicit intent to a mail app with the content of the list as the body of the mail. */
+    private void sendByEmail() {
+        if (mAdapter.getItemCount() != 0) {
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+            intent.putExtra(Intent.EXTRA_SUBJECT,
+                    getResources().getString(R.string.list_email_title, getDate()));
+            intent.putExtra(Intent.EXTRA_TEXT,
+                    DataUtils.getListAsStringForEmail(this, mSharedPreferences));
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            }
+        } else {
+            showMessage(getString(R.string.list_empty));
+        }
+    }
+
+    /* Gets the current date as a String representation. */
     private String getDate() {
         Calendar c = Calendar.getInstance();
         Date date = c.getTime();
@@ -700,4 +687,50 @@ public class ListActivity extends AppCompatActivity
         return formatter.format(date);
     }
 
+    /* Shows a short Snackbar message. */
+    private void showMessage(String message) {
+        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_SHORT)
+                .show();
+    }
+
+    /* Shows a long Snackbar message and changes the Floating Action Button icon. */
+    private void showMessageWithFabChange(String message) {
+
+        // Change FAB icon to a check mark
+        mFab.setImageResource(R.drawable.ic_check_white_24dp);
+        mFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(ListActivity.this, R.color.colorPrimaryDark)));
+
+        // Show a long Snackbar with the message
+        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_LONG)
+                .addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        // Change FAB icon back to basket when the message has ended
+                        mFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(ListActivity.this, R.color.colorAccent)));
+                        mFab.setImageResource(R.drawable.ic_shopping_basket_white_24dp);
+                    }
+                })
+                .show();
+    }
+
+    /* Shows long Snackbar message with an 'undo' action. */
+    private void showMessageWithUndoAction(String message, final String product, final int priority,
+                                           final String annotation) {
+        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_LONG)
+                .setAction(getString(android.R.string.cancel), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // When the 'undo' button is clicked, add the item whose attributes
+                        // are passed as parameter to the list.
+                        ContentValues cv = new ContentValues();
+                        cv.put(ListContract.ListEntry.COLUMN_PRODUCT, product);
+                        cv.put(ListContract.ListEntry.COLUMN_PRIORITY, priority);
+                        if (annotation != null)
+                            cv.put(ListContract.ListEntry.COLUMN_ANNOTATION, annotation);
+                        mListQueryHandler.startInsert(ListQueryHandler.INSERTION_LIST,
+                                null, ListContract.ListEntry.CONTENT_URI, cv);
+                    }
+                })
+                .show();
+    }
 }

@@ -26,10 +26,14 @@ public class ListContract {
         // The Uri identifying this table in the Content Provider.
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_LIST);
         // The names of the columns of the table are defined here.
-        // Only one column for now : the text identifying the item on the list.
+        // Three columns for now corrresponding to: the name of the product, an annotation and the priority.
         public static final String COLUMN_PRODUCT = "product";
         public static final String COLUMN_ANNOTATION = "annotation";
         public static final String COLUMN_PRIORITY = "priority";
+        // Possibles values for priority column
+        public static final int HIGH_PRIORITY_PRODUCT = 1;
+        public static final int DEFAULT_PRIORITY_PRODUCT = 2;
+        public static final int LOW_PRIORITY_PRODUCT = 3;
         // Internal name for the table.
         static final String TABLE_NAME = "list";
     }
@@ -40,7 +44,7 @@ public class ListContract {
         // The Uri identifying this table in the Content Provider.
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_HISTORY);
         // The names of the columns of the table are defined here.
-        // Only one column for now : the text identifying the item of the history.
+        // Only one column for now : the text corresponding to the name of the product of the history.
         public static final String COLUMN_PRODUCT = "product";
         // Internal name for the table.
         static final String TABLE_NAME = "history";

@@ -3,7 +3,8 @@
 
     <string name="app_name">Grocery List</string>
 
-    <!-- Strings for List activity -->
+
+    <!-- Strings for List activity start -->
 
     <string name="list_empty">The list is empty.</string>
 
@@ -53,7 +54,10 @@
     <string name="list_menu_send_email">Send by email</string>
     <string name="list_email_title">Grocery List for %1$s</string>
 
-    <!-- Strings for History activity -->
+    <!-- Strings for List activity end -->
+
+
+    <!-- Strings for History activity start -->
 
     <string name="history_title">History</string>
     <string name="history_instructions">Select products to add to the list:</string>
@@ -77,7 +81,10 @@
 
     <string name="history_message_to_list" translatable="false">history_message</string>
 
-    <!-- Strings for Preferences activity -->
+    <!-- Strings for History activity end -->
+
+
+    <!-- Strings for Preferences activity start -->
 
     <string name="pref_title">Preferences</string>
     <string name="pref_list_label">List</string>
@@ -129,6 +136,8 @@
     <string name="pref_help_add_text">Add a product to the list.</string>
     <string name="pref_help_history_text">Add products quicker from history.</string>
     <string name="pref_help_swipe_text">Swipe left or right to remove a product from the list.</string>
-    <string name="pref_help_edition_text">Double-tap to mark a product as important or add an annotation.</string>
+    <string name="pref_help_edition_text">Long-press to mark a product as important or add an annotation.</string>
+
+    <!-- Strings for Preferences activity end -->
 
 </resources>

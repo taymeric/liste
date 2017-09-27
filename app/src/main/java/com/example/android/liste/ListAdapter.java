@@ -11,13 +11,14 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.liste.data.ListContract;
 
 
 /**
- * Adapter class to manage display of items in the recycler view for the list.
+ * Adapter class to manage the display of items from the database table 'list' in a recycler view.
  */
 
 class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
@@ -86,11 +87,11 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             holder.mAnnotationTextView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
             holder.mPriorityView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
 
-            if (priority == ListActivity.HIGH_PRIORITY) {
+            if (priority == ListContract.ListEntry.HIGH_PRIORITY_PRODUCT) {
                 holder.mPriorityView.setText(mContext.getString(R.string.list_high_priority_mark));
                 holder.mPriorityView.setVisibility(View.VISIBLE);
             }
-            else if (priority == ListActivity.LOW_PRIORITY) {
+            else if (priority == ListContract.ListEntry.LOW_PRIORITY_PRODUCT) {
                 holder.mPriorityView.setText(mContext.getString(R.string.list_low_priority_mark));
                 holder.mPriorityView.setVisibility(View.VISIBLE);
             }
@@ -139,7 +140,12 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    /** The following interface declares the 'onClick' method that should be overridden
+     * by classes using a ListAdapter to provide an implementation of the set of actions
+     * performed when an item of the RecyclerView is clicked. */
     interface ListAdapterOnClickListener {
+        /**
+         * @param id the _id in the list SQL table of the click item */
         void onClick(int id);
     }
 
@@ -148,6 +154,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         final TextView mProductTextView;
         final TextView mAnnotationTextView;
         final TextView mPriorityView;
+        final ImageView mMoreView;
         int id;
 
         ViewHolder(View itemView) {
@@ -155,15 +162,24 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             mProductTextView = itemView.findViewById(R.id.item_product);
             mAnnotationTextView = itemView.findViewById(R.id.item_annotation);
             mPriorityView = itemView.findViewById(R.id.item_priority);
+            mMoreView = itemView.findViewById(R.id.item_more);
+
+            mMoreView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (id > 0)
+                        mListAdapterOnClickListener.onClick(id);
+                }
+            });
 
             itemView.setOnTouchListener(new View.OnTouchListener() {
                 final private GestureDetector gestureDetector = new GestureDetector(
                         mContext, new GestureDetector.SimpleOnGestureListener() {
                     @Override
-                    public boolean onDoubleTap(MotionEvent e) {
+                    public void onLongPress(MotionEvent e) {
                         if (id > 0)
                             mListAdapterOnClickListener.onClick(id);
-                        return true;
+                        super.onLongPress(e);
                     }
                 });
 
