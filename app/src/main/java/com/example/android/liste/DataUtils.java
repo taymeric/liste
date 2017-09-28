@@ -20,23 +20,32 @@ import com.example.android.liste.data.ListQueryHandler;
 /**
  * Utility methods for database-related operations.
  */
-
 class DataUtils {
 
+    /** Inserts a product to both list and history tables.
+     *  Called when a product is entered from the ActionView in the AppBar of ListActivity.
+     *  @param listQueryHandler needed to perform insertion with ContentProvider
+     *  @param product the name of the product to be inserted */
     static void insertProductIntoBothTables(ListQueryHandler listQueryHandler, String product) {
 
-        // Add value to the list table with a default priority
+        // Add product to the list table with a default priority
         ContentValues values = new ContentValues();
         values.put(ListContract.ListEntry.COLUMN_PRODUCT, product);
-        values.put(ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.DEFAULT_PRIORITY_PRODUCT);
-        listQueryHandler.startInsert(ListQueryHandler.INSERTION_LIST, null, ListContract.ListEntry.CONTENT_URI, values);
+        values.put(ListContract.ListEntry.COLUMN_PRIORITY,
+                ListContract.ListEntry.DEFAULT_PRIORITY_PRODUCT);
+        listQueryHandler.startInsert(
+                ListQueryHandler.INSERTION_LIST, null, ListContract.ListEntry.CONTENT_URI, values);
 
-        // Add text to the history table
+        // Add product to the history table
         values = new ContentValues();
         values.put(ListContract.HistoryEntry.COLUMN_PRODUCT, product);
-        listQueryHandler.startInsert(ListQueryHandler.INSERTION_HISTORY, null, ListContract.HistoryEntry.CONTENT_URI, values);
+        listQueryHandler.startInsert(
+                ListQueryHandler.INSERTION_HISTORY, null, ListContract.HistoryEntry.CONTENT_URI, values);
     }
 
+    /** @return a Notification object containing:
+     *  - the number of products in the list in its title
+     *  - the list of products in its body */
     static Notification createNotification(Context context) {
 
         Uri uri = ListContract.ListEntry.CONTENT_URI;
@@ -45,7 +54,8 @@ class DataUtils {
         String sortOrder = ListContract.ListEntry.COLUMN_PRIORITY + " ASC, "
                 + ListContract.ListEntry.COLUMN_PRODUCT + " COLLATE LOCALIZED ASC";
         // We also don't want to show annotations to save space.
-        String[] projection  = {ListContract.ListEntry.COLUMN_PRODUCT, ListContract.ListEntry.COLUMN_PRIORITY};
+        String[] projection  = {ListContract.ListEntry.COLUMN_PRODUCT,
+                ListContract.ListEntry.COLUMN_PRIORITY};
 
         Cursor cursor = context.getContentResolver().query(uri, projection, null, null, sortOrder);
 
@@ -93,6 +103,8 @@ class DataUtils {
         return mBuilder.build();
     }
 
+    /** @return a String representation of the whole list with products, annotations and priorities
+     *  to be used when sharing the list by mail. */
     static String getListAsStringForEmail(Context context, SharedPreferences sharedPreferences) {
 
         String list = "";

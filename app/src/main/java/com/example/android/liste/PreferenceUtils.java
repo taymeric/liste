@@ -16,9 +16,14 @@ import com.example.android.liste.data.ListContract;
  */
 class PreferenceUtils {
 
+    /** Identifies a normal layout */
     static final int NORMAL_LAYOUT_ITEM = 1;
+
+    /* Identifies a compact layout */
     private static final int COMPACT_LAYOUT_ITEM = 2;
 
+    /** @return the type of layout set in preferences for the list activity.
+     *  Possibles values: NORMAL_LAYOUT_ITEM or COMPACT_LAYOUT_ITEM */
     static int getListLayoutType(Context context, SharedPreferences sharedPreferences) {
         boolean compact_layout_value = sharedPreferences.getBoolean(context.getString(R.string.pref_list_compact_layout_key),
                 false);
@@ -28,6 +33,8 @@ class PreferenceUtils {
             return NORMAL_LAYOUT_ITEM;
     }
 
+    /** @return the type of layout set in preferences for the history activity
+     *  Possibles values: NORMAL_LAYOUT_ITEM or COMPACT_LAYOUT_ITEM */
     static int getHistoryLayoutType(Context context, SharedPreferences sharedPreferences) {
         boolean compact_layout_value = sharedPreferences.getBoolean(context.getString(R.string.pref_history_compact_layout_key),
                 true);
@@ -37,6 +44,7 @@ class PreferenceUtils {
             return NORMAL_LAYOUT_ITEM;
     }
 
+    /** @return  the RecyclerView.LayoutManager for the list activity. */
     static RecyclerView.LayoutManager getListLayoutManager(
             Context context, SharedPreferences sharedPreferences) {
         int type = getListLayoutType(context, sharedPreferences);
@@ -46,6 +54,7 @@ class PreferenceUtils {
             return new LinearLayoutManager(context);
     }
 
+    /** @return the RecyclerView.LayoutManager for the history activity. */
     static RecyclerView.LayoutManager getHistoryLayoutManager(
             Context context, SharedPreferences sharedPreferences) {
         int type = getHistoryLayoutType(context, sharedPreferences);
@@ -55,11 +64,16 @@ class PreferenceUtils {
             return new LinearLayoutManager(context);
     }
 
+    /** @return the font name set in preferences for the list activity.
+     *  Possible values: 'sans-serif' or 'casual' */
     static String getFont(Context context, SharedPreferences sharedPreferences) {
         return sharedPreferences.getString(context.getString(R.string.pref_font_key),
                 context.getString(R.string.pref_font_normal_value));
     }
 
+    /** @return the String representation of the sort order set in preferences,
+     * Possible values: 'priority ASC, product COLLATE LOCALIZED ASC'
+     * or 'product COLLATE LOCALIZED ASC' */
     static String getSortOrder(Context context, SharedPreferences sharedPreferences) {
         String sortOrder = sharedPreferences.getString(
                 context.getString(R.string.pref_sort_order_key),
@@ -74,6 +88,9 @@ class PreferenceUtils {
         return sortOrder;
     }
 
+    /** @return the direction for swiping set in preferences.
+     * Possibles values:
+     * ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT or ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT*/
     static int getSwipeDirection(Context context, SharedPreferences sharedPreferences) {
         String directionString = sharedPreferences.getString(
                 context.getString(R.string.pref_direction_key),
@@ -85,7 +102,7 @@ class PreferenceUtils {
         else return ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
     }
 
-    // Sets the alarm 'on' or 'off'. If 'on', also saves the time as a String representation.
+    /** Sets the alarm 'on' or 'off'. If 'on', also saves the time as a String representation. */
     static void setAlarm(Context context, SharedPreferences sharedPreferences, boolean is_on, String time) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(context.getString(R.string.list_reminder_alarm_on), is_on);
@@ -93,10 +110,12 @@ class PreferenceUtils {
         editor.apply();
     }
 
+    /** @return true if a reminder is scheduled, false otherwise */
     static boolean isAlarmOn(Context context, SharedPreferences sharedPreferences) {
         return sharedPreferences.getBoolean(context.getString(R.string.list_reminder_alarm_on), false);
     }
 
+    /** @return the String representation of the time set for the alarm */
     static String getAlarmTime(Context context, SharedPreferences sharedPreferences) {
         return sharedPreferences.getString(context.getString(R.string.list_reminder_alarm_time), "");
     }

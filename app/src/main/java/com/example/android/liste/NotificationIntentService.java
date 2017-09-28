@@ -11,7 +11,8 @@ import android.support.v7.preference.PreferenceManager;
 
 import static com.example.android.liste.NotificationReceiver.NOTIFICATION_ID_KEY;
 
-
+/** IntentService used to create and send a notification to the NotificationManager and
+ * update the SharedPreferences, all in a background thread. */
 public class NotificationIntentService extends IntentService {
 
     public NotificationIntentService() {

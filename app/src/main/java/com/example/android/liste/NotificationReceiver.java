@@ -4,7 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-
+/**
+ *  BroadcastReceiver to get notified of the Alarm triggering and to launch the IntentService
+ *  that handle the response.
+ */
 public class NotificationReceiver extends BroadcastReceiver {
 
     public static final String NOTIFICATION_ID_KEY = "notification_id";

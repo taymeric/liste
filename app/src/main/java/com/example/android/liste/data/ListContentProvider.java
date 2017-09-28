@@ -11,18 +11,24 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+/** ListContentProvider handles database related operations in the application. */
 public class ListContentProvider extends ContentProvider {
 
-    // Constants used to match Uris, see UriMatcher.
+    /* UriMatcher code for list table match */
     private static final int LIST = 100;
+
+    /* UriMatcher code for list table item match */
     private static final int LIST_ID = 200;
+
+    /* UriMatcher code for history table match */
     private static final int HISTORY = 300;
+
+    /* UriMatcher code for history table item match */
     private static final int HISTORY_ID = 400;
 
-    // The UriMatcher will match a given Uri with these templates and return a code to identify
-    // the table and the specificity of the Uri (single row or full table).
+    /* UriMatcher will match a given Uri with these templates and return a code to identify
+     * the table and the specificity of the Uri (single row or full table). */
     final private static UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-
     static {
         sUriMatcher.addURI(ListContract.CONTENT_AUTHORITY, ListContract.PATH_LIST, LIST);
         sUriMatcher.addURI(ListContract.CONTENT_AUTHORITY, ListContract.PATH_LIST + "/#", LIST_ID);
