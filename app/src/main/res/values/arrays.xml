@@ -5,13 +5,10 @@
     <array name="pref_font_labels">
         <item>@string/pref_font_normal_label</item>
         <item>@string/pref_font_handwritten_label</item>
-        <item>@string/pref_font_typewriter_label</item>
-
     </array>
     <array name="pref_font_values">
         <item>@string/pref_font_normal_value</item>
         <item>@string/pref_font_handwritten_value</item>
-        <item>@string/pref_font_typewriter_value</item>
     </array>
 
     <!-- Arrays for sort order preference -->

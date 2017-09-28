@@ -26,7 +26,7 @@ public class ListContract {
         // The Uri identifying this table in the Content Provider.
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_LIST);
         // The names of the columns of the table are defined here.
-        // Three columns for now corrresponding to: the name of the product, an annotation and the priority.
+        // Three columns for now corresponding to: the name of the product, an annotation and the priority.
         public static final String COLUMN_PRODUCT = "product";
         public static final String COLUMN_ANNOTATION = "annotation";
         public static final String COLUMN_PRIORITY = "priority";

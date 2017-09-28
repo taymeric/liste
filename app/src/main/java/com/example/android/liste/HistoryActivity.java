@@ -31,28 +31,35 @@ import com.example.android.liste.data.ListContract;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 /**
- * HistoryActivity displays the items in the history table.
+ * HistoryActivity displays the products in the history table, which stores products that have
+ * been previously entered in the list by the user.
  * The user can:
- *  - select one or several items to add to the list table
+ *  - select one or several items to add to the current list table
  *  - select one or several items to remove from the history table
- *  - remove all items from the history table
  */
-
 public class HistoryActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Cursor>,
-            HistoryAdapter.AdapterOnClickHandler {
+        implements LoaderManager.LoaderCallbacks<Cursor>, HistoryAdapter.HistoryAdapterOnClickHandler {
 
-    private static final int HISTORY_LOADER_ID = 99;
+    /* Helps the LoaderManager identify the loader for the history */
+    private static final int HISTORY_LOADER_ID = 101;
 
+    /* A Floating Action Button that appears when at least one element has been selected and that
+     * is used to confirm the addition of the selected element(s) to the list */
     private FloatingActionButton mFab;
+
+    /* A View displayed in place of the RecyclerView is empty (when the table does not contain
+     * any element) */
     private View mEmptyView;
+
+    /* A ProgressBar that is only 'visible' when the history is loading (otherwise it is 'gone')*/
     private ProgressBar mProgressBar;
+
+    /* The Adapter that binds the data from the history table to the Recycler View */
     private HistoryAdapter mAdapter;
 
-    // An HashMap is used to store (id, text) pairs of selected elements with no duplication.
-    // id is used for deletion and text is used for insertion.
+    /* An HashMap is used to store (id, text) pairs of selected elements with no duplication.
+     * id is used for deletion and text is used for insertion. */
     private HashMap<String, String> selectedIds;
 
     @Override
@@ -68,23 +75,26 @@ public class HistoryActivity extends AppCompatActivity
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addSelectedEntries();
+                // Clicking the Floating Action Button adds selected entries to the list
+                // and closes the History activity.
+                addSelectedProducts();
                 finish();
             }
         });
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         // Set up the Recycler View with its Adapter
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.history_recycler_view);
-        LinearLayoutManager layoutManager = (LinearLayoutManager) PreferenceUtils.getHistoryLayoutManager(this, sharedPreferences);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        LinearLayoutManager layoutManager =
+                (LinearLayoutManager) PreferenceUtils.getHistoryLayoutManager(this, sharedPreferences);
         recyclerView.setLayoutManager(layoutManager);
-
         mAdapter = new HistoryAdapter(this, this);
         recyclerView.setAdapter(mAdapter);
 
+        // By default, the empty view's visibility is set to 'gone'
         mEmptyView = findViewById(R.id.empty_view);
 
+        // Make the progress bar visible until the history has finished loading
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mProgressBar.setVisibility(View.VISIBLE);
 
@@ -94,9 +104,12 @@ public class HistoryActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_history, menu);
+
+        // Only show the menu item for deletion if at least one element is selected
         MenuItem trash = menu.findItem(R.id.action_clear);
         if (selectedIds != null) trash.setVisible(!selectedIds.isEmpty());
         else trash.setVisible(false);
+
         return true;
     }
 
@@ -105,7 +118,7 @@ public class HistoryActivity extends AppCompatActivity
         int id = item.getItemId();
         switch(id) {
             case R.id.action_clear:
-                deleteSelectedEntries();
+                deleteSelectedProducts();
                 return true;
             case android.R.id.home:
                 showConfirmationDialog();
@@ -115,7 +128,52 @@ public class HistoryActivity extends AppCompatActivity
         }
     }
 
-    private void deleteSelectedEntries() {
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
+        switch (id) {
+            case HISTORY_LOADER_ID :
+                String order = ListContract.HistoryEntry.COLUMN_PRODUCT + " COLLATE LOCALIZED ASC";
+                return new CursorLoader(
+                        this,    // Parent activity context
+                        ListContract.HistoryEntry.CONTENT_URI,    // Table to query
+                        null,    // Projection to return
+                        null,    // No selection clause
+                        null,    // No selection arguments
+                        order    // Default sort order
+                );
+            default:
+                // An invalid id was passed in
+                return null;
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        mProgressBar.setVisibility(View.GONE);
+        mAdapter.swapCursor(cursor);
+        updateEmptyViewVisibility();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mAdapter.swapCursor(null);
+        updateEmptyViewVisibility();
+    }
+
+    @Override
+    public void onClick(String id, String txt) {
+        // Because clicks are performed on checkboxes, a click either adds or removes an element
+        // from the list of selected elements.
+        if (selectedIds.containsKey(id))
+            selectedIds.remove(id);
+        else selectedIds.put(id, txt);
+        updateFabVisibility();
+        invalidateOptionsMenu();
+    }
+
+    /* Deletes selection from the history table */
+    private void deleteSelectedProducts() {
         new AlertDialog.Builder(HistoryActivity.this)
                 .setMessage(getResources().getQuantityString(R.plurals.history_clear_selection_title, selectedIds.size()))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -149,8 +207,8 @@ public class HistoryActivity extends AppCompatActivity
                         showMessage(getResources().getQuantityString(R.plurals.history_products_cleared_message, nb, nb));
 
                         selectedIds.clear();
-                        setFabVisibility();
-                        setEmptyViewVisibility();
+                        updateFabVisibility();
+                        updateEmptyViewVisibility();
                         mAdapter.notifyDataSetChanged();
                         invalidateOptionsMenu();
                     }
@@ -159,6 +217,8 @@ public class HistoryActivity extends AppCompatActivity
                 .create().show();
     }
 
+    /* Shows a dialog that gives the choice to insert selected elements to the list or
+     * to discard the selection. Used when leaving the activity. */
     private void showConfirmationDialog() {
         if (selectedIds != null && !selectedIds.isEmpty()) {
             new AlertDialog.Builder(HistoryActivity.this)
@@ -166,7 +226,7 @@ public class HistoryActivity extends AppCompatActivity
                     .setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            addSelectedEntries();
+                            addSelectedProducts();
                             finish();
                         }
                     })
@@ -183,11 +243,12 @@ public class HistoryActivity extends AppCompatActivity
         }
     }
 
-    private void addSelectedEntries() {
+    /* Inserts selected products to the list table */
+    private void addSelectedProducts() {
         Uri uri = ListContract.ListEntry.CONTENT_URI;
         ContentValues[] cv_all = new ContentValues[selectedIds.size()];
-        // Iterate through all the text values contained in the HasMap of selected elements
-        // and add elements with those texts to the list table.
+        // Iterate through all the text values contained in the HashMap of selected products
+        // and add products with those names to the list table.
         int i = 0;
         for (String value: selectedIds.values()) {
             ContentValues cv = new ContentValues();
@@ -211,60 +272,9 @@ public class HistoryActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-        switch (id) {
-            case HISTORY_LOADER_ID :
-                String order = ListContract.HistoryEntry.COLUMN_PRODUCT + " COLLATE LOCALIZED ASC";
-                return new CursorLoader(
-                        this,    // Parent activity context
-                        ListContract.HistoryEntry.CONTENT_URI,    // Table to query
-                        null,    // Projection to return
-                        null,    // No selection clause
-                        null,    // No selection arguments
-                        order    // Default sort order
-                );
-            default:
-                // An invalid id was passed in
-                return null;
-        }
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        mProgressBar.setVisibility(View.GONE);
-        mAdapter.swapCursor(cursor);
-        setEmptyViewVisibility();
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mAdapter.swapCursor(null);
-        setEmptyViewVisibility();
-    }
-
-    /**
-     * Shows a short Snackbar message.
-     */
-    private void showMessage(String message) {
-        Snackbar.make(findViewById(R.id.history), message, Snackbar.LENGTH_SHORT).show();
-    }
-
-    // Callback method of HistoryAdapter.AdapterOnClickHandler.
-    // Allows HistoryAdapter to update the HashMap containing the selected items.
-    @Override
-    public void onClick(String id, String txt) {
-        if (selectedIds.containsKey(id))
-            selectedIds.remove(id);
-        else selectedIds.put(id, txt);
-        setFabVisibility();
-        invalidateOptionsMenu();
-    }
-
-    // Updates the visibility of the Floating Action Button.
-    // If selection is empty, the FAB is invisible.
-    private void setFabVisibility() {
+    /* Updates the visibility of the Floating Action Button.
+     * If selection is empty, the FAB is invisible. */
+    private void updateFabVisibility() {
         if (!selectedIds.isEmpty() && !mFab.isShown()) {
             mFab.show();
         }
@@ -273,12 +283,17 @@ public class HistoryActivity extends AppCompatActivity
         }
     }
 
-    // If there are no elements in the history, display a message in an 'empty' view
-    private void setEmptyViewVisibility() {
+    /* Updates the visibility of the Empty View. */
+    private void updateEmptyViewVisibility() {
         if (mAdapter.getItemCount() == 0) {
             mEmptyView.setVisibility(View.VISIBLE);
         } else {
             mEmptyView.setVisibility(View.GONE);
         }
+    }
+
+    /* Shows a short Snackbar message */
+    private void showMessage(String message) {
+        Snackbar.make(findViewById(R.id.history), message, Snackbar.LENGTH_SHORT).show();
     }
 }

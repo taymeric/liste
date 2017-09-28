@@ -70,7 +70,7 @@ import java.util.Date;
 public class ListActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor>,
         SharedPreferences.OnSharedPreferenceChangeListener,
-        ListAdapter.ListAdapterOnClickListener
+        ListAdapter.ListAdapterOnClickHandler
 {
     /* Helps the LoaderManager identify the loader for the list */
     private static final int LIST_LOADER_ID = 100;
@@ -98,7 +98,7 @@ public class ListActivity extends AppCompatActivity
      * user's preferences */
     private RecyclerView.LayoutManager mLayoutManager;
 
-    /* The Adapter that binds the data from the table to the Recycler View */
+    /* The Adapter that binds the data from the list table to the Recycler View */
     private ListAdapter mAdapter;
 
     /* A callback method to manage deletion when an item is swiped */
@@ -159,7 +159,7 @@ public class ListActivity extends AppCompatActivity
         // Create the ListQueryHandler used to perform Content Provider operations
         mListQueryHandler = new ListQueryHandler(getContentResolver());
 
-        // Upon creation, make the progress bar visible until the list has finished loading
+        // Make the progress bar visible until the list has finished loading
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mProgressBar.setVisibility(View.VISIBLE);
 
@@ -393,7 +393,8 @@ public class ListActivity extends AppCompatActivity
     }
 
     /* Shows a popup dialog that allows to add or edit an annotation to a product of the list,
-    * as well as changing the priority setting for that product. */
+     * as well as changing the priority setting for that product.
+     * @param id the actual _ID of the product */
     private void showEditionDialog(int id) {
 
         final AlertDialog alertDialog;
@@ -603,7 +604,7 @@ public class ListActivity extends AppCompatActivity
         timePickerDialog.show();
     }
 
-    /* Sets the time of the scheduled reminder notification acccording to the time and date passed
+    /* Sets the time of the scheduled reminder notification according to the time and date passed
      * as parameters. */
     private void setReminderTime(int year, int month, int day, int hour, int minute) {
 

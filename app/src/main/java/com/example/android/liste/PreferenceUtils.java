@@ -10,8 +10,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 
 import com.example.android.liste.data.ListContract;
 
-import static android.R.attr.value;
-
 
 /**
  * Utility methods related to SharedPreferences,

@@ -20,26 +20,35 @@ import com.example.android.liste.data.ListContract;
 /**
  * Adapter class to manage the display of items from the database table 'list' in a recycler view.
  */
-
 class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
+    /* Context object needed for using PreferenceUtils methods and Context.getString() as well as
+     * getting a reference to SharedPreferences */
     final private Context mContext;
+    /* SharedPreferences object for using PreferenceUtils methods that get Preferences
+     * for font and layout */
     final private SharedPreferences mSharedPreferences;
-    final private ListAdapterOnClickListener mListAdapterOnClickListener;
-    private int mCurrentLayout;
+    /* Reference to an implementation of the interface that handles click on a ViewHolder */
+    final private ListAdapterOnClickHandler mListAdapterOnClickHandler;
+    /* The Cursor that references the actual data that populates the RecyclerView.
+     * Can be null before data has been loaded. */
     private Cursor mCursor;
+    /* Type of Layout for the RecyclerView. Used to adjust the layout of a ViewHolder.
+     * Possible values: PreferenceUtils.NORMAL_LAYOUT_ITEM or PreferenceUtils.COMPACT_LAYOUT_ITEM */
+    private int mCurrentLayout;
+    /* Name of the font used for TextViews in a ViewHolder. Possible values: 'sans-serif' or 'casual' */
     private String mFontFamily;
 
-    // A Context is needed for PreferenceUtils methods.
-    ListAdapter(Context context, ListAdapterOnClickListener listener) {
+    /** @param context  needed for PreferenceUtils methods and other operations.
+     *  @param clickHandler used to interact with List activity. */
+    ListAdapter(Context context, ListAdapterOnClickHandler clickHandler) {
         mContext = context;
-        mListAdapterOnClickListener = listener;
+        mListAdapterOnClickHandler = clickHandler;
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-
         mFontFamily = PreferenceUtils.getFont(mContext, mSharedPreferences);
-
         mCurrentLayout = PreferenceUtils.getListLayoutType(mContext, mSharedPreferences);
 
+        // Optimization
         setHasStableIds(true);
     }
 
@@ -48,9 +57,10 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return mCurrentLayout;
     }
 
-    // Creates new views
     @Override
     public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // There are two possible layouts for the RecyclerView: Normal or Compact.
+        // For each of these two layouts, the layout of a ViewHolder is different.
         View v;
         if (viewType == PreferenceUtils.NORMAL_LAYOUT_ITEM) {
             v = LayoutInflater.from(parent.getContext())
@@ -62,10 +72,9 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return new ViewHolder(v);
     }
 
-    // Replaces the contents of a view
     @Override
     public void onBindViewHolder(ListAdapter.ViewHolder holder, int position) {
-        // Gets element at position and replaces the contents of the view with that element
+        // Gets element at 'position' and replaces the content of the view with that element
         if (mCursor.moveToPosition(position)) {
 
             String product = mCursor.getString(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT));
@@ -73,12 +82,9 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             int priority = mCursor.getInt(mCursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
 
             holder.mAnnotationTextView.setVisibility(View.GONE);
-            if (annotation != null) {
-                annotation = annotation.trim();
-                if (!annotation.equals("")) {
-                    holder.mAnnotationTextView.setVisibility(View.VISIBLE);
-                    holder.mAnnotationTextView.setText(annotation);
-                }
+            if (annotation != null && !annotation.equals("")) {
+                holder.mAnnotationTextView.setVisibility(View.VISIBLE);
+                holder.mAnnotationTextView.setText(annotation);
             }
 
             holder.mProductTextView.setText(product);
@@ -97,7 +103,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             }
             else {
                 // For compact layout, we save space by using View.GONE when the priority marker is
-                // not visible. For normal layout, View.INVISIBLE makes for a better alignment.
+                // not visible. For normal layout, View.INVISIBLE gives a better alignment.
                 if (mCurrentLayout == PreferenceUtils.NORMAL_LAYOUT_ITEM)
                     holder.mPriorityView.setVisibility(View.INVISIBLE);
                 else
@@ -119,22 +125,23 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public long getItemId(int position) {
-        long id;
         mCursor.moveToPosition(position);
-        id = mCursor.getLong(mCursor.getColumnIndex(ListContract.ListEntry._ID));
-        return id;
+        return mCursor.getLong(mCursor.getColumnIndex(ListContract.ListEntry._ID));
     }
 
+    /** Updates the value of the cursor that points to data to be displayed in the RecyclerView */
     void swapCursor(Cursor cursor) {
         mCursor = cursor;
         notifyDataSetChanged();
     }
 
+    /** Updates the font value for TextViews to the most recent value from the user's preferences */
     void reloadFont() {
         mFontFamily = PreferenceUtils.getFont(mContext, mSharedPreferences);
         notifyDataSetChanged();
     }
 
+    /** Updates the layout of the RecyclerView to the most recent value from the user's preferences */
     void reloadLayout() {
         mCurrentLayout = PreferenceUtils.getListLayoutType(mContext, mSharedPreferences);
         notifyDataSetChanged();
@@ -143,18 +150,28 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     /** The following interface declares the 'onClick' method that should be overridden
      * by classes using a ListAdapter to provide an implementation of the set of actions
      * performed when an item of the RecyclerView is clicked. */
-    interface ListAdapterOnClickListener {
+    interface ListAdapterOnClickHandler {
         /**
-         * @param id the _id in the list SQL table of the click item */
+         * @param id the _id in the list SQL table of the clicked item */
         void onClick(int id);
     }
 
-    // Provides a reference to the view(s) for each data item
+    /** Our ViewHolder for Recycling purpose */
     class ViewHolder extends RecyclerView.ViewHolder {
+
+        /* Name of the product */
         final TextView mProductTextView;
+
+        /* Annotation for the product */
         final TextView mAnnotationTextView;
+
+        /* Priority marker for the product */
         final TextView mPriorityView;
+
+        /* Button to access edition dialog (annotation and priority editing) */
         final ImageView mMoreView;
+
+        /* id in the table (_ID column) of the item to be displayed */
         int id;
 
         ViewHolder(View itemView) {
@@ -168,20 +185,23 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     if (id > 0)
-                        mListAdapterOnClickListener.onClick(id);
+                        mListAdapterOnClickHandler.onClick(id);
                 }
             });
 
             itemView.setOnTouchListener(new View.OnTouchListener() {
-                final private GestureDetector gestureDetector = new GestureDetector(
-                        mContext, new GestureDetector.SimpleOnGestureListener() {
-                    @Override
-                    public void onLongPress(MotionEvent e) {
-                        if (id > 0)
-                            mListAdapterOnClickListener.onClick(id);
-                        super.onLongPress(e);
-                    }
-                });
+
+                final private GestureDetector gestureDetector =
+                                new GestureDetector(
+                                        mContext,
+                                        new GestureDetector.SimpleOnGestureListener() {
+                                            @Override
+                                            public void onLongPress(MotionEvent e) {
+                                                if (id > 0)
+                                                    mListAdapterOnClickHandler.onClick(id);
+                                                super.onLongPress(e);
+                                            }
+                                        });
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {

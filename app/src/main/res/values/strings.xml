@@ -12,6 +12,7 @@
     <string name="list_low_priority_mark" translatable="false">\?</string>
 
     <!-- Strings for edition -->
+    <string name="list_edition_button">More</string>
     <string name="list_edition_title">%1$s - More</string>
     <string name="list_edition_annotation_label">Annotation:</string>
     <string name="list_edition_priority_label">Priority:</string>
@@ -103,12 +104,10 @@
     <string name="pref_font_label">Font</string>
     <string name="pref_font_normal_label">By default</string>
     <string name="pref_font_handwritten_label">Handwritten</string>
-    <string name="pref_font_typewriter_label">Typewriter</string>
 
     <string name="pref_font_key" translatable="false">font</string>
     <string name="pref_font_normal_value" translatable="false">sans-serif</string>
     <string name="pref_font_handwritten_value" translatable="false">casual</string>
-    <string name="pref_font_typewriter_value" translatable="false">monospace</string>
 
     <!--Strings for sort order preference -->
     <string name="pref_sort_order_label">Sort</string>

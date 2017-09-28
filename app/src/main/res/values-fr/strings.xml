@@ -9,6 +9,7 @@
     <string name="list_empty">La liste est vide.</string>
 
     <!-- Strings for edition -->
+    <string name="list_edition_button">Plus</string>
     <string name="list_edition_title">%1$s - Plus</string>
     <string name="list_edition_annotation_label">Annotation :</string>
     <string name="list_edition_priority_label">Priorité :</string>
@@ -92,7 +93,6 @@
     <string name="pref_font_label">Police de caractère</string>
     <string name="pref_font_normal_label">Par défaut</string>
     <string name="pref_font_handwritten_label">Manuscrite</string>
-    <string name="pref_font_typewriter_label">Machine à écrire</string>
 
     <!--Strings for sort order preference -->
     <string name="pref_sort_order_label">Tri</string>
