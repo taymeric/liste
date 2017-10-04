@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:baselineAligned="false"
               android:orientation="vertical"
               android:paddingBottom="16dp"
               android:paddingEnd="32dp"
@@ -11,70 +10,57 @@
               android:paddingStart="32dp"
               android:paddingTop="16dp">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal">
-
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
             android:text="@string/list_edition_priority_label"
+            android:textAllCaps="true"
             android:textAppearance="?android:textAppearanceSmall"/>
 
         <RadioGroup
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp"
+            android:orientation="horizontal"
             >
 
             <RadioButton
                 android:id="@+id/button_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/list_edition_priority_high_label"/>
 
             <RadioButton
                 android:id="@+id/button_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/list_edition_priority_normal_label"/>
 
             <RadioButton
                 android:id="@+id/button_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/list_edition_priority_low_label"/>
 
         </RadioGroup>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/list_edition_annotation_label"
+            android:textAllCaps="true"
             android:textAppearance="?android:textAppearanceSmall"/>
 
         <EditText
             android:id="@+id/dialog_edit_text"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
             android:hint="@string/list_edition_annotation_hint"
             android:inputType="textCapSentences"/>
-
-    </LinearLayout>
 
 </LinearLayout>

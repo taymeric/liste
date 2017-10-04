@@ -24,6 +24,23 @@
         android:layout_gravity="center"
         android:visibility="gone"/>
 
+    <!-- Empty view for the list -->
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:alpha="0.4"
+        android:fontFamily="sans-serif"
+        android:paddingEnd="40dp"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:paddingStart="40dp"
+        android:text="@string/list_empty_view_text"
+        android:textAlignment="center"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:visibility="gone" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="@dimen/fab_size"

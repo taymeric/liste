@@ -5,11 +5,6 @@
 
     <PreferenceCategory
         android:title="@string/pref_list_label">
-        <SwitchPreference
-            android:defaultValue="false"
-            android:icon="@drawable/ic_dashboard_black_24dp"
-            android:key="@string/pref_list_compact_layout_key"
-            android:title="@string/pref_compact_layout_label"/>
         <ListPreference
             android:defaultValue="@string/pref_font_normal_value"
             android:entries="@array/pref_font_labels"
@@ -25,23 +20,6 @@
             android:key="@string/pref_sort_order_key"
             android:title="@string/pref_sort_order_label"
             />
-        <ListPreference
-            android:defaultValue="@string/pref_direction_both_value"
-            android:entries="@array/pref_direction_option_labels"
-            android:entryValues="@array/pref_direction_option_values"
-            android:icon="@drawable/ic_touch_app_black_24dp"
-            android:key="@string/pref_direction_key"
-            android:title="@string/pref_direction_label"
-            />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/pref_history_label">
-        <SwitchPreference
-            android:defaultValue="true"
-            android:icon="@drawable/ic_dashboard_black_24dp"
-            android:key="@string/pref_history_compact_layout_key"
-            android:title="@string/pref_compact_layout_label"/>
     </PreferenceCategory>
 
     <PreferenceCategory

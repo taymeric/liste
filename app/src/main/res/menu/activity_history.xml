@@ -8,4 +8,18 @@
         android:title="@string/history_menu_clear"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/action_compact_layout"
+        android:icon="@drawable/ic_layout_compact_white_24dp"
+        android:title="@string/history_menu_compact_layout"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_normal_layout"
+        android:icon="@drawable/ic_layout_normal_white_24dp"
+        android:title="@string/history_menu_normal_layout"
+        android:visible="false"
+        app:showAsAction="always" />
+
 </menu>

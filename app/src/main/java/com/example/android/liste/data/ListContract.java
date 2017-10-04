@@ -3,7 +3,6 @@ package com.example.android.liste.data;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import java.security.Provider;
 
 /**
  * The contract defines the constants of the database which contains two tables.

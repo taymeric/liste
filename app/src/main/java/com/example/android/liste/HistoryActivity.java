@@ -19,7 +19,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +30,7 @@ import com.example.android.liste.data.ListContract;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
 /**
  * HistoryActivity displays the products in the history table, which stores products that have
  * been previously entered in the list by the user.
@@ -39,7 +39,8 @@ import java.util.HashMap;
  *  - select one or several items to remove from the history table
  */
 public class HistoryActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Cursor>, HistoryAdapter.HistoryAdapterOnClickHandler {
+        implements LoaderManager.LoaderCallbacks<Cursor>, HistoryAdapter.HistoryAdapterOnClickHandler,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     /* Helps the LoaderManager identify the loader for the history */
     private static final int HISTORY_LOADER_ID = 101;
@@ -54,6 +55,16 @@ public class HistoryActivity extends AppCompatActivity
 
     /* A ProgressBar that is only 'visible' when the history is loading (otherwise it is 'gone')*/
     private ProgressBar mProgressBar;
+
+    /* A Reference to the Shared Preferences of the app, used to get the user's preferences */
+    private SharedPreferences mSharedPreferences;
+
+    /* The RecyclerView that displays the items of the history */
+    private RecyclerView mRecyclerView;
+
+    /* The LayoutManager that defines if the RecyclerView has one or two columns, depending on the
+     * user's preferences */
+    private RecyclerView.LayoutManager mLayoutManager;
 
     /* The Adapter that binds the data from the history table to the Recycler View */
     private HistoryAdapter mAdapter;
@@ -82,14 +93,15 @@ public class HistoryActivity extends AppCompatActivity
             }
         });
 
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
         // Set up the Recycler View with its Adapter
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.history_recycler_view);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        LinearLayoutManager layoutManager =
-                (LinearLayoutManager) PreferenceUtils.getHistoryLayoutManager(this, sharedPreferences);
-        recyclerView.setLayoutManager(layoutManager);
+        mRecyclerView = (RecyclerView) findViewById(R.id.history_recycler_view);
+        mLayoutManager = PreferenceUtils.getHistoryLayoutManager(this, mSharedPreferences);
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new HistoryAdapter(this, this);
-        recyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
 
         // By default, the empty view's visibility is set to 'gone'
         mEmptyView = findViewById(R.id.empty_view);
@@ -102,6 +114,12 @@ public class HistoryActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_history, menu);
 
@@ -109,6 +127,16 @@ public class HistoryActivity extends AppCompatActivity
         MenuItem trash = menu.findItem(R.id.action_clear);
         if (selectedIds != null) trash.setVisible(!selectedIds.isEmpty());
         else trash.setVisible(false);
+
+        MenuItem compact_layout = menu.findItem(R.id.action_compact_layout);
+        MenuItem normal_layout = menu.findItem(R.id.action_normal_layout);
+        if (mSharedPreferences.getBoolean(getString(R.string.pref_history_compact_layout_key), true)) {
+            compact_layout.setVisible(false);
+            normal_layout.setVisible(true);
+        } else {
+            compact_layout.setVisible(true);
+            normal_layout.setVisible(false);
+        }
 
         return true;
     }
@@ -119,6 +147,18 @@ public class HistoryActivity extends AppCompatActivity
         switch(id) {
             case R.id.action_clear:
                 deleteSelectedProducts();
+                return true;
+            case R.id.action_compact_layout:
+                SharedPreferences.Editor editor = mSharedPreferences.edit();
+                editor.putBoolean(getString(R.string.pref_history_compact_layout_key), true);
+                editor.apply();
+                invalidateOptionsMenu();
+                return true;
+            case R.id.action_normal_layout:
+                SharedPreferences.Editor editor2 = mSharedPreferences.edit();
+                editor2.putBoolean(getString(R.string.pref_history_compact_layout_key), false);
+                editor2.apply();
+                invalidateOptionsMenu();
                 return true;
             case android.R.id.home:
                 showConfirmationDialog();
@@ -170,6 +210,15 @@ public class HistoryActivity extends AppCompatActivity
         else selectedIds.put(id, txt);
         updateFabVisibility();
         invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        if (s.equals(getString(R.string.pref_history_compact_layout_key))) {
+            mLayoutManager = PreferenceUtils.getHistoryLayoutManager(this, mSharedPreferences);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mAdapter.reloadLayout();
+        }
     }
 
     /* Deletes selection from the history table */
@@ -258,7 +307,7 @@ public class HistoryActivity extends AppCompatActivity
             i++;
         }
 
-        // Here we use bulkinsert() to insert multiples lines at once as it is more efficient than
+        // Here we use bulkInsert() to insert multiples lines at once as it is more efficient than
         // calling insert() multiple times. We could also use ContentProviderOperations.
         // We don't use an AsyncQueryHandler as it is not straightforward to refactor this code
         // with it and I also don't know if it is suited for bulk operations.

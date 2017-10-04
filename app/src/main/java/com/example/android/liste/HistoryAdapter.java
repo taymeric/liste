@@ -19,14 +19,28 @@ import com.example.android.liste.data.ListContract;
  */
 class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
-    /* Type of Layout for the RecyclerView. Used to adjust the layout of a ViewHolder.
-     * Possible values: PreferenceUtils.NORMAL_LAYOUT_ITEM or PreferenceUtils.COMPACT_LAYOUT_ITEM */
-    private final int mCurrentLayout;
+    /** Identifies a normal layout */
+    private static final int NORMAL_LAYOUT = 1;
+
+    /* Identifies a compact layout */
+    private static final int COMPACT_LAYOUT = 2;
+
+    /* Context object needed for using PreferenceUtils methods as well as
+     * getting a reference to SharedPreferences */
+    final private Context mContext;
+
+    /* SharedPreferences object for using PreferenceUtils methods that get Preferences
+     * for layout */
+    final private SharedPreferences mSharedPreferences;
     /* Reference to an implementation of the interface that handles click on a ViewHolder */
     final private HistoryAdapterOnClickHandler mClickHandler;
+    /* Type of Layout for the RecyclerView. Used to adjust the layout of a ViewHolder.
+     * Possible values: PreferenceUtils.NORMAL_LAYOUT_ITEM or PreferenceUtils.COMPACT_LAYOUT_ITEM */
+    private int mCurrentLayout;
     /* The Cursor that references the actual data that populates the RecyclerView.
      * Can be null before data has been loaded. */
     private Cursor mCursor;
+
     /* Array that indicated if a product at a given position is checked or not */
     private boolean[] isChecked;
 
@@ -34,8 +48,16 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
      *  @param clickHandler used to interact with History activity. */
     HistoryAdapter(Context context, HistoryAdapterOnClickHandler clickHandler) {
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mCurrentLayout = PreferenceUtils.getHistoryLayoutType(context, sharedPreferences);
+        mContext = context;
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        boolean isCompactLayout = mSharedPreferences.getBoolean(
+                mContext.getString(R.string.pref_history_compact_layout_key), true);
+        if (isCompactLayout)
+            mCurrentLayout = COMPACT_LAYOUT;
+        else
+            mCurrentLayout = NORMAL_LAYOUT;
+
         mClickHandler = clickHandler;
 
         // Handles initialization of isChecked array
@@ -50,7 +72,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
         // There are two possible layouts for the RecyclerView: Normal or Compact.
         // For each of these two layouts, the layout of a ViewHolder is different.
         View v;
-        if (viewType == PreferenceUtils.NORMAL_LAYOUT_ITEM) {
+        if (viewType == NORMAL_LAYOUT) {
             v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_history_normal, parent, false);
         } else {
@@ -113,6 +135,17 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
             isChecked = new boolean[mCursor.getCount()];
         else
             isChecked = null;
+    }
+
+    /** Updates the layout of the RecyclerView to the most recent value from the user's preferences */
+    void reloadLayout() {
+        boolean isCompactLayout = mSharedPreferences.getBoolean(
+                mContext.getString(R.string.pref_history_compact_layout_key), true);
+        if (isCompactLayout)
+            mCurrentLayout = COMPACT_LAYOUT;
+        else
+            mCurrentLayout = NORMAL_LAYOUT;
+        notifyDataSetChanged();
     }
 
     /* Interface to provide a way to handle */

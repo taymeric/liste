@@ -17,7 +17,6 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -29,6 +28,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
+import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -87,6 +87,10 @@ public class ListActivity extends AppCompatActivity
     /* A ProgressBar that is only 'visible' when the list is loading (otherwise it is 'gone')*/
     private ProgressBar mProgressBar;
 
+    /* A View displayed in place of the RecyclerView is empty (when the table does not contain
+    * any element) */
+    private View mEmptyView;
+
     /* A Reference to the Shared Preferences of the app, used by many methods to adjust the behavior
      * of the app to the user's preferences */
     private SharedPreferences mSharedPreferences;
@@ -100,9 +104,6 @@ public class ListActivity extends AppCompatActivity
 
     /* The Adapter that binds the data from the list table to the Recycler View */
     private ListAdapter mAdapter;
-
-    /* A callback method to manage deletion when an item is swiped */
-    private ItemTouchHelper.SimpleCallback mSimpleCallback;
 
     /* A field in the AppBar that allows typing new products to add to the list and suggests products
     * from the history */
@@ -136,8 +137,8 @@ public class ListActivity extends AppCompatActivity
         mRecyclerView.setAdapter(mAdapter);
 
         // The ItemTouchHelper class manages deletion of a RecyclerView item that is swiped
-        mSimpleCallback = new ItemTouchHelper.SimpleCallback(0,
-                PreferenceUtils.getSwipeDirection(this, mSharedPreferences)) {
+        ItemTouchHelper.SimpleCallback mSimpleCallback = new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
             @Override
             public boolean onMove(RecyclerView recyclerView,
@@ -149,8 +150,6 @@ public class ListActivity extends AppCompatActivity
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 // The Adapter class stores the id of the element as a tag in the viewHolder
                 int id = (int) viewHolder.itemView.getTag();
-                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                v.vibrate(25);
                 deleteSingleEntry(id);
             }
         };
@@ -158,6 +157,9 @@ public class ListActivity extends AppCompatActivity
 
         // Create the ListQueryHandler used to perform Content Provider operations
         mListQueryHandler = new ListQueryHandler(getContentResolver());
+
+        // By default, the empty view's visibility is set to 'gone'
+        mEmptyView = findViewById(R.id.empty_view);
 
         // Make the progress bar visible until the list has finished loading
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
@@ -178,6 +180,18 @@ public class ListActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.activity_list, menu);
         setupReminderButtons(menu);
         setupAddButton(menu);
+
+        // Only show one of the layout change buttons
+        MenuItem compact_layout = menu.findItem(R.id.action_compact_layout);
+        MenuItem normal_layout = menu.findItem(R.id.action_normal_layout);
+        if (mSharedPreferences.getBoolean(getString(R.string.pref_list_compact_layout_key), true)) {
+            compact_layout.setVisible(false);
+            normal_layout.setVisible(true);
+        } else {
+            compact_layout.setVisible(true);
+            normal_layout.setVisible(false);
+        }
+
         return true;
     }
 
@@ -191,6 +205,18 @@ public class ListActivity extends AppCompatActivity
                 return true;
             case R.id.action_clear:
                 showDeleteAllDialog();
+                return true;
+            case R.id.action_compact_layout:
+                SharedPreferences.Editor editor = mSharedPreferences.edit();
+                editor.putBoolean(getString(R.string.pref_list_compact_layout_key), true);
+                editor.apply();
+                invalidateOptionsMenu();
+                return true;
+            case R.id.action_normal_layout:
+                SharedPreferences.Editor editor2 = mSharedPreferences.edit();
+                editor2.putBoolean(getString(R.string.pref_list_compact_layout_key), false);
+                editor2.apply();
+                invalidateOptionsMenu();
                 return true;
             case R.id.action_notify:
                 showReminderSetupDialogs();
@@ -233,6 +259,7 @@ public class ListActivity extends AppCompatActivity
             // Swap cursor in order to display List items when List Loader has finished
             mProgressBar.setVisibility(View.GONE);
             mAdapter.swapCursor(data);
+            updateEmptyViewVisibility();
         }
     }
 
@@ -242,6 +269,7 @@ public class ListActivity extends AppCompatActivity
         if (id == LIST_LOADER_ID) {
             mProgressBar.setVisibility(View.VISIBLE);
             mAdapter.swapCursor(null);
+            updateEmptyViewVisibility();
         }
     }
 
@@ -262,11 +290,8 @@ public class ListActivity extends AppCompatActivity
             mLayoutManager = PreferenceUtils.getListLayoutManager(this, mSharedPreferences);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mAdapter.reloadLayout();
-            mAdapter.notifyDataSetChanged();
         } else if (s.equals(getString(R.string.pref_sort_order_key))) {
             getLoaderManager().restartLoader(LIST_LOADER_ID, null, this);
-        } else if (s.equals(getString(R.string.pref_direction_key))) {
-            updateItemTouchHelper();
         } else if (s.equals(getString(R.string.list_reminder_alarm_on))) {
             invalidateOptionsMenu();
         } else if (s.equals(getString(R.string.pref_font_key))) {
@@ -276,10 +301,13 @@ public class ListActivity extends AppCompatActivity
     }
 
     @Override
-    public void onClick(int id) {
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(25);
-        showEditionDialog(id);
+    public void onClick(int id, boolean long_press) {
+        if (long_press) {
+            mRecyclerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            showEditionDialog(id);
+        } else {
+            deleteSingleEntry(id);
+        }
     }
 
     /* This method makes sure that when a reminder is scheduled, a informative menu item appears on
@@ -365,7 +393,6 @@ public class ListActivity extends AppCompatActivity
                     DataUtils.insertProductIntoBothTables(mListQueryHandler, text);
                     mAutoCompleteTextView.setText("");
                 }
-                menuItem.collapseActionView();
                 return true;
             }
         });
@@ -437,7 +464,7 @@ public class ListActivity extends AppCompatActivity
             else editText.setText("");
 
             alertDialog = new AlertDialog.Builder(ListActivity.this)
-                    .setMessage(getResources().getString(R.string.list_edition_title, product))
+                    .setMessage(product)
                     .setView(view)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
@@ -486,7 +513,6 @@ public class ListActivity extends AppCompatActivity
         String[] projection  = { ListContract.ListEntry.COLUMN_PRODUCT,
                 ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.COLUMN_ANNOTATION };
 
-        // No AsyncQueryHandler in this part to avoid having to deal with synchronizing issues.
         Cursor cu = getContentResolver().query(uri, projection, null, null, null);
 
         if (cu!=null && cu.moveToFirst()) {
@@ -502,13 +528,6 @@ public class ListActivity extends AppCompatActivity
                     getResources().getString(R.string.list_removed_product_message, product),
                     product, priority, annotation);
         }
-
-    }
-
-    /* Updates the direction of the swipe (for deletion) according to user preferences. */
-    private void updateItemTouchHelper() {
-        int direction = PreferenceUtils.getSwipeDirection(this, mSharedPreferences);
-        mSimpleCallback.setDefaultSwipeDirs(direction);
     }
 
     /* Shows a confirmation dialog to delete all entries from the list. */
@@ -527,7 +546,7 @@ public class ListActivity extends AppCompatActivity
                     .setNegativeButton(android.R.string.no, null)
                     .create().show();
         } else {
-            showMessage(getString(R.string.list_empty));
+            showMessage(getString(R.string.list_empty_message));
         }
     }
 
@@ -608,6 +627,7 @@ public class ListActivity extends AppCompatActivity
      * as parameters. */
     private void setReminderTime(int year, int month, int day, int hour, int minute) {
 
+        // Creation of the PendingIntent that will be used when the alarm is triggered
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
         notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID_KEY, NOTIFICATION_ID);
         PendingIntent pendingIntent =
@@ -676,7 +696,7 @@ public class ListActivity extends AppCompatActivity
                 startActivity(intent);
             }
         } else {
-            showMessage(getString(R.string.list_empty));
+            showMessage(getString(R.string.list_empty_message));
         }
     }
 
@@ -686,6 +706,15 @@ public class ListActivity extends AppCompatActivity
         Date date = c.getTime();
         java.text.DateFormat formatter = DateFormat.getDateFormat(this);
         return formatter.format(date);
+    }
+
+    /* Updates the visibility of the Empty View. */
+    private void updateEmptyViewVisibility() {
+        if (mAdapter.getItemCount() == 0) {
+            mEmptyView.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyView.setVisibility(View.GONE);
+        }
     }
 
     /* Shows a short Snackbar message. */
@@ -717,7 +746,7 @@ public class ListActivity extends AppCompatActivity
     /* Shows long Snackbar message with an 'undo' action. */
     private void showMessageWithUndoAction(String message, final String product, final int priority,
                                            final String annotation) {
-        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_LONG)
+        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_INDEFINITE)
                 .setAction(getString(android.R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

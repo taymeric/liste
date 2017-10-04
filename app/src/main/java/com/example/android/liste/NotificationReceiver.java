@@ -15,6 +15,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        // Perform response task with an IntentService to use a background thread
         Intent notificationIntent = new Intent(context, NotificationIntentService.class);
         int id = intent.getIntExtra(NOTIFICATION_ID_KEY, 0);
         notificationIntent.putExtra(NOTIFICATION_ID_KEY, id);

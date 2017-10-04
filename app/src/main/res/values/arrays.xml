@@ -21,15 +21,4 @@
         <item>@string/pref_sort_order_priority_value</item>
     </array>
 
-    <!-- Arrays for direction of swipe preference -->
-    <array name="pref_direction_option_labels">
-        <item>@string/pref_direction_right_label</item>
-        <item>@string/pref_direction_left_label</item>
-        <item>@string/pref_direction_both_label</item>
-    </array>
-    <array name="pref_direction_option_values">
-        <item>@string/pref_direction_right_value</item>
-        <item>@string/pref_direction_left_value</item>
-        <item>@string/pref_direction_both_value</item>
-    </array>
 </resources>
