@@ -1,5 +1,6 @@
 package com.example.android.liste;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -50,7 +51,6 @@ import com.example.android.liste.data.ListContract;
 import com.example.android.liste.data.ListQueryHandler;
 
 import java.util.Calendar;
-import java.util.Date;
 
 
 /**
@@ -442,7 +442,7 @@ public class ListActivity extends AppCompatActivity
             String annotation = cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_ANNOTATION));
 
             LayoutInflater inflater = getLayoutInflater();
-            View view = inflater.inflate(R.layout.dialog_edition, null);
+            @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_edition, null);
             final RadioButton radioButton1 = view.findViewById(R.id.button_1);
             final RadioButton radioButton2 = view.findViewById(R.id.button_2);
             final RadioButton radioButton3 = view.findViewById(R.id.button_3);
@@ -698,12 +698,12 @@ public class ListActivity extends AppCompatActivity
     }*/
 
     /* Gets the current date as a String representation. */
-    private String getDate() {
+    /*private String getDate() {
         Calendar c = Calendar.getInstance();
         Date date = c.getTime();
         java.text.DateFormat formatter = DateFormat.getDateFormat(this);
         return formatter.format(date);
-    }
+    }*/
 
     /* Updates the visibility of the Empty View. */
     private void updateEmptyViewVisibility() {

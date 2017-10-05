@@ -25,6 +25,7 @@
     <PreferenceCategory
         android:title="@string/pref_information_label">
 
+        <!--suppress AndroidElementNotAllowed -->
         <com.example.android.liste.AboutDialogPreference
             android:key="@string/pref_about_key"
             android:title="@string/pref_about_title"

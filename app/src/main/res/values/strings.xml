@@ -122,7 +122,7 @@
     <string name="pref_about_title">About</string>
     <string name="pref_about_version_number_label">Version</string>
     <string name="pref_about_url_label">More information</string>
-    <string name="pref_about_version_number" translatable="false">1.0</string>
+    <string name="pref_about_version_name" translatable="false">1.0</string>
     <string name="pref_about_url" translatable="false">https://github.com/taymeric/liste</string>
 
     <!-- Strings for Preferences activity end -->

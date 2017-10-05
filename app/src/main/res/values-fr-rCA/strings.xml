@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_name">Liste d\'épicerie</string>
 
@@ -14,12 +14,12 @@
     <string name="history_menu_normal_layout">Affichage: Normal</string>
 
     <plurals name="history_clear_selection_title">
-        <item quantity="one">Effacer le produit sélectionné de l\'historique?</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">Effacer le produit sélectionné de l\'historique?</item>
         <item quantity="other">Effacer les produits sélectionnés de l\'historique?</item>
     </plurals>
 
     <plurals name="history_add_selected_products">
-        <item quantity="one">Ajouter l\'élément sélectionné à la liste?</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">Ajouter l\'élément sélectionné à la liste?</item>
         <item quantity="other">Ajouter les éléments sélectionnés à la liste?</item>
     </plurals>
 

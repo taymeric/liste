@@ -20,6 +20,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +42,8 @@ import java.util.HashMap;
 public class HistoryActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor>, HistoryAdapter.HistoryAdapterOnClickHandler,
         SharedPreferences.OnSharedPreferenceChangeListener {
+
+    private static final String TAG = "HistoryActivity.java";
 
     /* Helps the LoaderManager identify the loader for the history */
     private static final int HISTORY_LOADER_ID = 101;
@@ -251,13 +254,14 @@ public class HistoryActivity extends AppCompatActivity
                             }
 
                         }
-                        catch (RemoteException | OperationApplicationException exception) {}
+                        catch (RemoteException | OperationApplicationException exception) {
+                            Log.d(TAG, "Exception while deleting products from history");
+                        }
 
                         showMessage(getResources().getQuantityString(R.plurals.history_products_cleared_message, nb, nb));
 
                         selectedIds.clear();
                         updateFabVisibility();
-                        updateEmptyViewVisibility();
                         mAdapter.notifyDataSetChanged();
                         invalidateOptionsMenu();
                     }
