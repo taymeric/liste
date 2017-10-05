@@ -94,8 +94,6 @@
     <string name="pref_title">Preferences</string>
     <string name="pref_list_label">List</string>
     <string name="pref_information_label">Information</string>
-    <string name="pref_version_number_label">Version</string>
-    <string name="pref_version_number" translatable="false">1.0</string>
 
     <!-- Strings for layout preference -->
     <string name="pref_list_compact_layout_key" translatable="false">list_layout</string>
@@ -119,13 +117,13 @@
     <string name="pref_sort_order_name_value" translatable="false">by_name</string>
     <string name="pref_sort_order_priority_value" translatable="false">by_priority</string>
 
-    <!-- Strings for help dialog in preference screen -->
-    <string name="pref_help_key" translatable="false">help_key</string>
-    <string name="pref_help_title">Help</string>
-    <string name="pref_help_add_text">Add a product to the list.</string>
-    <string name="pref_help_history_text">Add products quicker from history.</string>
-    <string name="pref_help_swipe_text">Delete a product by swiping left or right.</string>
-    <string name="pref_help_edition_text">Edit a product by long-pressing.</string>
+    <!-- Strings for About dialog in preference screen -->
+    <string name="pref_about_key" translatable="false">about_key</string>
+    <string name="pref_about_title">About</string>
+    <string name="pref_about_version_number_label">Version</string>
+    <string name="pref_about_url_label">More information</string>
+    <string name="pref_about_version_number" translatable="false">1.0</string>
+    <string name="pref_about_url" translatable="false">https://github.com/taymeric/liste</string>
 
     <!-- Strings for Preferences activity end -->
 

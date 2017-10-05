@@ -5,10 +5,10 @@ import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
 
 /** Necessary class for custom PreferenceDialog */
-public class HelpPreferenceDialogFragmentCompat extends PreferenceDialogFragmentCompat {
+public class AboutPreferenceDialogFragmentCompat extends PreferenceDialogFragmentCompat {
 
-    public static HelpPreferenceDialogFragmentCompat newInstance(Preference preference) {
-        HelpPreferenceDialogFragmentCompat fragment = new HelpPreferenceDialogFragmentCompat();
+    public static AboutPreferenceDialogFragmentCompat newInstance(Preference preference) {
+        AboutPreferenceDialogFragmentCompat fragment = new AboutPreferenceDialogFragmentCompat();
         Bundle bundle = new Bundle(1);
         bundle.putString("key", preference.getKey());
         fragment.setArguments(bundle);

@@ -25,14 +25,9 @@
     <PreferenceCategory
         android:title="@string/pref_information_label">
 
-        <com.example.android.liste.HelpDialogPreference
-            android:key="@string/pref_help_key"
-            android:title="@string/pref_help_title"/>
-
-        <Preference
-            android:icon="@drawable/ic_info_black_24dp"
-            android:summary="@string/pref_version_number"
-            android:title="@string/pref_version_number_label"
+        <com.example.android.liste.AboutDialogPreference
+            android:key="@string/pref_about_key"
+            android:title="@string/pref_about_title"
             />
 
     </PreferenceCategory>

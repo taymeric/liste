@@ -75,9 +75,9 @@ public class PreferencesFragment extends PreferenceFragmentCompat
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
         DialogFragment fragment;
-        // HelpDialogPreference is used to display a dialog for the help/info section
-        if (preference instanceof HelpDialogPreference) {
-            fragment = HelpPreferenceDialogFragmentCompat.newInstance(preference);
+        // AboutDialogPreference is used to display a dialog for the help/info section
+        if (preference instanceof AboutDialogPreference) {
+            fragment = AboutPreferenceDialogFragmentCompat.newInstance(preference);
             fragment.setTargetFragment(this, 0);
             fragment.show(getFragmentManager(),
                     "android.support.v7.preference.PreferenceFragment.DIALOG");

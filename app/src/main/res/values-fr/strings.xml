@@ -85,7 +85,6 @@
     <string name="pref_title">Préférences</string>
     <string name="pref_list_label">Liste</string>
     <string name="pref_information_label">Informations</string>
-    <string name="pref_version_number_label">Version</string>
 
     <!-- Strings for font preference -->
     <string name="pref_font_label">Police de caractère</string>
@@ -97,13 +96,10 @@
     <string name="pref_sort_order_by_name_label">Ordre alphabétique</string>
     <string name="pref_sort_order_by_priority_label">Ordre de priorité</string>
 
-
-    <!-- Strings for help dialog in preference screen -->
-    <string name="pref_help_title">Aide</string>
-    <string name="pref_help_add_text">Ajouter un produit dans la liste.</string>
-    <string name="pref_help_history_text">Ajouter plus rapidement des produits depuis l\'historique.</string>
-    <string name="pref_help_swipe_text">Supprimer un produit en balayant vers la gauche ou la droite.</string>
-    <string name="pref_help_edition_text">Éditer un produit avec un appui long.</string>
+    <!-- Strings for About dialog in preference screen -->
+    <string name="pref_about_title">À propos</string>
+    <string name="pref_about_version_number_label">Version</string>
+    <string name="pref_about_url_label">Plus d\'information</string>
 
     <!-- Strings for Preferences activity end -->
 
