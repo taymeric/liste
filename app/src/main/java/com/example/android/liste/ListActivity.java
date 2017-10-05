@@ -224,9 +224,6 @@ public class ListActivity extends AppCompatActivity
             case R.id.action_alarm_info:
                 showReminderInformationAndCancelingDialog();
                 return true;
-            case R.id.action_email:
-                sendByEmail();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -684,7 +681,7 @@ public class ListActivity extends AppCompatActivity
     }
 
     /* Sends an implicit intent to a mail app with the content of the list as the body of the mail. */
-    private void sendByEmail() {
+    /*private void sendByEmail() {
         if (mAdapter.getItemCount() != 0) {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setData(Uri.parse("mailto:")); // only email apps should handle this
@@ -698,7 +695,7 @@ public class ListActivity extends AppCompatActivity
         } else {
             showMessage(getString(R.string.list_empty_message));
         }
-    }
+    }*/
 
     /* Gets the current date as a String representation. */
     private String getDate() {

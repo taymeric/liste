@@ -5,9 +5,6 @@
 
     <string name="list_clear_title">Effacer la liste actuelle?</string>
 
-    <string name="list_menu_send_email">Envoyer par courriel</string>
-    <string name="list_email_title">Liste d\'épicerie du %1$s</string>
-
     <!-- Strings for list layout change menu -->
     <string name="list_menu_compact_layout">Affichage: Compact</string>
     <string name="list_menu_normal_layout">Affichage: Normal</string>
@@ -27,8 +24,8 @@
     </plurals>
 
     <plurals name="list_reminder_notification_title">
-        <item quantity="one">%d produit dans la liste d\'épicerie :</item>
-        <item quantity="other">%d produits dans la liste d\'épicerie :</item>
+        <item quantity="one">%d produit dans la liste d\'épicerie:</item>
+        <item quantity="other">%d produits dans la liste d\'épicerie:</item>
     </plurals>
 
 </resources>

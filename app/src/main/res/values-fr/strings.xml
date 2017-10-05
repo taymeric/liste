@@ -47,10 +47,6 @@
         <item quantity="other">%d produits dans la liste de course :</item>
     </plurals>
 
-    <!-- Strings for email -->
-    <string name="list_menu_send_email">Envoyer par email</string>
-    <string name="list_email_title">Liste de course du %1$s</string>
-
     <!-- Strings for List activity end -->
 
 

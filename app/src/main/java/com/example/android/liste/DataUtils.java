@@ -18,7 +18,7 @@ import com.example.android.liste.data.ListContract;
 import com.example.android.liste.data.ListQueryHandler;
 
 /**
- * Utility methods for database-related operations.
+ * Utility methods for operations that require access to the database.
  */
 class DataUtils {
 
@@ -103,9 +103,9 @@ class DataUtils {
         return mBuilder.build();
     }
 
-    /** @return a String representation of the whole list with products, annotations and priorities
+    /* @return a String representation of the whole list with products, annotations and priorities
      *  to be used when sharing the list by mail. */
-    static String getListAsStringForEmail(Context context, SharedPreferences sharedPreferences) {
+    /*static String getListAsStringForEmail(Context context, SharedPreferences sharedPreferences) {
 
         String list = "";
 
@@ -138,5 +138,5 @@ class DataUtils {
         }
 
         return list;
-    }
+    }*/
 }

@@ -54,10 +54,6 @@
     <string name="list_reminder_alarm_on" translatable="false">alarm_on</string>
     <string name="list_reminder_alarm_time" translatable="false">alarm_time</string>
 
-    <!-- Strings for email -->
-    <string name="list_menu_send_email">Send by email</string>
-    <string name="list_email_title">Grocery List for %1$s</string>
-
     <!-- Strings for List activity end -->
 
 
