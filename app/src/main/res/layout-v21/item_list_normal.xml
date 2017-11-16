@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="1dp"
-    android:layout_marginEnd="1dp"
-    android:layout_marginRight="1dp"
-    android:background="@android:color/white"
+    app:cardCornerRadius="0dp"
+    app:cardPreventCornerOverlap="true"
     >
 
     <LinearLayout
         android:id="@+id/item_list_layout"
-        style="@style/ListLayout.Compact"
+        style="@style/ListLayout.Normal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -29,7 +29,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textAppearance="?android:textAppearance"
-                android:textSize="@dimen/text_small"
+                android:textSize="@dimen/text_big"
+                android:textStyle="bold"
                 tools:text="Text"/>
 
             <TextView
@@ -37,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:textAppearanceSmall"
-                android:textSize="@dimen/text_annotation_small"
+                android:textSize="@dimen/text_annotation_big"
                 tools:text="Subtext"/>
 
         </LinearLayout>
@@ -47,15 +48,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
             android:gravity="end"
             android:textAppearance="?android:textAppearance"
-            android:textSize="@dimen/text_small"
+            android:textSize="@dimen/text_big"
             android:textStyle="bold"
             tools:text="!"/>
 
     </LinearLayout>
 
-
-</FrameLayout>
+</android.support.v7.widget.CardView>

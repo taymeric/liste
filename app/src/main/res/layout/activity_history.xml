@@ -32,6 +32,10 @@
         android:clipToPadding="false"
         android:overScrollMode="never"
         android:paddingBottom="@dimen/layout_bottom_padding_for_fab"
+        android:paddingEnd="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingStart="8dp"
         android:scrollbars="vertical"
         />
 
