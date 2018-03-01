@@ -337,7 +337,8 @@ public class ListActivity extends AppCompatActivity
                             mAutoCompleteTextView.setText("");
                             final InputMethodManager inputMethodManager
                                     = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                            inputMethodManager.hideSoftInputFromWindow(findViewById(R.id.main).getWindowToken(), 0);
+                            if (inputMethodManager != null)
+                                inputMethodManager.hideSoftInputFromWindow(findViewById(R.id.main).getWindowToken(), 0);
                         }
                     });
                 }
@@ -354,7 +355,8 @@ public class ListActivity extends AppCompatActivity
                             mAutoCompleteTextView.requestFocusFromTouch();
                             final InputMethodManager inputMethodManager
                                     = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                            inputMethodManager.showSoftInput(mAutoCompleteTextView, InputMethodManager.SHOW_IMPLICIT);
+                            if (inputMethodManager != null)
+                                inputMethodManager.showSoftInput(mAutoCompleteTextView, InputMethodManager.SHOW_IMPLICIT);
                         }
                     });
                 }
@@ -639,7 +641,7 @@ public class ListActivity extends AppCompatActivity
         long millis = cal.getTimeInMillis();
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
+        if (alarmManager != null) alarmManager.set(AlarmManager.RTC_WAKEUP, millis, pendingIntent);
 
         String time = DateUtils.formatDateTime(this, millis, DateUtils.FORMAT_SHOW_TIME|DateUtils.FORMAT_SHOW_DATE);
 
@@ -671,7 +673,7 @@ public class ListActivity extends AppCompatActivity
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
+        if (alarmManager != null) alarmManager.cancel(pendingIntent);
 
         PreferenceUtils.setAlarm(this, mSharedPreferences, false, null);
 

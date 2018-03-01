@@ -42,6 +42,7 @@
     <string name="list_reminder_date_picker_message">1. Sélectionner le jour du rappel :</string>
     <string name="list_reminder_time_picker_message">2. Sélectionner l\'heure du rappel :</string>
     <string name="list_reminder_pickers_next_button">Suite</string>
+    <string name="list_reminder_notification_button">Ouvrir</string>
     <plurals name="list_reminder_notification_title">
         <item quantity="one">%d produit dans la liste de course :</item>
         <item quantity="other">%d produits dans la liste de course :</item>

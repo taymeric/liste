@@ -30,7 +30,7 @@ class PreferenceUtils {
             Context context, SharedPreferences sharedPreferences) {
         if (sharedPreferences.getBoolean(context.getString(R.string.pref_history_compact_layout_key),
                 true))
-            return new GridLayoutManager(context, 3);
+            return new GridLayoutManager(context, 2);
         else
             return new LinearLayoutManager(context);
     }

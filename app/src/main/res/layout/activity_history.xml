@@ -74,6 +74,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
         android:clickable="true"
+        android:focusable="true"
         app:srcCompat="@drawable/ic_add_white_24dp"
         />
 

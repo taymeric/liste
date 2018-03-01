@@ -47,6 +47,7 @@
     <string name="list_reminder_date_picker_message">1. Select day of reminder:</string>
     <string name="list_reminder_time_picker_message">2. Select time of reminder:</string>
     <string name="list_reminder_pickers_next_button">Next</string>
+    <string name="list_reminder_notification_button">Open</string>
     <plurals name="list_reminder_notification_title">
         <item quantity="one">%d product in the grocery list:</item>
         <item quantity="other">%d products in the grocery list:</item>

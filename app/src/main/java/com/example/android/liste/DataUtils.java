@@ -5,10 +5,7 @@ import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
@@ -65,39 +62,36 @@ class DataUtils {
         String title = context.getResources().getQuantityString(R.plurals.list_reminder_notification_title, nbOfProducts, nbOfProducts);
 
         // Build a String representation of all the products in the list by iterating through the cursor
-        String list = "";
+        StringBuilder builder = new StringBuilder();
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                list += cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT))
-                        + ", ";
+                builder.append(cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT)));
+                builder.append(", ");
             }
             // Don't forget to close the cursor
             cursor.close();
         }
+        String list = builder.toString();
         // Remove extra ', ' unless the list was empty
         if (!list.isEmpty()) list = list.substring(0, list.length()-2);
+
+        // Creates an explicit intent for an Activity in the app
+        Intent resultIntent = new Intent(context, ListActivity.class);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        //mBuilder.setContentIntent(resultPendingIntent);
 
         NotificationCompat.Builder mBuilder = (NotificationCompat.Builder)
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_shopping_basket_white_24dp)
                         .setContentTitle(title)
                         .setContentText(list)
-                        .setColor(ContextCompat.getColor(context, R.color.colorAccent))
-                        .setAutoCancel(true)
-                        .setDefaults(Notification.DEFAULT_VIBRATE);
-
-        // Creates a largeIcon for the expanded view
-        Resources res = context.getResources();
-        Bitmap largeIcon = BitmapFactory.decodeResource(res, R.drawable.ic_shopping_basket_big_white_24px);
-        mBuilder.setLargeIcon(largeIcon);
-
-        // Creates an explicit intent for an Activity in the app
-        Intent resultIntent = new Intent(context, ListActivity.class);
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(resultPendingIntent);
-
-        // Create the Expanded style
-        mBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(list));
+                        .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                        //.setAutoCancel(true)
+                        .setDefaults(Notification.DEFAULT_VIBRATE)
+                        .addAction(R.drawable.ic_shopping_basket_white_24dp,
+                                context.getString(R.string.list_reminder_notification_button),
+                                resultPendingIntent)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(list));
 
         return mBuilder.build();
     }

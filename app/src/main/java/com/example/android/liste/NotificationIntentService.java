@@ -29,7 +29,7 @@ public class NotificationIntentService extends IntentService {
 
         int id = 0;
         if (intent != null) id= intent.getIntExtra(NOTIFICATION_ID_KEY, 0);
-        notificationManager.notify(id, notification);
+        if (notificationManager != null) notificationManager.notify(id, notification);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         PreferenceUtils.setAlarm(this, sharedPreferences, false, null);

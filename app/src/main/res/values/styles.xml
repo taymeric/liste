@@ -14,6 +14,26 @@
         <item name="android:overScrollMode">never</item>
     </style>
 
+    <!-- Specific theme for history activity. -->
+    <style name="HistoryTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryHistory</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkHistory</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="preferenceTheme">@style/myPreferenceTheme</item>
+    </style>
+
+    <!-- Specific theme for history activity. -->
+    <style name="PreferencesTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryPreferences</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkPreferences</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="preferenceTheme">@style/myPreferenceTheme</item>
+    </style>
+
     <style name="ListLayout">
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">16dp</item>
@@ -42,8 +62,8 @@
     </style>
 
     <style name="HistoryLayout.Compact">
-        <item name="android:paddingTop">4dp</item>
-        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingTop">9dp</item>
+        <item name="android:paddingBottom">9dp</item>
     </style>
 
 </resources>
