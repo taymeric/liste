@@ -5,14 +5,6 @@
 
     <string name="list_clear_title">Effacer la liste actuelle?</string>
 
-    <!-- Strings for list layout change menu -->
-    <string name="list_menu_compact_layout">Affichage: Compact</string>
-    <string name="list_menu_normal_layout">Affichage: Normal</string>
-
-    <!-- Strings for history layout change menu -->
-    <string name="history_menu_compact_layout">Affichage: Compact</string>
-    <string name="history_menu_normal_layout">Affichage: Normal</string>
-
     <plurals name="history_clear_selection_title">
         <item quantity="one" tools:ignore="ImpliedQuantity">Effacer le produit sélectionné de l\'historique?</item>
         <item quantity="other">Effacer les produits sélectionnés de l\'historique?</item>
@@ -24,8 +16,8 @@
     </plurals>
 
     <plurals name="list_reminder_notification_title">
-        <item quantity="one">%d produit dans la liste d\'épicerie:</item>
-        <item quantity="other">%d produits dans la liste d\'épicerie:</item>
+        <item quantity="one">Liste d\'épicerie (%d produit):</item>
+        <item quantity="other">Liste d\'épicerie (%d produits):</item>
     </plurals>
 
 </resources>

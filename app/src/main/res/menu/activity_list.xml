@@ -23,13 +23,13 @@
         android:id="@+id/action_compact_layout"
         android:title="@string/list_menu_compact_layout"
         android:visible="false"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_normal_layout"
         android:title="@string/list_menu_normal_layout"
         android:visible="false"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item android:id="@+id/action_notify"
           android:title="@string/list_menu_activate_reminder"

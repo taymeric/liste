@@ -29,23 +29,23 @@
     <string name="list_removed_product_message">\'%1$s\' retiré de la liste.</string>
 
     <!-- Strings for list layout change menu -->
-    <string name="list_menu_compact_layout">Affichage : Compact</string>
-    <string name="list_menu_normal_layout">Affichage : Normal</string>
+    <string name="list_menu_compact_layout">Deux colonnes</string>
+    <string name="list_menu_normal_layout">Une colonne</string>
 
     <!-- Strings for reminder -->
-    <string name="list_menu_activate_reminder">Planifier un rappel</string>
+    <string name="list_menu_activate_reminder">Notification</string>
     <string name="list_menu_deactivate_reminder">Désactiver</string>
     <string name="list_menu_reminder_information">Informations sur le rappel</string>
     <string name="list_reminder_information_dialog_message">Date et heure du rappel : %1$s</string>
     <string name="list_reminder_set_message">Rappel activé : %1$s</string>
     <string name="list_reminder_canceled_message">Rappel annulé.</string>
-    <string name="list_reminder_date_picker_message">1. Sélectionner le jour du rappel :</string>
-    <string name="list_reminder_time_picker_message">2. Sélectionner l\'heure du rappel :</string>
+    <string name="list_reminder_date_picker_message">1. Sélectionner le jour :</string>
+    <string name="list_reminder_time_picker_message">2. Sélectionner l\'heure :</string>
     <string name="list_reminder_pickers_next_button">Suite</string>
     <string name="list_reminder_notification_button">Ouvrir</string>
     <plurals name="list_reminder_notification_title">
-        <item quantity="one">%d produit dans la liste de course :</item>
-        <item quantity="other">%d produits dans la liste de course :</item>
+        <item quantity="one">Liste de course (%d produit) :</item>
+        <item quantity="other">Liste de course (%d produits) :</item>
     </plurals>
 
     <!-- Strings for List activity end -->
@@ -54,7 +54,7 @@
     <!-- Strings for History activity start -->
 
     <string name="history_title">Historique</string>
-    <string name="history_instructions">Sélectionner les produits à ajouter à la liste :</string>
+    <string name="history_instructions">Sélectionner les produits à ajouter :</string>
     <string name="history_empty_view_text">L\'historique est vide. Pour commencer, ajoutez des produits depuis l\'écran principal.</string>
 
     <!-- Strings for deletion menu -->
@@ -69,8 +69,8 @@
     </plurals>
 
     <!-- Strings for history layout change menu -->
-    <string name="history_menu_compact_layout">Affichage : Compact</string>
-    <string name="history_menu_normal_layout">Affichage : Normal</string>
+    <string name="history_menu_compact_layout">Deux colonnes</string>
+    <string name="history_menu_normal_layout">Une colonne</string>
 
     <!-- Strings for confirmation dialog -->
     <plurals name="history_add_selected_products">

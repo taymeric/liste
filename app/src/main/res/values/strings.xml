@@ -34,23 +34,23 @@
     <string name="list_removed_product_message">\'%1$s\' removed from the list.</string>
 
     <!-- Strings for list layout change menu -->
-    <string name="list_menu_compact_layout">Layout: Compact</string>
-    <string name="list_menu_normal_layout">Layout: Normal</string>
+    <string name="list_menu_compact_layout">Two columns</string>
+    <string name="list_menu_normal_layout">One column</string>
 
     <!-- Strings for reminder -->
-    <string name="list_menu_activate_reminder">Plan a reminder</string>
+    <string name="list_menu_activate_reminder">Notification</string>
     <string name="list_menu_deactivate_reminder">Deactivate</string>
     <string name="list_menu_reminder_information">Get reminder information</string>
     <string name="list_reminder_information_dialog_message">Date and time of reminder: %1$s</string>
     <string name="list_reminder_set_message">Reminder set: %1$s</string>
     <string name="list_reminder_canceled_message">Reminder canceled.</string>
-    <string name="list_reminder_date_picker_message">1. Select day of reminder:</string>
-    <string name="list_reminder_time_picker_message">2. Select time of reminder:</string>
+    <string name="list_reminder_date_picker_message">1. Select day:</string>
+    <string name="list_reminder_time_picker_message">2. Select time:</string>
     <string name="list_reminder_pickers_next_button">Next</string>
     <string name="list_reminder_notification_button">Open</string>
     <plurals name="list_reminder_notification_title">
-        <item quantity="one">%d product in the grocery list:</item>
-        <item quantity="other">%d products in the grocery list:</item>
+        <item quantity="one">Grocery list (%d product):</item>
+        <item quantity="other">Grocery list (%d products):</item>
     </plurals>
     <string name="list_reminder_alarm_on" translatable="false">alarm_on</string>
     <string name="list_reminder_alarm_time" translatable="false">alarm_time</string>
@@ -61,7 +61,7 @@
     <!-- Strings for History activity start -->
 
     <string name="history_title">History</string>
-    <string name="history_instructions">Select products to add to the list:</string>
+    <string name="history_instructions">Select products to add:</string>
     <string name="history_empty_view_text">History is empty. Start by adding products from the main screen.</string>
 
     <!-- Strings for deletion menu -->
@@ -76,8 +76,8 @@
     </plurals>
 
     <!-- Strings for history layout change menu -->
-    <string name="history_menu_compact_layout">Layout: Compact</string>
-    <string name="history_menu_normal_layout">Layout: Normal</string>
+    <string name="history_menu_compact_layout">Two columns</string>
+    <string name="history_menu_normal_layout">One column</string>
 
     <!-- Strings for confirmation dialog -->
     <plurals name="history_add_selected_products">

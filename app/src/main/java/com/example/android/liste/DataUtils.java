@@ -88,7 +88,7 @@ class DataUtils {
                         .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                         //.setAutoCancel(true)
                         .setDefaults(Notification.DEFAULT_VIBRATE)
-                        .addAction(R.drawable.ic_shopping_basket_white_24dp,
+                        .addAction(R.drawable.ic_open_in_new_white_24dp,
                                 context.getString(R.string.list_reminder_notification_button),
                                 resultPendingIntent)
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(list));
