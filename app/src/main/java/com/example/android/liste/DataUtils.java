@@ -59,7 +59,10 @@ class DataUtils {
         int nbOfProducts;
         if (cursor != null) nbOfProducts = cursor.getCount();
         else nbOfProducts = 0;
-        String title = context.getResources().getQuantityString(R.plurals.list_reminder_notification_title, nbOfProducts, nbOfProducts);
+        String title;
+
+        if (nbOfProducts == 0) title = context.getString(R.string.list_notification_title_empty);
+        else title = context.getResources().getQuantityString(R.plurals.list_notification_title, nbOfProducts, nbOfProducts);
 
         // Build a String representation of all the products in the list by iterating through the cursor
         StringBuilder builder = new StringBuilder();
@@ -89,7 +92,7 @@ class DataUtils {
                         //.setAutoCancel(true)
                         .setDefaults(Notification.DEFAULT_VIBRATE)
                         .addAction(R.drawable.ic_open_in_new_white_24dp,
-                                context.getString(R.string.list_reminder_notification_button),
+                                context.getString(R.string.list_notification_button),
                                 resultPendingIntent)
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(list));
 

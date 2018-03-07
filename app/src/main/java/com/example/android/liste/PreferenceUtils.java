@@ -62,18 +62,18 @@ class PreferenceUtils {
     /** Sets the alarm 'on' or 'off'. If 'on', also saves the time as a String representation. */
     static void setAlarm(Context context, SharedPreferences sharedPreferences, boolean is_on, String time) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(context.getString(R.string.list_reminder_alarm_on), is_on);
-        if (is_on && time != null) editor.putString(context.getString(R.string.list_reminder_alarm_time), time);
+        editor.putBoolean(context.getString(R.string.list_notification_alarm_on), is_on);
+        if (is_on && time != null) editor.putString(context.getString(R.string.list_notification_alarm_time), time);
         editor.apply();
     }
 
     /** @return true if a reminder is scheduled, false otherwise */
     static boolean isAlarmOn(Context context, SharedPreferences sharedPreferences) {
-        return sharedPreferences.getBoolean(context.getString(R.string.list_reminder_alarm_on), false);
+        return sharedPreferences.getBoolean(context.getString(R.string.list_notification_alarm_on), false);
     }
 
     /** @return the String representation of the time set for the alarm */
     static String getAlarmTime(Context context, SharedPreferences sharedPreferences) {
-        return sharedPreferences.getString(context.getString(R.string.list_reminder_alarm_time), "");
+        return sharedPreferences.getString(context.getString(R.string.list_notification_alarm_time), "");
     }
 }

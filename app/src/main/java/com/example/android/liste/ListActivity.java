@@ -62,7 +62,7 @@ import java.util.Calendar;
  * Additionally, from the AppBar, the user can:
  *  - Add a new element to the list (and to the two database tables: list and history)
  *  - Delete the whole list
- *  - Set up a scheduled reminder notification
+ *  - Set up a scheduled notification
  *  - Send the content of the list by email
  *  - Access the settings (ie SettingsActivity)
  * Finally, the user can start HistoryActivity by tapping the Floating Action Button.
@@ -178,7 +178,7 @@ public class ListActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_list, menu);
-        setupReminderButtons(menu);
+        setupNotificationButtons(menu);
         setupAddButton(menu);
 
         // Only show one of the layout change buttons
@@ -219,10 +219,10 @@ public class ListActivity extends AppCompatActivity
                 invalidateOptionsMenu();
                 return true;
             case R.id.action_notify:
-                showReminderSetupDialogs();
+                showNotificationSetupDialogs();
                 return true;
             case R.id.action_alarm_info:
-                showReminderInformationAndCancelingDialog();
+                showScheduledNotificationInformationDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -289,7 +289,7 @@ public class ListActivity extends AppCompatActivity
             mAdapter.reloadLayout();
         } else if (s.equals(getString(R.string.pref_sort_order_key))) {
             getLoaderManager().restartLoader(LIST_LOADER_ID, null, this);
-        } else if (s.equals(getString(R.string.list_reminder_alarm_on))) {
+        } else if (s.equals(getString(R.string.list_notification_alarm_on))) {
             invalidateOptionsMenu();
         } else if (s.equals(getString(R.string.pref_font_key))) {
             mAdapter.reloadFont();
@@ -307,9 +307,9 @@ public class ListActivity extends AppCompatActivity
         }
     }
 
-    /* This method makes sure that when a reminder is scheduled, a informative menu item appears on
-     * the AppBar and that the menu entry for settings up a reminder does not appear anymore.  */
-    private void setupReminderButtons(Menu menu) {
+    /* This method makes sure that when a notification is scheduled, an informative menu item appears on
+     * the AppBar and that the menu entry for settings up a notification does not appear anymore.  */
+    private void setupNotificationButtons(Menu menu) {
         boolean isAlarmSet = PreferenceUtils.isAlarmOn(this, mSharedPreferences);
         MenuItem alarmSettingButton = menu.findItem(R.id.action_notify);
         alarmSettingButton.setVisible(!isAlarmSet);
@@ -549,12 +549,12 @@ public class ListActivity extends AppCompatActivity
         }
     }
 
-    /* Nesting method launching the first step of the Reminder setup. */
-    private void showReminderSetupDialogs() {
+    /* Nesting method launching the first step of the notification setup. */
+    private void showNotificationSetupDialogs() {
         showDatePicker();
     }
 
-    /* Shows a dialog for the selection of the date of the reminder. */
+    /* Shows a dialog for the selection of the date of the notification. */
     private void showDatePicker() {
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
@@ -564,7 +564,7 @@ public class ListActivity extends AppCompatActivity
         final DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                // When the date for the reminder has been selected, launch the second step of the Reminder setup.
+                // When the date for the notification has been selected, launch the second step of the notification setup.
                 showTimePicker(year, month, day);
             }
         };
@@ -576,7 +576,7 @@ public class ListActivity extends AppCompatActivity
         final ViewGroup nullParent = null;
         View v = inflater.inflate(R.layout.dialog_picker_title, nullParent);
         TextView tv = v.findViewById(R.id.text_title);
-        tv.setText(getString(R.string.list_reminder_date_picker_message));
+        tv.setText(getString(R.string.list_notification_date_picker_message));
 
         datePickerDialog.setCustomTitle(v);
 
@@ -584,10 +584,10 @@ public class ListActivity extends AppCompatActivity
 
         // This call is after show() because Button are not created before
         Button confirmButton = datePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        if (confirmButton != null) confirmButton.setText(getString(R.string.list_reminder_pickers_next_button));
+        if (confirmButton != null) confirmButton.setText(getString(R.string.list_notification_pickers_next_button));
     }
 
-    /* Shows a dialog for the selection of the time for the reminder. The previously selected date
+    /* Shows a dialog for the selection of the time for the notification. The previously selected date
      * is passed as parameter. */
     private void showTimePicker(final int year, final int month, final int day) {
         Calendar c = Calendar.getInstance();
@@ -597,9 +597,9 @@ public class ListActivity extends AppCompatActivity
         final TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                // When the time for the reminder has been selected along with the date, launch the
-                // final step of the Reminder setup.
-                setReminderTime(year, month, day, hour, minute);
+                // When the time for the notification has been selected along with the date, launch the
+                // final step of the notification setup.
+                setNotificationTime(year, month, day, hour, minute);
             }
         };
 
@@ -615,16 +615,16 @@ public class ListActivity extends AppCompatActivity
         final ViewGroup nullParent = null;
         View v = inflater.inflate(R.layout.dialog_picker_title, nullParent);
         TextView tv = v.findViewById(R.id.text_title);
-        tv.setText(getString(R.string.list_reminder_time_picker_message));
+        tv.setText(getString(R.string.list_notification_time_picker_message));
 
         timePickerDialog.setCustomTitle(v);
 
         timePickerDialog.show();
     }
 
-    /* Sets the time of the scheduled reminder notification according to the time and date passed
+    /* Sets the time of the scheduled notification according to the time and date passed
      * as parameters. */
-    private void setReminderTime(int year, int month, int day, int hour, int minute) {
+    private void setNotificationTime(int year, int month, int day, int hour, int minute) {
 
         // Creation of the PendingIntent that will be used when the alarm is triggered
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
@@ -647,29 +647,29 @@ public class ListActivity extends AppCompatActivity
 
         PreferenceUtils.setAlarm(this, mSharedPreferences, true, time);
 
-        showMessage(getResources().getString(R.string.list_reminder_set_message, time));
+        showMessage(getResources().getString(R.string.list_notification_set_message, time));
 
         invalidateOptionsMenu();
     }
 
-    /* Shows a dialog with the time and date of the scheduled reminder, as well as an option
-     * to cancel this reminder. */
-    private void showReminderInformationAndCancelingDialog() {
+    /* Shows a dialog with the time and date of the scheduled notification, as well as an option
+     * to cancel this notification. */
+    private void showScheduledNotificationInformationDialog() {
         String time = PreferenceUtils.getAlarmTime(this, mSharedPreferences);
         new AlertDialog.Builder(ListActivity.this)
-                .setMessage(getResources().getString(R.string.list_reminder_information_dialog_message, time))
+                .setMessage(getResources().getString(R.string.list_notification_information_dialog_message, time))
                 .setPositiveButton(android.R.string.ok, null)
-                .setNegativeButton(R.string.list_menu_deactivate_reminder, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.list_menu_deactivate_notification, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        cancelReminder();
+                        cancelScheduledNotification();
                     }
                 })
                 .create().show();
     }
 
-    /* Cancels the scheduled reminder and recreates the menu. */
-    private void cancelReminder() {
+    /* Cancels the scheduled notification and recreates the menu. */
+    private void cancelScheduledNotification() {
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
@@ -679,7 +679,7 @@ public class ListActivity extends AppCompatActivity
 
         invalidateOptionsMenu();
 
-        showMessage(getString(R.string.list_reminder_canceled_message));
+        showMessage(getString(R.string.list_notification_canceled_message));
     }
 
     /* Sends an implicit intent to a mail app with the content of the list as the body of the mail. */
@@ -742,10 +742,10 @@ public class ListActivity extends AppCompatActivity
                 .show();
     }
 
-    /* Shows long Snackbar message with an 'undo' action. */
+    /* Shows a long Snackbar message with an 'undo' action. */
     private void showMessageWithUndoAction(String message, final String product, final int priority,
                                            final String annotation) {
-        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_LONG)
                 .setAction(getString(android.R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

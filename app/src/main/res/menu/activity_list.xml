@@ -11,7 +11,7 @@
 
     <item android:id="@+id/action_alarm_info"
           android:icon="@drawable/ic_alarm_white_24dp"
-          android:title="@string/list_menu_reminder_information"
+          android:title="@string/list_menu_notification_information"
           app:showAsAction="ifRoom"/>
 
     <item
@@ -32,7 +32,7 @@
         app:showAsAction="never" />
 
     <item android:id="@+id/action_notify"
-          android:title="@string/list_menu_activate_reminder"
+          android:title="@string/list_menu_activate_notification"
           app:showAsAction="never"/>
 
     <item

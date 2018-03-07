@@ -37,23 +37,24 @@
     <string name="list_menu_compact_layout">Two columns</string>
     <string name="list_menu_normal_layout">One column</string>
 
-    <!-- Strings for reminder -->
-    <string name="list_menu_activate_reminder">Notification</string>
-    <string name="list_menu_deactivate_reminder">Deactivate</string>
-    <string name="list_menu_reminder_information">Get reminder information</string>
-    <string name="list_reminder_information_dialog_message">Date and time of reminder: %1$s</string>
-    <string name="list_reminder_set_message">Reminder set: %1$s</string>
-    <string name="list_reminder_canceled_message">Reminder canceled.</string>
-    <string name="list_reminder_date_picker_message">1. Select day:</string>
-    <string name="list_reminder_time_picker_message">2. Select time:</string>
-    <string name="list_reminder_pickers_next_button">Next</string>
-    <string name="list_reminder_notification_button">Open</string>
-    <plurals name="list_reminder_notification_title">
+    <!-- Strings for notification -->
+    <string name="list_menu_activate_notification">Notification</string>
+    <string name="list_menu_deactivate_notification">Deactivate</string>
+    <string name="list_menu_notification_information">Get notification information</string>
+    <string name="list_notification_information_dialog_message">Date and time of notification:\n\n%1$s</string>
+    <string name="list_notification_set_message">Notification set: %1$s</string>
+    <string name="list_notification_canceled_message">Notification canceled.</string>
+    <string name="list_notification_date_picker_message">1. Select day:</string>
+    <string name="list_notification_time_picker_message">2. Select time:</string>
+    <string name="list_notification_pickers_next_button">Next</string>
+    <string name="list_notification_button">Open</string>
+    <string name="list_notification_title_empty">Grocery list (empty)</string>
+    <plurals name="list_notification_title">
         <item quantity="one">Grocery list (%d product):</item>
         <item quantity="other">Grocery list (%d products):</item>
     </plurals>
-    <string name="list_reminder_alarm_on" translatable="false">alarm_on</string>
-    <string name="list_reminder_alarm_time" translatable="false">alarm_time</string>
+    <string name="list_notification_alarm_on" translatable="false">alarm_on</string>
+    <string name="list_notification_alarm_time" translatable="false">alarm_time</string>
 
     <!-- Strings for List activity end -->
 

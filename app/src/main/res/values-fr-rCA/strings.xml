@@ -15,9 +15,10 @@
         <item quantity="other">Ajouter les éléments sélectionnés à la liste?</item>
     </plurals>
 
-    <plurals name="list_reminder_notification_title">
-        <item quantity="one">Liste d\'épicerie (%d produit):</item>
-        <item quantity="other">Liste d\'épicerie (%d produits):</item>
+    <string name="list_notification_title_empty">Liste d\'épicerie (vide)</string>
+    <plurals name="list_notification_title">
+        <item quantity="one">Liste d\'épicerie (%d produit) :</item>
+        <item quantity="other">Liste d\'épicerie (%d produits) :</item>
     </plurals>
 
 </resources>

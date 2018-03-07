@@ -7,6 +7,6 @@
     <color name="colorPrimaryHistory">#FBC02D</color>
     <color name="colorPrimaryDarkHistory">#FBC02D</color>
 
-    <color name="colorPrimaryPreferences">#AB47BC</color>
-    <color name="colorPrimaryDarkPreferences">#AB47BC</color>
+    <color name="colorPrimaryPreferences">#3F51B5</color>
+    <color name="colorPrimaryDarkPreferences">#3F51B5</color>
 </resources>

@@ -32,18 +32,19 @@
     <string name="list_menu_compact_layout">Deux colonnes</string>
     <string name="list_menu_normal_layout">Une colonne</string>
 
-    <!-- Strings for reminder -->
-    <string name="list_menu_activate_reminder">Notification</string>
-    <string name="list_menu_deactivate_reminder">Désactiver</string>
-    <string name="list_menu_reminder_information">Informations sur le rappel</string>
-    <string name="list_reminder_information_dialog_message">Date et heure du rappel : %1$s</string>
-    <string name="list_reminder_set_message">Rappel activé : %1$s</string>
-    <string name="list_reminder_canceled_message">Rappel annulé.</string>
-    <string name="list_reminder_date_picker_message">1. Sélectionner le jour :</string>
-    <string name="list_reminder_time_picker_message">2. Sélectionner l\'heure :</string>
-    <string name="list_reminder_pickers_next_button">Suite</string>
-    <string name="list_reminder_notification_button">Ouvrir</string>
-    <plurals name="list_reminder_notification_title">
+    <!-- Strings for notification -->
+    <string name="list_menu_activate_notification">Notification</string>
+    <string name="list_menu_deactivate_notification">Désactiver</string>
+    <string name="list_menu_notification_information">Informations sur la notification</string>
+    <string name="list_notification_information_dialog_message">Date et heure de la notification :\n\n%1$s</string>
+    <string name="list_notification_set_message">Notification activée : %1$s</string>
+    <string name="list_notification_canceled_message">Notification annulée.</string>
+    <string name="list_notification_date_picker_message">1. Sélectionner le jour :</string>
+    <string name="list_notification_time_picker_message">2. Sélectionner l\'heure :</string>
+    <string name="list_notification_pickers_next_button">Suite</string>
+    <string name="list_notification_button">Ouvrir</string>
+    <string name="list_notification_title_empty">Liste de course (vide)</string>
+    <plurals name="list_notification_title">
         <item quantity="one">Liste de course (%d produit) :</item>
         <item quantity="other">Liste de course (%d produits) :</item>
     </plurals>
