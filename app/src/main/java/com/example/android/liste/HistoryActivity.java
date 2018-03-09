@@ -2,14 +2,12 @@ package com.example.android.liste;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
-import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -36,8 +34,6 @@ import java.util.HashMap;
 public class HistoryActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor>, HistoryAdapter.HistoryAdapterOnClickHandler,
         SharedPreferences.OnSharedPreferenceChangeListener {
-
-    private static final String TAG = "HistoryActivity.java";
 
     /* Helps the LoaderManager identify the loader for the history */
     private static final int HISTORY_LOADER_ID = 101;

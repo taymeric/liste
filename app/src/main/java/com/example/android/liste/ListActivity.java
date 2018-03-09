@@ -136,6 +136,8 @@ public class ListActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new ListAdapter(this, this);
         mRecyclerView.setAdapter(mAdapter);
+        // Lower default animation duration (default = 250)
+        mRecyclerView.getItemAnimator().setMoveDuration(120);
 
         // The ItemTouchHelper class manages deletion of a RecyclerView item that is swiped
         ItemTouchHelper.SimpleCallback mSimpleCallback = new ItemTouchHelper.SimpleCallback(0,

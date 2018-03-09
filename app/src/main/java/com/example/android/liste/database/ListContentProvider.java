@@ -146,6 +146,8 @@ public class ListContentProvider extends ContentProvider {
     }
 
     // Used by both activities to delete an entries or all of them from their respective table.
+    // Case HISTORY actually never happens because the options to delete all history entries at once
+    // is not provided.
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
         SQLiteDatabase db = mListDbHelper.getWritableDatabase();
