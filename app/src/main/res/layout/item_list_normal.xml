@@ -54,7 +54,7 @@
             android:textAppearance="?android:textAppearance"
             android:textSize="@dimen/text_list_big"
             android:textStyle="bold"
-            tools:text="!"/>
+            tools:text="!!!"/>
 
     </LinearLayout>
 

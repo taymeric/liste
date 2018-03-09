@@ -36,6 +36,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -389,7 +391,8 @@ public class ListActivity extends AppCompatActivity
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 String text = mAutoCompleteTextView.getText().toString();
                 if (!text.equals("")) {
-                    DataUtils.insertProductIntoBothTables(mListQueryHandler, text);
+                    DataUtils.insertProductIntoListTable(mListQueryHandler, text);
+                    DataUtils.insertProductIntoHistoryTable(mListQueryHandler, text);
                     mAutoCompleteTextView.setText("");
                 }
                 return true;
@@ -647,7 +650,7 @@ public class ListActivity extends AppCompatActivity
 
         PreferenceUtils.setAlarm(this, mSharedPreferences, true, time);
 
-        showMessage(getResources().getString(R.string.list_notification_set_message, time));
+        showLongMessage(getResources().getString(R.string.list_notification_set_message, time));
 
         invalidateOptionsMenu();
     }
@@ -722,6 +725,12 @@ public class ListActivity extends AppCompatActivity
                 .show();
     }
 
+    /* Shows a long Snackbar message. */
+    private void showLongMessage(String message) {
+        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_LONG)
+                .show();
+    }
+
     /* Shows a long Snackbar message and changes the Floating Action Button icon. */
     private void showMessageWithFabChange(String message) {
 
@@ -734,6 +743,7 @@ public class ListActivity extends AppCompatActivity
                 .addCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar transientBottomBar, int event) {
+
                         // Change FAB icon back to basket when the message has ended
                         mFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(ListActivity.this, R.color.colorAccent)));
                         mFab.setImageResource(R.drawable.ic_shopping_basket_white_24dp);

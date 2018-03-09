@@ -9,15 +9,15 @@
     <string name="list_empty_message">The list is empty.</string>
     <string name="list_empty_view_text">The list is empty.</string>
 
-    <string name="list_high_priority_mark" translatable="false">!</string>
-    <string name="list_low_priority_mark" translatable="false">\?</string>
+    <string name="list_high_priority_mark" translatable="false">!!!</string>
+    <string name="list_low_priority_mark" translatable="false">\?\?\?</string>
 
     <!-- Strings for edition -->
     <string name="list_edition_annotation_label">Annotation:</string>
     <string name="list_edition_priority_label">Priority:</string>
-    <string name="list_edition_priority_high_label" translatable="false">!</string>
+    <string name="list_edition_priority_high_label" translatable="false">!!!</string>
     <string name="list_edition_priority_normal_label">Default</string>
-    <string name="list_edition_priority_low_label" translatable="false">\?</string>
+    <string name="list_edition_priority_low_label" translatable="false">\?\?\?</string>
     <string name="list_edition_annotation_hint">E.g. quantity</string>
 
     <!-- Strings for addition -->

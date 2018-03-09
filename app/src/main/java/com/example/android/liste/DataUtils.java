@@ -18,22 +18,31 @@ import com.example.android.liste.data.ListQueryHandler;
  */
 class DataUtils {
 
-    /** Inserts a product to both list and history tables.
+    /** Inserts a product into the list table.
      *  Called when a product is entered from the ActionView in the AppBar of ListActivity.
-     *  @param listQueryHandler needed to perform insertion with ContentProvider
+     *  If the product is already in the table, it is not added a second time as COLUMN_PRODUCT in
+     *  list table is UNIQUE.
+     *  @param listQueryHandler needed to perform insertion with ContentProvider on background thread
      *  @param product the name of the product to be inserted */
-    static void insertProductIntoBothTables(ListQueryHandler listQueryHandler, String product) {
+    static void insertProductIntoListTable(ListQueryHandler listQueryHandler, String product) {
 
-        // Add product to the list table with a default priority
         ContentValues values = new ContentValues();
         values.put(ListContract.ListEntry.COLUMN_PRODUCT, product);
         values.put(ListContract.ListEntry.COLUMN_PRIORITY,
                 ListContract.ListEntry.DEFAULT_PRIORITY_PRODUCT);
         listQueryHandler.startInsert(
                 ListQueryHandler.INSERTION_LIST, null, ListContract.ListEntry.CONTENT_URI, values);
+    }
 
-        // Add product to the history table
-        values = new ContentValues();
+    /** Inserts a product into the history table.
+     *  Called when a product is entered from the ActionView in the AppBar of ListActivity.
+     *  If the product is already in the table, it is not added a second time as COLUMN_PRODUCT in
+     *  history table is UNIQUE.
+     *  @param listQueryHandler needed to perform insertion with ContentProvider on background thread
+     *  @param product the name of the product to be inserted */
+    static void insertProductIntoHistoryTable(ListQueryHandler listQueryHandler, String product) {
+
+        ContentValues values = new ContentValues();
         values.put(ListContract.HistoryEntry.COLUMN_PRODUCT, product);
         listQueryHandler.startInsert(
                 ListQueryHandler.INSERTION_HISTORY, null, ListContract.HistoryEntry.CONTENT_URI, values);
