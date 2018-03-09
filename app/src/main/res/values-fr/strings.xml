@@ -49,6 +49,10 @@
         <item quantity="other">Liste de course (%d produits) :</item>
     </plurals>
 
+    <!-- Strings for email -->
+    <string name="list_menu_email">Email</string>
+    <string name="list_email_title">Liste de course du %1$s.</string>
+
     <!-- Strings for List activity end -->
 
 
@@ -102,6 +106,7 @@
     <string name="pref_about_title">À propos</string>
     <string name="pref_about_version_number_label">Version</string>
     <string name="pref_about_url_label">Plus d\'information</string>
+    <string name="pref_about_icons_label">Icônes par Google</string>
 
     <!-- Strings for Preferences activity end -->
 

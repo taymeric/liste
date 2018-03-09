@@ -52,6 +52,7 @@ import com.example.android.liste.database.ListQueryHandler;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -223,6 +224,9 @@ public class ListActivity extends AppCompatActivity
                 return true;
             case R.id.action_notify:
                 showNotificationSetupDialogs();
+                return true;
+            case R.id.action_email:
+                sendByEmail();
                 return true;
             case R.id.action_alarm_info:
                 showScheduledNotificationInformationDialog();
@@ -670,29 +674,29 @@ public class ListActivity extends AppCompatActivity
     }
 
     /* Sends an implicit intent to a mail app with the content of the list as the body of the mail. */
-    /*private void sendByEmail() {
+    private void sendByEmail() {
         if (mAdapter.getItemCount() != 0) {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setData(Uri.parse("mailto:")); // only email apps should handle this
             intent.putExtra(Intent.EXTRA_SUBJECT,
                     getResources().getString(R.string.list_email_title, getDate()));
             intent.putExtra(Intent.EXTRA_TEXT,
-                    DatabaseUtils.getListAsStringForEmail(this, mSharedPreferences));
+                    DatabaseUtils.formatListForEmail(this, mSharedPreferences));
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);
             }
         } else {
             showMessage(getString(R.string.list_empty_message));
         }
-    }*/
+    }
 
     /* Gets the current date as a String representation. */
-    /*private String getDate() {
+    private String getDate() {
         Calendar c = Calendar.getInstance();
         Date date = c.getTime();
         java.text.DateFormat formatter = DateFormat.getDateFormat(this);
         return formatter.format(date);
-    }*/
+    }
 
     /* Updates the visibility of the Empty View. */
     private void updateEmptyViewVisibility() {

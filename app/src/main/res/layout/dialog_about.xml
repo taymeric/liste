@@ -36,8 +36,24 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:autoLink="web"
+        android:autoLink="email"
         android:text="@string/pref_about_url"
+        android:textAppearance="?android:textAppearanceSmall"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/pref_about_icons_label"
+        android:textAppearance="?android:textAppearanceMedium"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:text="@string/pref_about_icons"
         android:textAppearance="?android:textAppearanceSmall"
         />
 

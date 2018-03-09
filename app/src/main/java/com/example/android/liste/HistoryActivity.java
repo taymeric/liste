@@ -62,7 +62,7 @@ public class HistoryActivity extends AppCompatActivity
     /* The Adapter that binds the data from the history table to the Recycler View */
     private HistoryAdapter mAdapter;
 
-    /* An HashMap is used to store (id, text) pairs of selected elements with no duplication.
+    /* An HashMap is used to store (id, text) pairs of selected elements.
      * id is used for deletion and text is used for insertion. */
     private HashMap<String, String> selected;
 

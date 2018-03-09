@@ -35,6 +35,10 @@
           android:title="@string/list_menu_activate_notification"
           app:showAsAction="never"/>
 
+    <item android:id="@+id/action_email"
+          android:title="@string/list_menu_email"
+          app:showAsAction="never"/>
+
     <item
         android:id="@+id/action_preferences"
         android:title="@string/pref_title"

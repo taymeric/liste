@@ -148,7 +148,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    /* Interface to provide a way to handle */
+    /* Interface to provide a way to handle both addition and deletion by the corresponding activity.*/
     interface HistoryAdapterOnClickHandler {
         /*
          * @param id the _id in the list SQL table of the clicked item

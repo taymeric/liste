@@ -8,9 +8,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
@@ -183,9 +185,14 @@ class DatabaseUtils {
         return nb;
     }
 
-    /** @return a Notification object containing:
-     *  - the number of products in the list in its title
-     *  - the list of products in its body */
+    /**
+     * Creates a notification object containing:
+     *  - a title with the number of products
+     *  - a body with the list of products
+     *  - a button that launches the app
+     * @param context used to get access to Content Resolver
+     * @return the full Notification object (to be sent to the Notification Manager)
+     */
     static Notification createNotificationFromListProducts(Context context) {
 
         Uri uri = ListContract.ListEntry.CONTENT_URI;
@@ -209,25 +216,24 @@ class DatabaseUtils {
         else title = context.getResources().getQuantityString(R.plurals.list_notification_title, nbOfProducts, nbOfProducts);
 
         // Build a String representation of all the products in the list by iterating through the cursor
-        StringBuilder builder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                builder.append(cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT)));
-                builder.append(", ");
+                stringBuilder.append(cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT)));
+                stringBuilder.append(", ");
             }
             // Don't forget to close the cursor
             cursor.close();
         }
-        String list = builder.toString();
+        String list = stringBuilder.toString();
         // Remove extra ', ' unless the list was empty
         if (!list.isEmpty()) list = list.substring(0, list.length()-2);
 
         // Creates an explicit intent for an Activity in the app
         Intent resultIntent = new Intent(context, ListActivity.class);
         PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        //mBuilder.setContentIntent(resultPendingIntent);
 
-        NotificationCompat.Builder mBuilder = (NotificationCompat.Builder)
+        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder)
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_shopping_basket_white_24dp)
                         .setContentTitle(title)
@@ -240,14 +246,17 @@ class DatabaseUtils {
                                 resultPendingIntent)
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(list));
 
-        return mBuilder.build();
+        return notificationBuilder.build();
     }
 
-    /* @return a String representation of the whole list with products, annotations and priorities
-     *  to be used when sharing the list by mail. */
-    /*static String getListAsStringForEmail(Context context, SharedPreferences sharedPreferences) {
-
-        String list = "";
+    /**
+     * Formats the list as a String to be used in the body of an email.
+     * @param context needed to get access to Content Resolver
+     * @param sharedPreferences used to get user's preference for sort order
+     * @return the String representation of the whole list with products, annotations and priorities.
+     */
+    @NonNull
+    static String formatListForEmail(Context context, SharedPreferences sharedPreferences) {
 
         Uri uri = ListContract.ListEntry.CONTENT_URI;
 
@@ -259,24 +268,34 @@ class DatabaseUtils {
 
         Cursor cursor = context.getContentResolver().query(uri, projection, null, null, sortOrder);
 
+        StringBuilder list = new StringBuilder();
+
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                list += "- " + cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT));
+                list.append("- ");
+                list.append(cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT)));
 
                 String annotation = cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_ANNOTATION));
-                if (annotation != null && !annotation.equals("")) list += " (" + annotation + ")";
+                if (annotation != null && !annotation.equals("")) {
+                    list.append(" (");
+                    list.append(annotation);
+                    list.append(")");
+                }
 
                 int p = cursor.getInt(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
-                if (p == ListContract.ListEntry.HIGH_PRIORITY_PRODUCT)
-                    list = list + " " + context.getString(R.string.list_high_priority_mark);
-                else if (p == ListContract.ListEntry.LOW_PRIORITY_PRODUCT)
-                    list = list + " " + context.getString(R.string.list_low_priority_mark);
+                if (p == ListContract.ListEntry.HIGH_PRIORITY_PRODUCT) {
+                    list.append(" ");
+                    list.append(context.getString(R.string.list_high_priority_mark));
+                }
+                else if (p == ListContract.ListEntry.LOW_PRIORITY_PRODUCT) {
+                    list.append(" ");
+                    list.append(context.getString(R.string.list_low_priority_mark));
+                }
 
-                list = list + "\n";
+                list.append("\n");
             }
             cursor.close();
         }
-
-        return list;
-    }*/
+        return list.toString();
+    }
 }
