@@ -7,7 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
-import com.example.android.liste.data.ListContract;
+import com.example.android.liste.database.ListContract;
 
 
 /**

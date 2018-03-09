@@ -25,7 +25,7 @@ public class NotificationIntentService extends IntentService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Notification notification = DataUtils.createNotification(this);
+        Notification notification = DatabaseUtils.createNotificationFromListProducts(this);
 
         int id = 0;
         if (intent != null) id= intent.getIntExtra(NOTIFICATION_ID_KEY, 0);

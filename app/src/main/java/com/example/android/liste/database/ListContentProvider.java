@@ -1,4 +1,4 @@
-package com.example.android.liste.data;
+package com.example.android.liste.database;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -188,11 +188,6 @@ public class ListContentProvider extends ContentProvider {
                 String selection = ListContract.ListEntry._ID + "=?";
                 String [] selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 rowsUpdated = db.update(ListContract.ListEntry.TABLE_NAME, contentValues, selection, selectionArgs);
-                break;
-            case HISTORY_ID:
-                String selection2 = ListContract.HistoryEntry._ID + "=?";
-                String [] selectionArgs2 = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                rowsUpdated = db.update(ListContract.HistoryEntry.TABLE_NAME, contentValues, selection2, selectionArgs2);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

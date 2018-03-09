@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
-import com.example.android.liste.data.ListContract;
+import com.example.android.liste.database.ListContract;
 
 
 /**

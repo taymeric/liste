@@ -36,8 +36,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -49,9 +47,10 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.example.android.liste.data.ListContract;
-import com.example.android.liste.data.ListQueryHandler;
+import com.example.android.liste.database.ListContract;
+import com.example.android.liste.database.ListQueryHandler;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -152,7 +151,7 @@ public class ListActivity extends AppCompatActivity
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 // The Adapter class stores the id of the element as a tag in the viewHolder
                 int id = (int) viewHolder.itemView.getTag();
-                deleteSingleEntry(id);
+                deleteProductWithMessage(id);
             }
         };
         new ItemTouchHelper(mSimpleCallback).attachToRecyclerView(mRecyclerView);
@@ -305,7 +304,7 @@ public class ListActivity extends AppCompatActivity
             mRecyclerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
             showEditionDialog(id);
         } else {
-            deleteSingleEntry(id);
+            deleteProductWithMessage(id);
         }
     }
 
@@ -391,8 +390,8 @@ public class ListActivity extends AppCompatActivity
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 String text = mAutoCompleteTextView.getText().toString();
                 if (!text.equals("")) {
-                    DataUtils.insertProductIntoListTable(mListQueryHandler, text);
-                    DataUtils.insertProductIntoHistoryTable(mListQueryHandler, text);
+                    DatabaseUtils.insertProductIntoListTable(mListQueryHandler, text);
+                    DatabaseUtils.insertProductIntoHistoryTable(mListQueryHandler, text);
                     mAutoCompleteTextView.setText("");
                 }
                 return true;
@@ -481,12 +480,7 @@ public class ListActivity extends AppCompatActivity
 
                             String newAnnotation = editText.getText().toString().trim();
 
-                            ContentValues contentValues = new ContentValues();
-                            contentValues.put(ListContract.ListEntry.COLUMN_PRIORITY, newPriority);
-                            contentValues.put(ListContract.ListEntry.COLUMN_ANNOTATION, newAnnotation);
-
-                            mListQueryHandler.startUpdate(ListQueryHandler.UPDATE_LIST, null, uri,
-                                    contentValues, null, null);
+                            DatabaseUtils.updateProductPriorityAndAnnotation(mListQueryHandler, uri, newPriority, newAnnotation);
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, null)
@@ -505,31 +499,19 @@ public class ListActivity extends AppCompatActivity
         }
     }
 
-    /* Deletes a single entry from the list based on its id in the table.*/
-    private void deleteSingleEntry(int id) {
-        String stringId = Integer.toString(id);
+    /* Deletes a single product from the list based on its id in the table and displays a
+     * message with an undo action to reverse the deletion. */
+    private void deleteProductWithMessage(int id) {
 
-        Uri uri = ListContract.ListEntry.CONTENT_URI;
-        uri = uri.buildUpon().appendPath(stringId).build();
+        ArrayList<String> deletedValues =
+                DatabaseUtils.deleteProductFromListTable(ListActivity.this, mListQueryHandler, id);
 
-        String[] projection  = { ListContract.ListEntry.COLUMN_PRODUCT,
-                ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.COLUMN_ANNOTATION };
-
-        Cursor cu = getContentResolver().query(uri, projection, null, null, null);
-
-        if (cu!=null && cu.moveToFirst()) {
-            // Save values for undo operation
-            String product = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT));
-            int priority = cu.getInt(cu.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
-            String annotation = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_ANNOTATION));
-            cu.close();
-            // Call for actual deletion
-            mListQueryHandler.startDelete(ListQueryHandler.DELETION_LIST, null, uri, null, null);
-            // Show confirmation message along with 'undo' button
+        if (deletedValues != null)
             showMessageWithUndoAction(
-                    getResources().getString(R.string.list_removed_product_message, product),
-                    product, priority, annotation);
-        }
+                    getResources().getString(R.string.list_removed_product_message, deletedValues.get(0)),
+                    deletedValues.get(0),
+                    Integer.valueOf(deletedValues.get(1)),
+                    deletedValues.get(2));
     }
 
     /* Shows a confirmation dialog to delete all entries from the list. */
@@ -693,7 +675,7 @@ public class ListActivity extends AppCompatActivity
             intent.putExtra(Intent.EXTRA_SUBJECT,
                     getResources().getString(R.string.list_email_title, getDate()));
             intent.putExtra(Intent.EXTRA_TEXT,
-                    DataUtils.getListAsStringForEmail(this, mSharedPreferences));
+                    DatabaseUtils.getListAsStringForEmail(this, mSharedPreferences));
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);
             }

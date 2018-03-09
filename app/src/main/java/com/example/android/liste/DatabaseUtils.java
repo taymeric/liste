@@ -2,21 +2,32 @@ package com.example.android.liste;
 
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.RemoteException;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 
-import com.example.android.liste.data.ListContract;
-import com.example.android.liste.data.ListQueryHandler;
+import com.example.android.liste.database.ListContract;
+import com.example.android.liste.database.ListQueryHandler;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Utility methods for operations that require access to the database.
  */
-class DataUtils {
+class DatabaseUtils {
+
+    private static final String TAG = "DatabaseUtils.java";
 
     /** Inserts a product into the list table.
      *  Called when a product is entered from the ActionView in the AppBar of ListActivity.
@@ -48,10 +59,134 @@ class DataUtils {
                 ListQueryHandler.INSERTION_HISTORY, null, ListContract.HistoryEntry.CONTENT_URI, values);
     }
 
+    /**
+     * Deletes a product from the list table identified by its id.
+     * The values corresponding to this product (name, priority, annotation) are saved and returned.
+     * @param context needed to get access to Content Resolver
+     * @param listQueryHandler needed to perform insertion with ContentProvider on background thread
+     * @param id the id in the table of the product to delete
+     * @return (product, priority, annotation) of the deleted product
+     */
+    static @Nullable ArrayList<String> deleteProductFromListTable(Context context, ListQueryHandler listQueryHandler, int id) {
+
+        ArrayList<String> deletedValues = new ArrayList<>();
+
+        String stringId = Integer.toString(id);
+        Uri uri = ListContract.ListEntry.CONTENT_URI;
+        uri = uri.buildUpon().appendPath(stringId).build();
+
+        String[] projection  = { ListContract.ListEntry.COLUMN_PRODUCT,
+                ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.COLUMN_ANNOTATION };
+
+        // Check if provided id corresponds to an entry in the table
+        Cursor cu = context.getContentResolver().query(uri, projection, null, null, null);
+
+        if (cu!=null && cu.moveToFirst()) {
+
+            // Save values for result
+            String product = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT));
+            int priority = cu.getInt(cu.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
+            String annotation = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_ANNOTATION));
+
+            deletedValues.add(product);
+            deletedValues.add(String.valueOf(priority));
+            deletedValues.add(annotation);
+
+            cu.close();
+
+            // Call for actual deletion
+            listQueryHandler.startDelete(ListQueryHandler.DELETION_LIST, null, uri, null, null);
+
+            return deletedValues;
+        }
+        else return null;
+    }
+
+    /**
+     * Updates the priority and the annotation of a product of the list table.
+     * @param listQueryHandler needed to perform insertion with ContentProvider on background thread
+     * @param uri the uri identifying the product
+     * @param priority the new priority for the product
+     * @param annotation the new annotation for the product
+     */
+    static void updateProductPriorityAndAnnotation(ListQueryHandler listQueryHandler, Uri uri, int priority, String annotation) {
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ListContract.ListEntry.COLUMN_PRIORITY, priority);
+        contentValues.put(ListContract.ListEntry.COLUMN_ANNOTATION, annotation);
+
+        listQueryHandler.startUpdate(ListQueryHandler.UPDATE_LIST, null, uri,
+                contentValues, null, null);
+    }
+
+    /**
+     * Inserts several products into the list table.
+     * @param context needed to get access to Content Resolver
+     * @param products the (id, name) pairs of the products to be deleted, only id is used here
+     * @return the number of products actually added to the list (not duplicates)
+     */
+    static int insertProductsIntoListTable(Context context, HashMap<String, String> products) {
+
+        Uri uri = ListContract.ListEntry.CONTENT_URI;
+        ContentValues[] cv_all = new ContentValues[products.size()];
+        // Iterate through all the products in the HashMap
+        // and add the name  (values) of these products to the list table.
+        int i = 0;
+        for (String value: products.values()) {
+            ContentValues cv = new ContentValues();
+            cv.put(ListContract.ListEntry.COLUMN_PRODUCT, value);
+            cv.put(ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.DEFAULT_PRIORITY_PRODUCT);
+            cv_all[i] = cv;
+            i++;
+        }
+
+        // Here we use bulkInsert() to insert multiples lines at once as it is more efficient than
+        // calling insert() multiple times. We could also use ContentProviderOperations.
+        return context.getContentResolver().bulkInsert(uri, cv_all);
+    }
+
+    /**
+     * Deletes several products from the history table.
+     * @param context needed to get access to Content Resolver
+     * @param products the (id, name) pairs of the products to be deleted, only id is used here
+     * @return the number of products deleted from history
+     */
+    static int deleteProductsFromHistoryTable(Context context, HashMap<String, String> products) {
+
+        // We use ContentProviderOperations to delete the selected products in one
+        // batch operation.
+        // First, we iterate through all the Ids contained in the HashMap of selected
+        // products and create our list of deletion operations to be performed.
+        int nb = 0;
+        Uri uri;
+        ArrayList<ContentProviderOperation> deleteOperations = new ArrayList<>();
+        ContentProviderOperation operation;
+        for (String id : products.keySet()) {
+            uri = ListContract.HistoryEntry.CONTENT_URI;
+            uri = uri.buildUpon().appendPath(id).build();
+            operation = ContentProviderOperation.newDelete(uri).build();
+            deleteOperations.add(operation);
+        }
+        try {
+            ContentProviderResult[] results = context.getContentResolver().applyBatch(ListContract.CONTENT_AUTHORITY, deleteOperations);
+
+            // Check for results of deletion operations
+            for (ContentProviderResult result : results) {
+                nb += result.count;
+            }
+
+        }
+        catch (RemoteException | OperationApplicationException exception) {
+            Log.d(TAG, "Exception while deleting products from history");
+        }
+
+        return nb;
+    }
+
     /** @return a Notification object containing:
      *  - the number of products in the list in its title
      *  - the list of products in its body */
-    static Notification createNotification(Context context) {
+    static Notification createNotificationFromListProducts(Context context) {
 
         Uri uri = ListContract.ListEntry.CONTENT_URI;
         // For notifications, the whole list may not be entirely visible, so we sort by priority,

@@ -2,33 +2,27 @@ package com.example.android.liste;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
-import android.content.ContentProviderOperation;
-import android.content.ContentProviderResult;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.OperationApplicationException;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.example.android.liste.data.ListContract;
+import com.example.android.liste.database.ListContract;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -74,7 +68,7 @@ public class HistoryActivity extends AppCompatActivity
 
     /* An HashMap is used to store (id, text) pairs of selected elements with no duplication.
      * id is used for deletion and text is used for insertion. */
-    private HashMap<String, String> selectedIds;
+    private HashMap<String, String> selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +76,7 @@ public class HistoryActivity extends AppCompatActivity
         setContentView(R.layout.activity_history);
         setTitle(getString(R.string.history_title));
 
-        selectedIds = new HashMap<>();
+        selected = new HashMap<>();
 
         mFab = (FloatingActionButton) findViewById(R.id.floatingActionButtonHistory);
         mFab.hide();
@@ -128,7 +122,7 @@ public class HistoryActivity extends AppCompatActivity
 
         // Only show the menu item for deletion if at least one element is selected
         MenuItem trash = menu.findItem(R.id.action_clear);
-        if (selectedIds != null) trash.setVisible(!selectedIds.isEmpty());
+        if (selected != null) trash.setVisible(!selected.isEmpty());
         else trash.setVisible(false);
 
         MenuItem compact_layout = menu.findItem(R.id.action_compact_layout);
@@ -208,9 +202,9 @@ public class HistoryActivity extends AppCompatActivity
     public void onClick(String id, String txt) {
         // Because clicks are performed on checkboxes, a click either adds or removes an element
         // from the list of selected elements.
-        if (selectedIds.containsKey(id))
-            selectedIds.remove(id);
-        else selectedIds.put(id, txt);
+        if (selected.containsKey(id))
+            selected.remove(id);
+        else selected.put(id, txt);
         updateFabVisibility();
         invalidateOptionsMenu();
     }
@@ -227,40 +221,14 @@ public class HistoryActivity extends AppCompatActivity
     /* Deletes selection from the history table */
     private void deleteSelectedProducts() {
         new AlertDialog.Builder(HistoryActivity.this)
-                .setMessage(getResources().getQuantityString(R.plurals.history_clear_selection_title, selectedIds.size()))
+                .setMessage(getResources().getQuantityString(R.plurals.history_clear_selection_title, selected.size()))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // We use ContentProviderOperations to delete the selected products in one
-                        // batch operation.
-                        // First, we iterate through all the Ids contained in the HashMap of selected
-                        // products and create our list of deletion operations to be performed.
-                        int nb = 0;
-                        Uri uri;
-                        ArrayList<ContentProviderOperation> deleteOperations = new ArrayList<>();
-                        ContentProviderOperation operation;
-                        for (String id : selectedIds.keySet()) {
-                            uri = ListContract.HistoryEntry.CONTENT_URI;
-                            uri = uri.buildUpon().appendPath(id).build();
-                            operation = ContentProviderOperation.newDelete(uri).build();
-                            deleteOperations.add(operation);
-                        }
-                        try {
-                            ContentProviderResult[] results = getContentResolver().applyBatch(ListContract.CONTENT_AUTHORITY, deleteOperations);
 
-                            // Check for results of deletion operations
-                            for (ContentProviderResult result : results) {
-                                nb += result.count;
-                            }
-
-                        }
-                        catch (RemoteException | OperationApplicationException exception) {
-                            Log.d(TAG, "Exception while deleting products from history");
-                        }
-
+                        int nb = DatabaseUtils.deleteProductsFromHistoryTable(HistoryActivity.this, selected);
                         showMessage(getResources().getQuantityString(R.plurals.history_products_cleared_message, nb, nb));
-
-                        selectedIds.clear();
+                        selected.clear();
                         updateFabVisibility();
                         mAdapter.notifyDataSetChanged();
                         invalidateOptionsMenu();
@@ -273,9 +241,9 @@ public class HistoryActivity extends AppCompatActivity
     /* Shows a dialog that gives the choice to insert selected elements to the list or
      * to discard the selection. Used when leaving the activity. */
     private void showConfirmationDialog() {
-        if (selectedIds != null && !selectedIds.isEmpty()) {
+        if (selected != null && !selected.isEmpty()) {
             new AlertDialog.Builder(HistoryActivity.this)
-                    .setMessage(getResources().getQuantityString(R.plurals.history_add_selected_products, selectedIds.size()))
+                    .setMessage(getResources().getQuantityString(R.plurals.history_add_selected_products, selected.size()))
                     .setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -296,42 +264,25 @@ public class HistoryActivity extends AppCompatActivity
         }
     }
 
-    /* Inserts selected products to the list table */
+    /* Inserts selected products to the list table and sets the result of the activity. */
     private void addSelectedProducts() {
-        Uri uri = ListContract.ListEntry.CONTENT_URI;
-        ContentValues[] cv_all = new ContentValues[selectedIds.size()];
-        // Iterate through all the text values contained in the HashMap of selected products
-        // and add products with those names to the list table.
-        int i = 0;
-        for (String value: selectedIds.values()) {
-            ContentValues cv = new ContentValues();
-            cv.put(ListContract.ListEntry.COLUMN_PRODUCT, value);
-            cv.put(ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.DEFAULT_PRIORITY_PRODUCT);
-            cv_all[i] = cv;
-            i++;
-        }
 
-        // Here we use bulkInsert() to insert multiples lines at once as it is more efficient than
-        // calling insert() multiple times. We could also use ContentProviderOperations.
-        // We don't use an AsyncQueryHandler as it is not straightforward to refactor this code
-        // with it and I also don't know if it is suited for bulk operations.
-        int nb = getContentResolver().bulkInsert(uri, cv_all);
+        int nb = DatabaseUtils.insertProductsIntoListTable(this, selected);
         Intent intent = new Intent();
         if (nb == 0)
             intent.putExtra(getString(R.string.history_message_to_list), getString(R.string.list_no_new_product_message));
         else
             intent.putExtra(getString(R.string.history_message_to_list), getResources().getQuantityString(R.plurals.list_new_products_message, nb, nb));
         setResult(RESULT_OK, intent);
-
     }
 
     /* Updates the visibility of the Floating Action Button.
      * If selection is empty, the FAB is invisible. */
     private void updateFabVisibility() {
-        if (!selectedIds.isEmpty() && !mFab.isShown()) {
+        if (!selected.isEmpty() && !mFab.isShown()) {
             mFab.show();
         }
-        else if (selectedIds.isEmpty() && mFab.isShown()) {
+        else if (selected.isEmpty() && mFab.isShown()) {
             mFab.hide();
         }
     }

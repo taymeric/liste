@@ -1,4 +1,4 @@
-package com.example.android.liste.data;
+package com.example.android.liste.database;
 
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;

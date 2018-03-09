@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.android.liste.data.ListContract;
+import com.example.android.liste.database.ListContract;
 
 
 /**
@@ -233,6 +233,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     gestureDetector.onTouchEvent(event);
+                    v.performClick();
                     return true;
                 }
             });

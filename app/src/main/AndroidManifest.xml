@@ -49,7 +49,7 @@
         </activity>
 
         <provider
-            android:name="com.example.android.liste.data.ListContentProvider"
+            android:name="com.example.android.liste.database.ListContentProvider"
             android:authorities="com.example.android.liste"
             android:exported="false"/>
 
