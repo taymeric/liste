@@ -134,7 +134,7 @@ class DatabaseUtils {
         // Iterate through all the products in the HashMap
         // and add the name  (values) of these products to the list table.
         int i = 0;
-        for (String value: products.values()) {
+        for (String value: products.keySet()) {
             ContentValues cv = new ContentValues();
             cv.put(ListContract.ListEntry.COLUMN_PRODUCT, value);
             cv.put(ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.DEFAULT_PRIORITY_PRODUCT);
@@ -163,7 +163,7 @@ class DatabaseUtils {
         Uri uri;
         ArrayList<ContentProviderOperation> deleteOperations = new ArrayList<>();
         ContentProviderOperation operation;
-        for (String id : products.keySet()) {
+        for (String id : products.values()) {
             uri = ListContract.HistoryEntry.CONTENT_URI;
             uri = uri.buildUpon().appendPath(id).build();
             operation = ContentProviderOperation.newDelete(uri).build();

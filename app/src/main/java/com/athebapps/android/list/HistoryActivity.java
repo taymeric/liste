@@ -62,7 +62,7 @@ public class HistoryActivity extends AppCompatActivity
     /* The Adapter that binds the data from the history table to the Recycler View */
     private HistoryAdapter mAdapter;
 
-    /* An HashMap is used to store (id, text) pairs of selected elements.
+    /* An HashMap is used to store (text, id) pairs of selected elements.
      * id is used for deletion and text is used for insertion. */
     private HashMap<String, String> selected;
 
@@ -72,10 +72,14 @@ public class HistoryActivity extends AppCompatActivity
         setContentView(R.layout.activity_history);
         setTitle(getString(R.string.history_title));
 
-        selected = new HashMap<>();
+        if (savedInstanceState != null)
+            //noinspection unchecked
+            selected = (HashMap<String, String >) savedInstanceState.getSerializable("selected");
+        else
+            selected = new HashMap<>();
 
         mFab = (FloatingActionButton) findViewById(R.id.floatingActionButtonHistory);
-        mFab.hide();
+        updateFabVisibility();
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,7 +97,7 @@ public class HistoryActivity extends AppCompatActivity
         mRecyclerView = (RecyclerView) findViewById(R.id.history_recycler_view);
         mLayoutManager = PreferenceUtils.getHistoryLayoutManager(this, mSharedPreferences);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new HistoryAdapter(this, this);
+        mAdapter = new HistoryAdapter(this, selected, this);
         mRecyclerView.setAdapter(mAdapter);
 
         // By default, the empty view's visibility is set to 'gone'
@@ -110,6 +114,14 @@ public class HistoryActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Save the map of selected elements
+        outState.putSerializable("selected", selected);
     }
 
     @Override
@@ -195,12 +207,7 @@ public class HistoryActivity extends AppCompatActivity
     }
 
     @Override
-    public void onClick(String id, String txt) {
-        // Because clicks are performed on checkboxes, a click either adds or removes an element
-        // from the list of selected elements.
-        if (selected.containsKey(id))
-            selected.remove(id);
-        else selected.put(id, txt);
+    public void onClick() {
         updateFabVisibility();
         invalidateOptionsMenu();
     }

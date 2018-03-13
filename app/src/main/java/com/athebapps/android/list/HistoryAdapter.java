@@ -13,6 +13,8 @@ import android.widget.CompoundButton;
 
 import com.athebapps.android.list.database.ListContract;
 
+import java.util.HashMap;
+
 
 /**
  * Adapter class to manage display of items in the recycler view for the history.
@@ -41,12 +43,12 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
      * Can be null before data has been loaded. */
     private Cursor mCursor;
 
-    /* Array that indicated if a product at a given position is checked or not */
-    private boolean[] isChecked;
+    /* A structure that stores the (name , id) pair of the products that are selected. */
+    private HashMap<String, String> selected;
 
     /** @param context  needed for PreferenceUtils methods.
      *  @param clickHandler used to interact with History activity. */
-    HistoryAdapter(Context context, HistoryAdapterOnClickHandler clickHandler) {
+    HistoryAdapter(Context context, HashMap<String, String> selectedProducts, HistoryAdapterOnClickHandler clickHandler) {
 
         mContext = context;
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -58,10 +60,9 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
         else
             mCurrentLayout = NORMAL_LAYOUT;
 
-        mClickHandler = clickHandler;
+        selected = selectedProducts;
 
-        // Handles initialization of isChecked array
-        resetIsChecked();
+        mClickHandler = clickHandler;
 
         // Optimization
         setHasStableIds(true);
@@ -90,16 +91,20 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
             holder.mCheckBox.setText(s);
 
             holder.mCheckBox.setOnCheckedChangeListener(null);
-            holder.mCheckBox.setChecked(isChecked[position]);
+            holder.mCheckBox.setChecked(selected.containsKey(s));
             final int thisPosition = position;
             holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    isChecked[thisPosition] = b;
                     mCursor.moveToPosition(thisPosition);
-                    String id = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry._ID));
                     String txt = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_PRODUCT));
-                    mClickHandler.onClick(id, txt);
+                    if (selected.containsKey(txt))
+                        selected.remove(txt);
+                    else {
+                        String id = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry._ID));
+                        selected.put(txt, id);
+                    }
+                    mClickHandler.onClick();
                 }
             });
         }
@@ -125,16 +130,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     /** Updates the value of the cursor that points to data to be displayed in the RecyclerView */
     void swapCursor(Cursor cursor) {
         mCursor = cursor;
-        resetIsChecked();
         notifyDataSetChanged();
-    }
-
-    /** Initializes or reset array that indicates if a product is currently checked */
-    private void resetIsChecked() {
-        if (mCursor != null)
-            isChecked = new boolean[mCursor.getCount()];
-        else
-            isChecked = null;
     }
 
     /** Updates the layout of the RecyclerView to the most recent value from the user's preferences */
@@ -150,11 +146,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
     /* Interface to provide a way to handle both addition and deletion by the corresponding activity.*/
     interface HistoryAdapterOnClickHandler {
-        /*
-         * @param id the _id in the list SQL table of the clicked item
-         * @param txt the name of the product for the clicked item
-         */
-        void onClick(String id, String txt);
+        void onClick();
     }
 
     /** Our ViewHolder for Recycling purpose */
