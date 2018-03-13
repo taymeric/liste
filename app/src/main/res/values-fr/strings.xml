@@ -60,7 +60,7 @@
 
     <string name="history_title">Historique</string>
     <string name="history_instructions">Sélectionner les produits à ajouter :</string>
-    <string name="history_empty_view_text">L\'historique est vide. Pour commencer, ajoutez des produits depuis l\'écran principal.</string>
+    <string name="history_empty_view_text">L\'historique est vide.\nPour commencer, ajouter des produits depuis l\'écran principal.</string>
 
     <!-- Strings for deletion menu -->
     <string name="history_menu_clear">Effacer la sélection</string>
@@ -105,7 +105,7 @@
     <!-- Strings for About dialog in preference screen -->
     <string name="pref_about_title">À propos</string>
     <string name="pref_about_version_number_label">Version</string>
-    <string name="pref_about_url_label">Plus d\'information</string>
+    <string name="pref_about_email_label">Contact</string>
     <string name="pref_about_icons_label">Icônes par Google</string>
 
     <!-- Strings for Preferences activity end -->

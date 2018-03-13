@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
-        applicationId "com.example.android.liste"
+        applicationId "com.athebapps.android.list"
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 1

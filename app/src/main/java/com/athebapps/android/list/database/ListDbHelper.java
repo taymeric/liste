@@ -1,4 +1,4 @@
-package com.example.android.liste.database;
+package com.athebapps.android.list.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

@@ -1,4 +1,4 @@
-package com.example.android.liste;
+package com.athebapps.android.list;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -47,8 +47,8 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.example.android.liste.database.ListContract;
-import com.example.android.liste.database.ListQueryHandler;
+import com.athebapps.android.list.database.ListContract;
+import com.athebapps.android.list.database.ListQueryHandler;
 
 import java.util.ArrayList;
 import java.util.Calendar;

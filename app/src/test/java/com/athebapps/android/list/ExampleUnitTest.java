@@ -1,4 +1,4 @@
-package com.example.android.liste;
+package com.athebapps.android.list;
 
 import org.junit.Test;
 

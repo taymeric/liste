@@ -1,4 +1,4 @@
-package com.example.android.liste;
+package com.athebapps.android.list;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,7 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
-import com.example.android.liste.database.ListContract;
+import com.athebapps.android.list.database.ListContract;
 
 
 /**

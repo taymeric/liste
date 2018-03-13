@@ -1,4 +1,4 @@
-package com.example.android.liste;
+package com.athebapps.android.list;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -18,8 +18,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
-import com.example.android.liste.database.ListContract;
-import com.example.android.liste.database.ListQueryHandler;
+import com.athebapps.android.list.database.ListContract;
+import com.athebapps.android.list.database.ListQueryHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;

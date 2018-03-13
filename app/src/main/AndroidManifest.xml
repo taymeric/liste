@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="com.example.android.liste">
+          package="com.athebapps.android.list">
 
     <uses-permission android:name="android.permission.VIBRATE"/>
 
@@ -16,7 +16,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name="com.example.android.liste.ListActivity"
+            android:name="com.athebapps.android.list.ListActivity"
             android:launchMode="singleTop"
             android:screenOrientation="sensorPortrait">
             <intent-filter>
@@ -26,37 +26,37 @@
         </activity>
 
         <activity
-            android:name="com.example.android.liste.HistoryActivity"
+            android:name="com.athebapps.android.list.HistoryActivity"
             android:launchMode="singleTop"
-            android:parentActivityName="com.example.android.liste.ListActivity"
+            android:parentActivityName="com.athebapps.android.list.ListActivity"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/HistoryTheme"
             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.liste.ListActivity"/>
+                android:value="com.athebapps.android.list.ListActivity"/>
         </activity>
 
         <activity
-            android:name="com.example.android.liste.PreferencesActivity"
+            android:name="com.athebapps.android.list.PreferencesActivity"
             android:label="@string/pref_title"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/PreferencesTheme"
             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.liste.ListActivity"/>
+                android:value="com.athebapps.android.list.ListActivity"/>
         </activity>
 
         <provider
-            android:name="com.example.android.liste.database.ListContentProvider"
-            android:authorities="com.example.android.liste"
+            android:name="com.athebapps.android.list.database.ListContentProvider"
+            android:authorities="com.athebapps.android.list"
             android:exported="false"/>
 
-        <service android:name=".NotificationIntentService"
+        <service android:name="com.athebapps.android.list.NotificationIntentService"
                  android:exported="false"/>
 
-        <receiver android:name=".NotificationReceiver"/>
+        <receiver android:name="com.athebapps.android.list.NotificationReceiver"/>
 
     </application>
 

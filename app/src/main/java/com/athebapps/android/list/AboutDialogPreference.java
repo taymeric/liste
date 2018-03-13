@@ -1,4 +1,4 @@
-package com.example.android.liste;
+package com.athebapps.android.list;
 
 import android.content.Context;
 import android.support.v7.preference.DialogPreference;

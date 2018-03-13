@@ -1,4 +1,4 @@
-package com.example.android.liste.database;
+package com.athebapps.android.list.database;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -10,7 +10,7 @@ import android.provider.BaseColumns;
 public class ListContract {
 
     /** The authority for the Content Provider */
-    public static final String CONTENT_AUTHORITY = "com.example.android.liste";
+    public static final String CONTENT_AUTHORITY = "com.athebapps.android.list";
     /** Identifier of the list table (to append to the base Uri) */
     static final String PATH_LIST = "list";
     /** Identifier of the history table (to append to the base Uri) */

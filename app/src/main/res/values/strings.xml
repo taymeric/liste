@@ -67,7 +67,7 @@
 
     <string name="history_title">History</string>
     <string name="history_instructions">Select products to add:</string>
-    <string name="history_empty_view_text">History is empty. Start by adding products from the main screen.</string>
+    <string name="history_empty_view_text">History is empty.\nStart by adding products from the main screen.</string>
 
     <!-- Strings for deletion menu -->
     <string name="history_menu_clear">Clear selection</string>
@@ -127,10 +127,10 @@
     <string name="pref_about_key" translatable="false">about_key</string>
     <string name="pref_about_title">About</string>
     <string name="pref_about_version_number_label">Version</string>
-    <string name="pref_about_url_label">More information</string>
+    <string name="pref_about_email_label">Contact</string>
     <string name="pref_about_icons_label">Icons by Google</string>
     <string name="pref_about_version_name" translatable="false">1.0</string>
-    <string name="pref_about_url" translatable="false">aymeric.thebaud@gmail.com</string>
+    <string name="pref_about_url" translatable="false">athebapp@gmail.com</string>
     <string name="pref_about_icons" translatable="false">https://material.io/icons/</string>
 
     <!-- Strings for Preferences activity end -->

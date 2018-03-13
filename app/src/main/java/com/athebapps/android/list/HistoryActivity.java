@@ -1,4 +1,4 @@
-package com.example.android.liste;
+package com.athebapps.android.list;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
@@ -19,7 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.example.android.liste.database.ListContract;
+import com.athebapps.android.list.database.ListContract;
 
 import java.util.HashMap;
 

@@ -7,7 +7,7 @@
         android:icon="@drawable/ic_create_white_24dp"
         android:title="@string/list_menu_add_hint"
         app:actionLayout="@layout/action_bar_edit_text_view"
-        app:showAsAction="ifRoom|collapseActionView"/>
+        app:showAsAction="always|collapseActionView"/>
 
     <item android:id="@+id/action_alarm_info"
           android:icon="@drawable/ic_alarm_white_24dp"
