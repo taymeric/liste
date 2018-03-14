@@ -89,7 +89,6 @@ public class HistoryActivity extends AppCompatActivity
                 // Clicking the Floating Action Button adds selected entries to the list
                 // and closes the History activity.
                 addSelectedProducts();
-                finish();
             }
         });
 
@@ -232,6 +231,7 @@ public class HistoryActivity extends AppCompatActivity
                     @SuppressLint("StaticFieldLeak")
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        // We use an AsyncTask here to perform deletions on a background thread.
                         new AsyncTask<Void, Void, Integer>() {
                             @Override
                             protected Integer doInBackground(Void... voids) {
@@ -264,7 +264,6 @@ public class HistoryActivity extends AppCompatActivity
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             addSelectedProducts();
-                            finish();
                         }
                     })
                     .setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
@@ -283,6 +282,7 @@ public class HistoryActivity extends AppCompatActivity
     /* Inserts selected products to the list table and sets the result of the activity. */
     @SuppressLint("StaticFieldLeak")
     private void addSelectedProducts() {
+        // We use an AsyncTask in order to perform insertions on a background thread
         new AsyncTask<Void, Void, Integer>() {
             @Override
             protected Integer doInBackground(Void... voids) {
@@ -300,10 +300,9 @@ public class HistoryActivity extends AppCompatActivity
                     intent.putExtra(getString(R.string.history_message_to_list),
                             getResources().getQuantityString(R.plurals.list_new_products_message, integer, integer));
                 setResult(RESULT_OK, intent);
+                finish();
             }
         }.execute();
-
-
     }
 
     /* Updates the visibility of the Floating Action Button.

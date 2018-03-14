@@ -36,15 +36,14 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     final private SharedPreferences mSharedPreferences;
     /* Reference to an implementation of the interface that handles click on a ViewHolder */
     final private HistoryAdapterOnClickHandler mClickHandler;
+    /* A structure that stores the (name , id) pair of the products that are selected. */
+    private final HashMap<String, String> selected;
     /* Type of Layout for the RecyclerView. Used to adjust the layout of a ViewHolder.
      * Possible values: PreferenceUtils.NORMAL_LAYOUT_ITEM or PreferenceUtils.COMPACT_LAYOUT_ITEM */
     private int mCurrentLayout;
     /* The Cursor that references the actual data that populates the RecyclerView.
      * Can be null before data has been loaded. */
     private Cursor mCursor;
-
-    /* A structure that stores the (name , id) pair of the products that are selected. */
-    private HashMap<String, String> selected;
 
     /** @param context  needed for PreferenceUtils methods.
      *  @param clickHandler used to interact with History activity. */

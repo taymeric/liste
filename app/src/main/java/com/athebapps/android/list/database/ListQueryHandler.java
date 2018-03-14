@@ -26,12 +26,4 @@ public class ListQueryHandler extends AsyncQueryHandler {
     public ListQueryHandler(ContentResolver cr) {
         super(cr);
     }
-
-    @Override
-    protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-        super.onQueryComplete(token, cookie, cursor);
-
-
-
-    }
 }

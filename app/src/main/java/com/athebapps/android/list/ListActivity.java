@@ -93,7 +93,8 @@ public class ListActivity extends AppCompatActivity
     /* Used by onActivityResult to identifies that the result comes from HistoryActivity */
     private static final int HISTORY_FOR_RESULT_ID = 300;
 
-    private static final boolean DEVELOPER_MODE = true;
+    /* Used to enable debugging in StrictMode */
+    private static final boolean DEVELOPER_MODE = false;
 
     /* The Floating Action Button that launches HistoryActivity */
     private FloatingActionButton mFab;
@@ -285,14 +286,12 @@ public class ListActivity extends AppCompatActivity
                 String stringId = args.getString("id");
                 Uri contentUri = ListContract.ListEntry.CONTENT_URI;
                 final Uri uri = contentUri.buildUpon().appendPath(stringId).build();
-                String selection = ListContract.ListEntry._ID + "=?";
-                String [] selectionArgs = new String[] { stringId };
                 return new CursorLoader(
                     this,    // Parent activity context
-                    ListContract.ListEntry.CONTENT_URI,    // Table to query
+                    uri,    // Row of the table to query
                     null,    // Projection to return
-                    selection,    // No selection clause
-                    selectionArgs,    // No selection arguments
+                    null,    // No selection clause
+                    null,    // No selection arguments
                     null    // Default sort order
                 );
             default:
@@ -575,7 +574,7 @@ public class ListActivity extends AppCompatActivity
     private void deleteProductWithMessage(Cursor cursor) {
 
         ArrayList<String> deletedValues =
-                DatabaseUtils.deleteProductFromListTable(ListActivity.this, mListQueryHandler, cursor);
+                DatabaseUtils.deleteProductFromListTable(mListQueryHandler, cursor);
 
         if (deletedValues != null)
             showMessageWithUndoAction(

@@ -8,7 +8,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
@@ -65,12 +64,11 @@ class DatabaseUtils {
     /**
      * Deletes a product from the list table identified by its id.
      * The values corresponding to this product (name, priority, annotation) are saved and returned.
-     * @param context needed to get access to Content Resolver
      * @param listQueryHandler needed to perform insertion with ContentProvider on background thread
      * @param cu the cursor pointing to the product in the table to delete
      * @return (product, priority, annotation) of the deleted product
      */
-    static @Nullable ArrayList<String> deleteProductFromListTable(Context context, ListQueryHandler listQueryHandler, Cursor cu) {
+    static @Nullable ArrayList<String> deleteProductFromListTable(ListQueryHandler listQueryHandler, Cursor cu) {
 
         if (cu!=null && cu.moveToFirst()) {
 
