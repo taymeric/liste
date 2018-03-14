@@ -2,6 +2,7 @@ package com.athebapps.android.list.database;
 
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
+import android.database.Cursor;
 
 /**
  * AsyncQueryHandler is used from the main thread to perform simple Content Provider operations
@@ -26,4 +27,11 @@ public class ListQueryHandler extends AsyncQueryHandler {
         super(cr);
     }
 
+    @Override
+    protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+        super.onQueryComplete(token, cookie, cursor);
+
+
+
+    }
 }

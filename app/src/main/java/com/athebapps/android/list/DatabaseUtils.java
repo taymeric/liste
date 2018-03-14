@@ -144,6 +144,8 @@ class DatabaseUtils {
 
         // Here we use bulkInsert() to insert multiples lines at once as it is more efficient than
         // calling insert() multiple times. We could also use ContentProviderOperations.
+        // AsyncQueryHandler does not allow bulkInsert therefore this implementation is not perfect
+        // but I want to keep it as an example. Same for ContentOperations used for deletion below.
         return context.getContentResolver().bulkInsert(uri, cv_all);
     }
 

@@ -282,12 +282,8 @@ public class HistoryActivity extends AppCompatActivity
     /* Updates the visibility of the Floating Action Button.
      * If selection is empty, the FAB is invisible. */
     private void updateFabVisibility() {
-        if (!selected.isEmpty() && !mFab.isShown()) {
-            mFab.show();
-        }
-        else if (selected.isEmpty() && mFab.isShown()) {
-            mFab.hide();
-        }
+        if (!selected.isEmpty()) mFab.show();
+        else mFab.hide();
     }
 
     /* Updates the visibility of the Empty View. */

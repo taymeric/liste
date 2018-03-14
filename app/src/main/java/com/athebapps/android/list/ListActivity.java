@@ -18,6 +18,7 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -74,14 +75,19 @@ public class ListActivity extends AppCompatActivity
         SharedPreferences.OnSharedPreferenceChangeListener,
         ListAdapter.ListAdapterOnClickHandler
 {
-    /* Helps the LoaderManager identify the loader for the list */
+    /* Helps the LoaderManager identify the loader for the whole list */
     private static final int LIST_LOADER_ID = 100;
+
+    /* Helps the LoaderManager identify the loader for a single element of the list */
+    private static final int LIST_PRODUCT_LOADER_ID = 101;
 
     /* Used by NotificationManager to identify the notification within the app */
     private static final int NOTIFICATION_ID = 200;
 
     /* Used by onActivityResult to identifies that the result comes from HistoryActivity */
     private static final int HISTORY_FOR_RESULT_ID = 300;
+
+    private static final boolean DEVELOPER_MODE = false;
 
     /* The Floating Action Button that launches HistoryActivity */
     private FloatingActionButton mFab;
@@ -116,6 +122,23 @@ public class ListActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        if (DEVELOPER_MODE) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectDiskReads()
+                    .detectDiskWrites()
+                    .detectNetwork()   // or .detectAll() for all detectable problems
+                    .penaltyLog()
+                    .penaltyFlashScreen()
+                    .build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectLeakedSqlLiteObjects()
+                    .detectLeakedClosableObjects()
+                    .penaltyLog()
+                    .penaltyDeath()
+                    .build());
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
@@ -250,6 +273,20 @@ public class ListActivity extends AppCompatActivity
                         null,    // No selection arguments
                         sortOrder    // Default sort order
                 );
+            case LIST_PRODUCT_LOADER_ID:
+                String stringId = args.getString("id");
+                Uri contentUri = ListContract.ListEntry.CONTENT_URI;
+                final Uri uri = contentUri.buildUpon().appendPath(stringId).build();
+                String selection = ListContract.ListEntry._ID + "=?";
+                String [] selectionArgs = new String[] { stringId };
+                return new CursorLoader(
+                    this,    // Parent activity context
+                    ListContract.ListEntry.CONTENT_URI,    // Table to query
+                    null,    // Projection to return
+                    selection,    // No selection clause
+                    selectionArgs,    // No selection arguments
+                    null    // Default sort order
+                );
             default:
                 // An invalid id was passed in
                 return null;
@@ -264,6 +301,9 @@ public class ListActivity extends AppCompatActivity
             mProgressBar.setVisibility(View.GONE);
             mAdapter.swapCursor(data);
             updateEmptyViewVisibility();
+        }
+        if (id == LIST_PRODUCT_LOADER_ID) {
+            showEditionDialog(data);
         }
     }
 
@@ -308,7 +348,7 @@ public class ListActivity extends AppCompatActivity
     public void onClick(int id, boolean long_press) {
         if (long_press) {
             mRecyclerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-            showEditionDialog(id);
+            editProduct(id);
         } else {
             deleteProductWithMessage(id);
         }
@@ -426,30 +466,32 @@ public class ListActivity extends AppCompatActivity
         return getContentResolver().query(ListContract.HistoryEntry.CONTENT_URI, projection, select, selectArgs, null);
     }
 
+    /* Initializes the edition process of a product
+     * @param id the _ID of the product to edit */
+    private void editProduct(int id) {
+        String stringId = Integer.toString(id);
+        Bundle bundle = new Bundle();
+        bundle.putString("id", stringId);
+        getLoaderManager().restartLoader(LIST_PRODUCT_LOADER_ID, bundle, this);
+    }
+
     /* Shows a popup dialog that allows to add or edit an annotation to a product of the list,
      * as well as changing the priority setting for that product.
-     * @param id the actual _ID of the product */
-    private void showEditionDialog(int id) {
-
-        final AlertDialog alertDialog;
-
-        String stringId = Integer.toString(id);
-        Uri contentUri = ListContract.ListEntry.CONTENT_URI;
-        final Uri uri = contentUri.buildUpon().appendPath(stringId).build();
-
-        String[] columns = { ListContract.ListEntry.COLUMN_PRODUCT, ListContract.ListEntry.COLUMN_PRIORITY,
-                ListContract.ListEntry.COLUMN_ANNOTATION};
-        String selection = ListContract.ListEntry._ID + "=?";
-        String [] selectionArgs = new String[] { stringId };
-        // Here, we don't use AsyncQueryHandler because we need to use the result of the query
-        // for the creation of the UI which is done right away.
-        Cursor cursor = getContentResolver().query(uri, columns, selection, selectionArgs, null);
+     * @param cursor the Cursor pointing to the product to edit.
+     */
+    private void showEditionDialog(Cursor cursor) {
 
         if (cursor != null && cursor.moveToFirst()) {
 
+            final AlertDialog alertDialog;
+
+            String id = cursor.getString(cursor.getColumnIndex(ListContract.ListEntry._ID));
             String product = cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT));
             int priority = cursor.getInt(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
             String annotation = cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_ANNOTATION));
+
+            Uri contentUri = ListContract.ListEntry.CONTENT_URI;
+            final Uri uri = contentUri.buildUpon().appendPath(id).build();
 
             LayoutInflater inflater = getLayoutInflater();
             @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_edition, null);
@@ -740,10 +782,10 @@ public class ListActivity extends AppCompatActivity
                 .show();
     }
 
-    /* Shows a long Snackbar message with an 'undo' action. */
+    /* Shows a Snackbar message with an 'undo' action. */
     private void showMessageWithUndoAction(String message, final String product, final int priority,
                                            final String annotation) {
-        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_LONG)
+        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_INDEFINITE)
                 .setAction(getString(android.R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
