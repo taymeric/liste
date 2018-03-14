@@ -66,22 +66,10 @@ class DatabaseUtils {
      * The values corresponding to this product (name, priority, annotation) are saved and returned.
      * @param context needed to get access to Content Resolver
      * @param listQueryHandler needed to perform insertion with ContentProvider on background thread
-     * @param id the id in the table of the product to delete
+     * @param cu the cursor pointing to the product in the table to delete
      * @return (product, priority, annotation) of the deleted product
      */
-    static @Nullable ArrayList<String> deleteProductFromListTable(Context context, ListQueryHandler listQueryHandler, int id) {
-
-        ArrayList<String> deletedValues = new ArrayList<>();
-
-        String stringId = Integer.toString(id);
-        Uri uri = ListContract.ListEntry.CONTENT_URI;
-        uri = uri.buildUpon().appendPath(stringId).build();
-
-        String[] projection  = { ListContract.ListEntry.COLUMN_PRODUCT,
-                ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.COLUMN_ANNOTATION };
-
-        // Check if provided id corresponds to an entry in the table
-        Cursor cu = context.getContentResolver().query(uri, projection, null, null, null);
+    static @Nullable ArrayList<String> deleteProductFromListTable(Context context, ListQueryHandler listQueryHandler, Cursor cu) {
 
         if (cu!=null && cu.moveToFirst()) {
 
@@ -89,7 +77,11 @@ class DatabaseUtils {
             String product = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT));
             int priority = cu.getInt(cu.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
             String annotation = cu.getString(cu.getColumnIndex(ListContract.ListEntry.COLUMN_ANNOTATION));
+            String id = cu.getString(cu.getColumnIndex(ListContract.ListEntry._ID));
+            Uri uri = ListContract.ListEntry.CONTENT_URI;
+            uri = uri.buildUpon().appendPath(id).build();
 
+            ArrayList<String> deletedValues = new ArrayList<>();
             deletedValues.add(product);
             deletedValues.add(String.valueOf(priority));
             deletedValues.add(annotation);

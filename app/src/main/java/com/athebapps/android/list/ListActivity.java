@@ -78,8 +78,11 @@ public class ListActivity extends AppCompatActivity
     /* Helps the LoaderManager identify the loader for the whole list */
     private static final int LIST_LOADER_ID = 100;
 
-    /* Helps the LoaderManager identify the loader for a single element of the list */
-    private static final int LIST_PRODUCT_LOADER_ID = 101;
+    /* Helps the LoaderManager identify the loader for a single element of the list in the case of edition */
+    private static final int LIST_PRODUCT_FOR_EDITION_LOADER_ID = 101;
+
+    /* Helps the LoaderManager identify the loader for a single element of the list in the case of deletion */
+    private static final int LIST_PRODUCT_FOR_DELETION_LOADER_ID = 102;
 
     /* Used by NotificationManager to identify the notification within the app */
     private static final int NOTIFICATION_ID = 200;
@@ -177,7 +180,7 @@ public class ListActivity extends AppCompatActivity
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 // The Adapter class stores the id of the element as a tag in the viewHolder
                 int id = (int) viewHolder.itemView.getTag();
-                deleteProductWithMessage(id);
+                deleteSingleProduct(id);
             }
         };
         new ItemTouchHelper(mSimpleCallback).attachToRecyclerView(mRecyclerView);
@@ -273,7 +276,8 @@ public class ListActivity extends AppCompatActivity
                         null,    // No selection arguments
                         sortOrder    // Default sort order
                 );
-            case LIST_PRODUCT_LOADER_ID:
+            case LIST_PRODUCT_FOR_EDITION_LOADER_ID:
+            case LIST_PRODUCT_FOR_DELETION_LOADER_ID:
                 String stringId = args.getString("id");
                 Uri contentUri = ListContract.ListEntry.CONTENT_URI;
                 final Uri uri = contentUri.buildUpon().appendPath(stringId).build();
@@ -296,15 +300,20 @@ public class ListActivity extends AppCompatActivity
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         int id = loader.getId();
-        if (id == LIST_LOADER_ID) {
-            // Swap cursor in order to display List items when List Loader has finished
-            mProgressBar.setVisibility(View.GONE);
-            mAdapter.swapCursor(data);
-            updateEmptyViewVisibility();
+        switch (id) {
+            case LIST_LOADER_ID:
+                // Swap cursor in order to display List items when List Loader has finished
+                mProgressBar.setVisibility(View.GONE);
+                mAdapter.swapCursor(data);
+                updateEmptyViewVisibility();
+                break;
+            case LIST_PRODUCT_FOR_EDITION_LOADER_ID:
+                showEditionDialog(data);
+                break;
+            case LIST_PRODUCT_FOR_DELETION_LOADER_ID:
+                deleteProductWithMessage(data);
         }
-        if (id == LIST_PRODUCT_LOADER_ID) {
-            showEditionDialog(data);
-        }
+
     }
 
     @Override
@@ -350,7 +359,7 @@ public class ListActivity extends AppCompatActivity
             mRecyclerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
             editProduct(id);
         } else {
-            deleteProductWithMessage(id);
+            deleteSingleProduct(id);
         }
     }
 
@@ -472,7 +481,7 @@ public class ListActivity extends AppCompatActivity
         String stringId = Integer.toString(id);
         Bundle bundle = new Bundle();
         bundle.putString("id", stringId);
-        getLoaderManager().restartLoader(LIST_PRODUCT_LOADER_ID, bundle, this);
+        getLoaderManager().restartLoader(LIST_PRODUCT_FOR_EDITION_LOADER_ID, bundle, this);
     }
 
     /* Shows a popup dialog that allows to add or edit an annotation to a product of the list,
@@ -547,12 +556,19 @@ public class ListActivity extends AppCompatActivity
         }
     }
 
-    /* Deletes a single product from the list based on its id in the table and displays a
-     * message with an undo action to reverse the deletion. */
-    private void deleteProductWithMessage(int id) {
+    /* Initiate deletion of a single product from the list based on its id in the table */
+    private void deleteSingleProduct(int id) {
+        String stringId = Integer.toString(id);
+        Bundle bundle = new Bundle();
+        bundle.putString("id", stringId);
+        getLoaderManager().restartLoader(LIST_PRODUCT_FOR_DELETION_LOADER_ID, bundle, this);
+    }
+
+    /* Deletes the product pointed by the cursor. Also shows a message that allows to reverse the deletion */
+    private void deleteProductWithMessage(Cursor cursor) {
 
         ArrayList<String> deletedValues =
-                DatabaseUtils.deleteProductFromListTable(ListActivity.this, mListQueryHandler, id);
+                DatabaseUtils.deleteProductFromListTable(ListActivity.this, mListQueryHandler, cursor);
 
         if (deletedValues != null)
             showMessageWithUndoAction(
