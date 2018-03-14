@@ -1,5 +1,6 @@
 package com.athebapps.android.list;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -32,11 +34,12 @@ import java.util.HashMap;
  *  - select one or several items to remove from the history table
  */
 public class HistoryActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Cursor>, HistoryAdapter.HistoryAdapterOnClickHandler,
+        implements LoaderManager.LoaderCallbacks<Cursor>,
+        HistoryAdapter.HistoryAdapterOnClickHandler,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     /* Helps the LoaderManager identify the loader for the history */
-    private static final int HISTORY_LOADER_ID = 101;
+    private static final int HISTORY_LOADER_ID = 1000;
 
     /* A Floating Action Button that appears when at least one element has been selected and that
      * is used to confirm the addition of the selected element(s) to the list */
@@ -226,15 +229,25 @@ public class HistoryActivity extends AppCompatActivity
         new AlertDialog.Builder(HistoryActivity.this)
                 .setMessage(getResources().getQuantityString(R.plurals.history_clear_selection_title, selected.size()))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @SuppressLint("StaticFieldLeak")
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        new AsyncTask<Void, Void, Integer>() {
+                            @Override
+                            protected Integer doInBackground(Void... voids) {
+                                return DatabaseUtils.deleteProductsFromHistoryTable(HistoryActivity.this, selected);
+                            }
 
-                        int nb = DatabaseUtils.deleteProductsFromHistoryTable(HistoryActivity.this, selected);
-                        showMessage(getResources().getQuantityString(R.plurals.history_products_cleared_message, nb, nb));
-                        selected.clear();
-                        updateFabVisibility();
-                        mAdapter.notifyDataSetChanged();
-                        invalidateOptionsMenu();
+                            @Override
+                            protected void onPostExecute(Integer integer) {
+                                super.onPostExecute(integer);
+                                showMessage(getResources().getQuantityString(R.plurals.history_products_cleared_message, integer, integer));
+                                selected.clear();
+                                updateFabVisibility();
+                                mAdapter.notifyDataSetChanged();
+                                invalidateOptionsMenu();
+                            }
+                        }.execute();
                     }
                 })
                 .setNegativeButton(android.R.string.no, null)
@@ -268,15 +281,29 @@ public class HistoryActivity extends AppCompatActivity
     }
 
     /* Inserts selected products to the list table and sets the result of the activity. */
+    @SuppressLint("StaticFieldLeak")
     private void addSelectedProducts() {
+        new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... voids) {
+                return DatabaseUtils.insertProductsIntoListTable(HistoryActivity.this, selected);
+            }
 
-        int nb = DatabaseUtils.insertProductsIntoListTable(this, selected);
-        Intent intent = new Intent();
-        if (nb == 0)
-            intent.putExtra(getString(R.string.history_message_to_list), getString(R.string.list_no_new_product_message));
-        else
-            intent.putExtra(getString(R.string.history_message_to_list), getResources().getQuantityString(R.plurals.list_new_products_message, nb, nb));
-        setResult(RESULT_OK, intent);
+            @Override
+            protected void onPostExecute(Integer integer) {
+                super.onPostExecute(integer);
+                Intent intent = new Intent();
+                if (integer == 0)
+                    intent.putExtra(getString(R.string.history_message_to_list),
+                            getString(R.string.list_no_new_product_message));
+                else
+                    intent.putExtra(getString(R.string.history_message_to_list),
+                            getResources().getQuantityString(R.plurals.list_new_products_message, integer, integer));
+                setResult(RESULT_OK, intent);
+            }
+        }.execute();
+
+
     }
 
     /* Updates the visibility of the Floating Action Button.

@@ -93,7 +93,7 @@ public class ListActivity extends AppCompatActivity
     /* Used by onActivityResult to identifies that the result comes from HistoryActivity */
     private static final int HISTORY_FOR_RESULT_ID = 300;
 
-    private static final boolean DEVELOPER_MODE = false;
+    private static final boolean DEVELOPER_MODE = true;
 
     /* The Floating Action Button that launches HistoryActivity */
     private FloatingActionButton mFab;
