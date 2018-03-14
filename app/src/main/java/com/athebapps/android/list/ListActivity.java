@@ -78,6 +78,9 @@ public class ListActivity extends AppCompatActivity
     /* Helps the LoaderManager identify the loader for the whole list */
     private static final int LIST_LOADER_ID = 100;
 
+    /* Helps the LoaderManager identify the loader for the whole list in the case of email sending */
+    private static final int LIST_FOR_EMAIL_LOADER_ID = 103;
+
     /* Helps the LoaderManager identify the loader for a single element of the list in the case of edition */
     private static final int LIST_PRODUCT_FOR_EDITION_LOADER_ID = 101;
 
@@ -252,7 +255,7 @@ public class ListActivity extends AppCompatActivity
                 showNotificationSetupDialogs();
                 return true;
             case R.id.action_email:
-                sendByEmail();
+                getLoaderManager().restartLoader(LIST_FOR_EMAIL_LOADER_ID, null, this);
                 return true;
             case R.id.action_alarm_info:
                 showScheduledNotificationInformationDialog();
@@ -266,6 +269,7 @@ public class ListActivity extends AppCompatActivity
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LIST_LOADER_ID:
+            case LIST_FOR_EMAIL_LOADER_ID:
                 String sortOrder = PreferenceUtils.getSortOrder(this, mSharedPreferences);
                 // Returns a new CursorLoader
                 return new CursorLoader(
@@ -306,6 +310,9 @@ public class ListActivity extends AppCompatActivity
                 mProgressBar.setVisibility(View.GONE);
                 mAdapter.swapCursor(data);
                 updateEmptyViewVisibility();
+                break;
+            case LIST_FOR_EMAIL_LOADER_ID:
+                sendByEmail(data);
                 break;
             case LIST_PRODUCT_FOR_EDITION_LOADER_ID:
                 showEditionDialog(data);
@@ -731,15 +738,16 @@ public class ListActivity extends AppCompatActivity
         showMessage(getString(R.string.list_notification_canceled_message));
     }
 
-    /* Sends an implicit intent to a mail app with the content of the list as the body of the mail. */
-    private void sendByEmail() {
+    /* Sends an implicit intent to a mail app with the content of the list as the body of the mail.
+     * @param cursor a Cursor pointing to the whole list sorted according to the user's preference */
+    private void sendByEmail(Cursor cursor) {
         if (mAdapter.getItemCount() != 0) {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setData(Uri.parse("mailto:")); // only email apps should handle this
             intent.putExtra(Intent.EXTRA_SUBJECT,
                     getResources().getString(R.string.list_email_title, getDate()));
             intent.putExtra(Intent.EXTRA_TEXT,
-                    DatabaseUtils.formatListForEmail(this, mSharedPreferences));
+                    DatabaseUtils.formatListForEmail(this, cursor));
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);
             }

@@ -25,7 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Utility methods for operations that require access to the database.
+ * Utility methods for operations that require access to the database,
+ * using the Content Provider or Cursors.
  */
 class DatabaseUtils {
 
@@ -245,22 +246,12 @@ class DatabaseUtils {
 
     /**
      * Formats the list as a String to be used in the body of an email.
-     * @param context needed to get access to Content Resolver
-     * @param sharedPreferences used to get user's preference for sort order
+     * @param context used to access String values
+     * @param cursor a Cursor pointing to the table representing the list
      * @return the String representation of the whole list with products, annotations and priorities.
      */
     @NonNull
-    static String formatListForEmail(Context context, SharedPreferences sharedPreferences) {
-
-        Uri uri = ListContract.ListEntry.CONTENT_URI;
-
-        // In the case of email, we want the sort order to be the same as the one in the app.
-        String sortOrder = PreferenceUtils.getSortOrder(context, sharedPreferences);
-        // We also want to show the full list with annotations.
-        String[] projection  = {ListContract.ListEntry.COLUMN_PRODUCT,
-                ListContract.ListEntry.COLUMN_PRIORITY, ListContract.ListEntry.COLUMN_ANNOTATION};
-
-        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, sortOrder);
+    static String formatListForEmail(Context context, Cursor cursor) {
 
         StringBuilder list = new StringBuilder();
 
