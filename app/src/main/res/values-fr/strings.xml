@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <string name="app_name">Liste de course</string>
+    <string name="app_name">Liste de courses</string>
 
 
     <!-- Strings for List activity start -->
@@ -43,15 +43,15 @@
     <string name="list_notification_time_picker_message">2. Sélectionner l\'heure :</string>
     <string name="list_notification_pickers_next_button">Suite</string>
     <string name="list_notification_button">Ouvrir</string>
-    <string name="list_notification_title_empty">Liste de course (vide)</string>
+    <string name="list_notification_title_empty">Liste de courses (vide)</string>
     <plurals name="list_notification_title">
-        <item quantity="one">Liste de course (%d produit) :</item>
-        <item quantity="other">Liste de course (%d produits) :</item>
+        <item quantity="one">Liste de courses (%d produit) :</item>
+        <item quantity="other">Liste de courses (%d produits) :</item>
     </plurals>
 
     <!-- Strings for email -->
     <string name="list_menu_email">Email</string>
-    <string name="list_email_title">Liste de course du %1$s.</string>
+    <string name="list_email_title">Liste de courses du %1$s.</string>
 
     <!-- Strings for List activity end -->
 
