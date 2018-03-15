@@ -2,7 +2,6 @@ package com.athebapps.android.list.database;
 
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
-import android.database.Cursor;
 
 /**
  * AsyncQueryHandler is used from the main thread to perform simple Content Provider operations

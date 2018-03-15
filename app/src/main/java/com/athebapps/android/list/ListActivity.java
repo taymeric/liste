@@ -93,9 +93,6 @@ public class ListActivity extends AppCompatActivity
     /* Used by onActivityResult to identifies that the result comes from HistoryActivity */
     private static final int HISTORY_FOR_RESULT_ID = 300;
 
-    /* Used to enable debugging in StrictMode */
-    private static final boolean DEVELOPER_MODE = false;
-
     /* The Floating Action Button that launches HistoryActivity */
     private FloatingActionButton mFab;
 
@@ -130,7 +127,7 @@ public class ListActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        if (DEVELOPER_MODE) {
+        /*if (DEVELOPER_MODE) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     .detectDiskReads()
                     .detectDiskWrites()
@@ -144,7 +141,7 @@ public class ListActivity extends AppCompatActivity
                     .penaltyLog()
                     .penaltyDeath()
                     .build());
-        }
+        }*/
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
@@ -218,13 +215,9 @@ public class ListActivity extends AppCompatActivity
         // Only show one of the layout change buttons
         MenuItem compact_layout = menu.findItem(R.id.action_compact_layout);
         MenuItem normal_layout = menu.findItem(R.id.action_normal_layout);
-        if (mSharedPreferences.getBoolean(getString(R.string.pref_list_compact_layout_key), true)) {
-            compact_layout.setVisible(false);
-            normal_layout.setVisible(true);
-        } else {
-            compact_layout.setVisible(true);
-            normal_layout.setVisible(false);
-        }
+        boolean isCompactLayout = mSharedPreferences.getBoolean(getString(R.string.pref_list_compact_layout_key), false);
+        compact_layout.setVisible(!isCompactLayout);
+        normal_layout.setVisible(isCompactLayout);
 
         return true;
     }

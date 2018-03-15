@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textAppearance="?android:textAppearance"
-                android:textSize="@dimen/text_list_big"
+                android:textSize="@dimen/text_list_product_big"
                 android:textStyle="bold"
                 tools:text="Text"/>
 
@@ -52,7 +52,7 @@
             android:layout_marginStart="16dp"
             android:gravity="end"
             android:textAppearance="?android:textAppearance"
-            android:textSize="@dimen/text_list_big"
+            android:textSize="@dimen/text_list_product_big"
             android:textStyle="bold"
             tools:text="!!!"/>
 

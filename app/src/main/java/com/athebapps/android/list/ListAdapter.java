@@ -58,7 +58,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         mFontFamily = PreferenceUtils.getFont(mContext, mSharedPreferences);
 
         boolean isCompactLayout = mSharedPreferences.getBoolean(
-                mContext.getString(R.string.pref_list_compact_layout_key), true);
+                mContext.getString(R.string.pref_list_compact_layout_key), false);
         if (isCompactLayout)
             mCurrentLayout = COMPACT_LAYOUT;
         else
@@ -160,7 +160,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     /** Updates the layout of the RecyclerView to the most recent value from the user's preferences */
     void reloadLayout() {
         boolean isCompactLayout = mSharedPreferences.getBoolean(
-                mContext.getString(R.string.pref_list_compact_layout_key), true);
+                mContext.getString(R.string.pref_list_compact_layout_key), false);
         if (isCompactLayout)
             mCurrentLayout = COMPACT_LAYOUT;
         else

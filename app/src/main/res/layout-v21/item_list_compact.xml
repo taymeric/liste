@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textAppearance="?android:textAppearance"
-                android:textSize="@dimen/text_list_small"
+                android:textSize="@dimen/text_list_product_small"
                 tools:text="Text"/>
 
             <TextView
@@ -51,7 +51,7 @@
             android:layout_marginStart="16dp"
             android:gravity="end"
             android:textAppearance="?android:textAppearance"
-            android:textSize="@dimen/text_list_small"
+            android:textSize="@dimen/text_list_product_small"
             android:textStyle="bold"
             tools:text="!!!"/>
 

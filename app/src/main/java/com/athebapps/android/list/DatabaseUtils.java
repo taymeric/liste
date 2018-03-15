@@ -15,7 +15,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 
 import com.athebapps.android.list.database.ListContract;
 import com.athebapps.android.list.database.ListQueryHandler;
@@ -28,8 +27,6 @@ import java.util.HashMap;
  * using the Content Provider or Cursors.
  */
 class DatabaseUtils {
-
-    private static final String TAG = "DatabaseUtils.java";
 
     /** Inserts a product into the list table.
      *  Called when a product is entered from the ActionView in the AppBar of ListActivity.
@@ -172,7 +169,7 @@ class DatabaseUtils {
 
         }
         catch (RemoteException | OperationApplicationException exception) {
-            Log.d(TAG, "Exception while deleting products from history");
+            //Log.d(TAG, "Exception while deleting products from history");
         }
 
         return nb;
