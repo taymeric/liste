@@ -8,7 +8,7 @@
     <string name="list_menu_email">Courriel</string>
     <string name="list_email_title">Liste d\'épicerie du %1$s.</string>
 
-    <plurals name="history_clear_selection_title">
+    <plurals name="history_delete_selection_title">
         <item quantity="one" tools:ignore="ImpliedQuantity">Effacer le produit sélectionné de l\'historique?</item>
         <item quantity="other">Effacer les produits sélectionnés de l\'historique?</item>
     </plurals>

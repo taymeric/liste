@@ -131,7 +131,7 @@ public class HistoryActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.activity_history, menu);
 
         // Only show the menu item for deletion if at least one element is selected
-        MenuItem trash = menu.findItem(R.id.action_clear);
+        MenuItem trash = menu.findItem(R.id.action_delete);
         if (selected != null) trash.setVisible(!selected.isEmpty());
         else trash.setVisible(false);
 
@@ -152,7 +152,7 @@ public class HistoryActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch(id) {
-            case R.id.action_clear:
+            case R.id.action_delete:
                 deleteSelectedProducts();
                 return true;
             case R.id.action_compact_layout:
@@ -226,7 +226,7 @@ public class HistoryActivity extends AppCompatActivity
     /* Deletes selection from the history table */
     private void deleteSelectedProducts() {
         new AlertDialog.Builder(HistoryActivity.this)
-                .setMessage(getResources().getQuantityString(R.plurals.history_clear_selection_title, selected.size()))
+                .setMessage(getResources().getQuantityString(R.plurals.history_delete_selection_title, selected.size()))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @SuppressLint("StaticFieldLeak")
                     @Override
@@ -241,7 +241,7 @@ public class HistoryActivity extends AppCompatActivity
                             @Override
                             protected void onPostExecute(Integer integer) {
                                 super.onPostExecute(integer);
-                                showMessage(getResources().getQuantityString(R.plurals.history_products_cleared_message, integer, integer));
+                                showMessage(getResources().getQuantityString(R.plurals.history_products_deleted_message, integer, integer));
                                 selected.clear();
                                 updateFabVisibility();
                                 mAdapter.notifyDataSetChanged();

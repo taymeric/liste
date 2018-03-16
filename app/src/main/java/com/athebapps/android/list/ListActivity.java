@@ -18,7 +18,6 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -230,7 +229,7 @@ public class ListActivity extends AppCompatActivity
                 Intent preferencesIntent = new Intent(this, PreferencesActivity.class);
                 startActivity(preferencesIntent);
                 return true;
-            case R.id.action_clear:
+            case R.id.action_delete:
                 showDeleteAllDialog();
                 return true;
             case R.id.action_compact_layout:
@@ -746,6 +745,7 @@ public class ListActivity extends AppCompatActivity
         } else {
             showMessage(getString(R.string.list_empty_message));
         }
+        getLoaderManager().destroyLoader(LIST_FOR_EMAIL_LOADER_ID);
     }
 
     /* Gets the current date as a String representation. */

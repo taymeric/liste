@@ -22,16 +22,16 @@
 
     <!-- Strings for addition -->
     <string name="list_menu_add_hint">Add a product</string>
-    <string name="list_no_new_product_message">No new product.</string>
+    <string name="list_no_new_product_message">No new products.</string>
     <plurals name="list_new_products_message">
-        <item quantity="one">%d new product added to the list.</item>
-        <item quantity="other">%d new products added to the list.</item>
+        <item quantity="one">%d new product added to list.</item>
+        <item quantity="other">%d new products added to list.</item>
     </plurals>
 
     <!-- Strings for deletion -->
     <string name="list_menu_clear">Clear list</string>
     <string name="list_clear_title">Clear current list?</string>
-    <string name="list_removed_product_message">\'%1$s\' removed from the list.</string>
+    <string name="list_removed_product_message">\'%1$s\' removed from list.</string>
 
     <!-- Strings for list layout change menu -->
     <string name="list_menu_compact_layout">Two columns</string>
@@ -67,17 +67,17 @@
 
     <string name="history_title">History</string>
     <string name="history_instructions">Select products to add:</string>
-    <string name="history_empty_view_text">History is empty.\nStart by adding products from the main screen.</string>
+    <string name="history_empty_view_text">Your history is empty.\nStart by adding products from the main screen.</string>
 
     <!-- Strings for deletion menu -->
-    <string name="history_menu_clear">Clear selection</string>
-    <plurals name="history_clear_selection_title">
-        <item quantity="one">Clear selected product from history?</item>
-        <item quantity="other">Clear selected products from history?</item>
+    <string name="history_menu_delete">Delete selection</string>
+    <plurals name="history_delete_selection_title">
+        <item quantity="one">Delete selected product from history?</item>
+        <item quantity="other">Delete selected products from history?</item>
     </plurals>
-    <plurals name="history_products_cleared_message">
-        <item quantity="one">%d product cleared from history.</item>
-        <item quantity="other">%d products cleared from history.</item>
+    <plurals name="history_products_deleted_message">
+        <item quantity="one">%d product deleted from history.</item>
+        <item quantity="other">%d products deleted from history.</item>
     </plurals>
 
     <!-- Strings for history layout change menu -->
@@ -86,8 +86,8 @@
 
     <!-- Strings for confirmation dialog -->
     <plurals name="history_add_selected_products">
-        <item quantity="one">Add selected element to the list?</item>
-        <item quantity="other">Add selected elements to the list?</item>
+        <item quantity="one">Add selected product to list?</item>
+        <item quantity="other">Add selected products to list?</item>
     </plurals>
 
     <string name="history_message_to_list" translatable="false">history_message</string>

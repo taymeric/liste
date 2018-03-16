@@ -50,7 +50,7 @@
     </plurals>
 
     <!-- Strings for email -->
-    <string name="list_menu_email">Email</string>
+    <string name="list_menu_email">E-mail</string>
     <string name="list_email_title">Liste de courses du %1$s.</string>
 
     <!-- Strings for List activity end -->
@@ -60,15 +60,15 @@
 
     <string name="history_title">Historique</string>
     <string name="history_instructions">Sélectionner les produits à ajouter :</string>
-    <string name="history_empty_view_text">L\'historique est vide.\nPour commencer, ajouter des produits depuis l\'écran principal.</string>
+    <string name="history_empty_view_text">Votre historique est vide.\nPour commencer, ajoutez des produits depuis l\'écran principal.</string>
 
     <!-- Strings for deletion menu -->
-    <string name="history_menu_clear">Effacer la sélection</string>
-    <plurals name="history_clear_selection_title">
+    <string name="history_menu_delete">Effacer la sélection</string>
+    <plurals name="history_delete_selection_title">
         <item quantity="one" tools:ignore="ImpliedQuantity">Effacer le produit sélectionné de l\'historique ?</item>
         <item quantity="other">Effacer les produits sélectionnés de l\'historique ?</item>
     </plurals>
-    <plurals name="history_products_cleared_message">
+    <plurals name="history_products_deleted_message">
         <item quantity="one">%d produit supprimé de l\'historique.</item>
         <item quantity="other">%d produits supprimés de l\'historique.</item>
     </plurals>
