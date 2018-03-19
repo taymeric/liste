@@ -53,7 +53,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         boolean isCompactLayout = mSharedPreferences.getBoolean(
-                mContext.getString(R.string.pref_history_compact_layout_key), true);
+                mContext.getString(R.string.pref_history_compact_layout_key), context.getResources().getBoolean(R.bool.history_layout_compact_default));
         if (isCompactLayout)
             mCurrentLayout = COMPACT_LAYOUT;
         else

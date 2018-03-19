@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Specifies if the default layout for ListActivity is compact -->
+    <bool name="list_layout_compact_default">false</bool>
+    <!-- Specifies if the default layout for HistoryActivity is compact -->
+    <bool name="history_layout_compact_default">true</bool>
+</resources>

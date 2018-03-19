@@ -19,7 +19,7 @@ class PreferenceUtils {
     static RecyclerView.LayoutManager getListLayoutManager(
             Context context, SharedPreferences sharedPreferences) {
         if (sharedPreferences.getBoolean(context.getString(R.string.pref_list_compact_layout_key),
-                false))
+                context.getResources().getBoolean(R.bool.list_layout_compact_default)))
             return new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         else
             return new LinearLayoutManager(context);
@@ -29,7 +29,7 @@ class PreferenceUtils {
     static RecyclerView.LayoutManager getHistoryLayoutManager(
             Context context, SharedPreferences sharedPreferences) {
         if (sharedPreferences.getBoolean(context.getString(R.string.pref_history_compact_layout_key),
-                true))
+                context.getResources().getBoolean(R.bool.history_layout_compact_default)))
             return new GridLayoutManager(context, 2);
         else
             return new LinearLayoutManager(context);

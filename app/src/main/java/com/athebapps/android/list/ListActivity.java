@@ -214,7 +214,7 @@ public class ListActivity extends AppCompatActivity
         // Only show one of the layout change buttons
         MenuItem compact_layout = menu.findItem(R.id.action_compact_layout);
         MenuItem normal_layout = menu.findItem(R.id.action_normal_layout);
-        boolean isCompactLayout = mSharedPreferences.getBoolean(getString(R.string.pref_list_compact_layout_key), false);
+        boolean isCompactLayout = mSharedPreferences.getBoolean(getString(R.string.pref_list_compact_layout_key), getResources().getBoolean(R.bool.list_layout_compact_default));
         compact_layout.setVisible(!isCompactLayout);
         normal_layout.setVisible(isCompactLayout);
 

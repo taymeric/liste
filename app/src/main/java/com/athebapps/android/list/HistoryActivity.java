@@ -137,7 +137,7 @@ public class HistoryActivity extends AppCompatActivity
 
         MenuItem compact_layout = menu.findItem(R.id.action_compact_layout);
         MenuItem normal_layout = menu.findItem(R.id.action_normal_layout);
-        if (mSharedPreferences.getBoolean(getString(R.string.pref_history_compact_layout_key), true)) {
+        if (mSharedPreferences.getBoolean(getString(R.string.pref_history_compact_layout_key), getResources().getBoolean(R.bool.history_layout_compact_default))) {
             compact_layout.setVisible(false);
             normal_layout.setVisible(true);
         } else {
