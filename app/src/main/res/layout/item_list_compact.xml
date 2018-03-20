@@ -30,7 +30,7 @@
                 android:layout_gravity="center_vertical"
                 android:textAppearance="?android:textAppearance"
                 android:textSize="@dimen/text_list_product_small"
-                tools:text="Text"/>
+                tools:text="@tools:sample/cities"/>
 
             <TextView
                 android:id="@+id/item_annotation"
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textSize="@dimen/text_list_annotation_small"
-                tools:text="Subtext"/>
+                tools:text="@tools:sample/us_phones"/>
 
         </LinearLayout>
 

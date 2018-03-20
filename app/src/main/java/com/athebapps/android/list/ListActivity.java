@@ -304,6 +304,7 @@ public class ListActivity extends AppCompatActivity
                 break;
             case LIST_FOR_EMAIL_LOADER_ID:
                 sendByEmail(data);
+                getLoaderManager().destroyLoader(LIST_FOR_EMAIL_LOADER_ID);
                 break;
             case LIST_PRODUCT_FOR_EDITION_LOADER_ID:
                 showEditionDialog(data);
@@ -463,7 +464,7 @@ public class ListActivity extends AppCompatActivity
     }
 
     /* Helper method to get a Cursor that points to elements of the history table
-     * that match the string passed as parameter. */
+     * that match the string passed as parameter. Used by the Adapter of the ActionView. */
     private Cursor getCursor(CharSequence str) {
         String select = ListContract.HistoryEntry.COLUMN_PRODUCT + " LIKE ? ";
         String[]  selectArgs = { "%" + str + "%"};
@@ -745,7 +746,6 @@ public class ListActivity extends AppCompatActivity
         } else {
             showMessage(getString(R.string.list_empty_message));
         }
-        getLoaderManager().destroyLoader(LIST_FOR_EMAIL_LOADER_ID);
     }
 
     /* Gets the current date as a String representation. */
