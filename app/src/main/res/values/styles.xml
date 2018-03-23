@@ -15,23 +15,19 @@
     </style>
 
     <!-- Specific theme for history activity. -->
-    <style name="HistoryTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="HistoryTheme" parent="AppTheme">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimaryHistory</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkHistory</item>
         <item name="colorAccent">@color/colorAccent</item>
-
-        <item name="preferenceTheme">@style/myPreferenceTheme</item>
     </style>
 
     <!-- Specific theme for history activity. -->
-    <style name="PreferencesTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="PreferencesTheme" parent="AppTheme">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimaryPreferences</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkPreferences</item>
         <item name="colorAccent">@color/colorAccent</item>
-
-        <item name="preferenceTheme">@style/myPreferenceTheme</item>
     </style>
 
     <style name="ListLayout">
