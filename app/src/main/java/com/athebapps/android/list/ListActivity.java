@@ -620,6 +620,7 @@ public class ListActivity extends AppCompatActivity
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, listener, year, month, day);
 
         // Create View for Custom title
+        // For some reasons, the custom title does not show on some devices...
         LayoutInflater inflater = getLayoutInflater();
         final ViewGroup nullParent = null;
         View v = inflater.inflate(R.layout.dialog_picker_title, nullParent);

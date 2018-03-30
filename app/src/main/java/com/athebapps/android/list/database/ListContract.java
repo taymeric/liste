@@ -48,7 +48,9 @@ public class ListContract {
         /** The Uri identifying this table in the Content Provider. */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_HISTORY);
         /** The only column for the history table: the text corresponding to the name of the product
-         *  of the history.*/
+         *  of the history. There is no normalization of the database: the name of the products are
+         *  repeated in both tables. The reason is it is possible to have a product in one of the
+         *  tables and not int the other. */
         public static final String COLUMN_PRODUCT = "product";
         /** Internal name for the table. */
         static final String TABLE_NAME = "history";
