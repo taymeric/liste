@@ -260,13 +260,13 @@ public class HistoryActivity extends AppCompatActivity
         if (selected != null && !selected.isEmpty()) {
             new AlertDialog.Builder(HistoryActivity.this)
                     .setMessage(getResources().getQuantityString(R.plurals.history_add_selected_products, selected.size()))
-                    .setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                    .setPositiveButton(getString(R.string.history_confirm_yes), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             addSelectedProducts();
                         }
                     })
-                    .setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.history_confirm_no), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             setResult(RESULT_CANCELED, null);

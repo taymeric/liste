@@ -6,11 +6,13 @@
 
     <!-- Strings for List activity start -->
 
+    <string name="list_fab_content_description">Access history</string>
     <string name="list_empty_message">The list is empty.</string>
     <string name="list_empty_view_text">The list is empty.</string>
 
     <string name="list_high_priority_mark" translatable="false">!!!</string>
     <string name="list_low_priority_mark" translatable="false">\?\?\?</string>
+
 
     <!-- Strings for edition -->
     <string name="list_edition_annotation_label">Annotation:</string>
@@ -68,6 +70,7 @@
     <string name="history_title">History</string>
     <string name="history_instructions">Select products to add:</string>
     <string name="history_empty_view_text">Your history is empty.\nStart by adding products from the main screen.</string>
+    <string name="history_fab_content_description">Add products</string>
 
     <!-- Strings for deletion menu -->
     <string name="history_menu_delete">Delete selection</string>
@@ -85,6 +88,8 @@
     <string name="history_menu_normal_layout">One column</string>
 
     <!-- Strings for confirmation dialog -->
+    <string name="history_confirm_yes">Yes</string>
+    <string name="history_confirm_no">No</string>
     <plurals name="history_add_selected_products">
         <item quantity="one">Add selected product to list?</item>
         <item quantity="other">Add selected products to list?</item>
@@ -130,8 +135,8 @@
     <string name="pref_about_email_label">Contact</string>
     <string name="pref_about_icons_label">Icons by Google</string>
     <string name="pref_about_version_name" translatable="false">1.0</string>
-    <string name="pref_about_url" translatable="false">athebapp@gmail.com</string>
-    <string name="pref_about_icons" translatable="false">https://material.io/icons/</string>
+    <string name="pref_about_email" translatable="false">athebapps@gmail.com</string>
+    <string name="pref_about_icons_url" translatable="false">https://material.io/icons/</string>
 
     <!-- Strings for Preferences activity end -->
 

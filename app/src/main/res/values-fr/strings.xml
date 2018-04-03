@@ -6,6 +6,7 @@
 
     <!-- Strings for List activity start -->
 
+    <string name="list_fab_content_description">Accéder à l\'historique</string>
     <string name="list_empty_message">La liste est vide.</string>
     <string name="list_empty_view_text">La liste est vide.</string>
 
@@ -61,6 +62,7 @@
     <string name="history_title">Historique</string>
     <string name="history_instructions">Sélectionner les produits à ajouter :</string>
     <string name="history_empty_view_text">Votre historique est vide.\nPour commencer, ajoutez des produits depuis l\'écran principal.</string>
+    <string name="history_fab_content_description">Ajouter produits</string>
 
     <!-- Strings for deletion menu -->
     <string name="history_menu_delete">Effacer la sélection</string>
@@ -78,6 +80,8 @@
     <string name="history_menu_normal_layout">Une colonne</string>
 
     <!-- Strings for confirmation dialog -->
+    <string name="history_confirm_yes">Oui</string>
+    <string name="history_confirm_no">Non</string>
     <plurals name="history_add_selected_products">
         <item quantity="one" tools:ignore="ImpliedQuantity">Ajouter l\'élément sélectionné à la liste ?</item>
         <item quantity="other">Ajouter les éléments sélectionnés à la liste ?</item>

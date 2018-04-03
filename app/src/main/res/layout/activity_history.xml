@@ -77,6 +77,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:clickable="true"
         android:focusable="true"
+        android:contentDescription="@string/history_fab_content_description"
         app:srcCompat="@drawable/ic_add_white_24dp"
         />
 
