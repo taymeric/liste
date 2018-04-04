@@ -8,13 +8,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.CoreMatchers.anything;
 
 /**
  * Tests if long-pressing a product of the list displays the edition dialog.
@@ -27,7 +25,7 @@ public class ListActivityLongPressTest {
             new ActivityTestRule<>(ListActivity.class);
 
     @Test
-    public void longPressProduct() {
+    public void longPressFirstProduct() {
 
         // Perform a long click on the first element of the list
         onView(withId(R.id.list_recycler_view))
