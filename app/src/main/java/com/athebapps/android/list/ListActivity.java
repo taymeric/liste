@@ -158,7 +158,7 @@ public class ListActivity extends AppCompatActivity
         });
 
         // Set up the RecyclerView and its Adapter
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecyclerView = (RecyclerView) findViewById(R.id.list_recycler_view);
         mLayoutManager = PreferenceUtils.getListLayoutManager(this, mSharedPreferences);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new ListAdapter(this, this);
