@@ -13,6 +13,7 @@
     <string name="list_high_priority_mark" translatable="false">!!!</string>
     <string name="list_low_priority_mark" translatable="false">\?\?\?</string>
 
+    <string name="list_menu_preferences">Preferences</string>
 
     <!-- Strings for edition -->
     <string name="list_edition_annotation_label">Annotation:</string>

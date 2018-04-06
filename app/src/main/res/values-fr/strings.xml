@@ -10,6 +10,8 @@
     <string name="list_empty_message">La liste est vide.</string>
     <string name="list_empty_view_text">La liste est vide.</string>
 
+    <string name="list_menu_preferences">Préférences</string>
+
     <!-- Strings for edition -->
     <string name="list_edition_annotation_label">Annotation :</string>
     <string name="list_edition_priority_label">Priorité :</string>

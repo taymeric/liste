@@ -14,8 +14,10 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
+
 /**
  * Tests if long-pressing a product of the list displays the edition dialog.
+ * Warning : This test does not work if the list is empty.
  */
 @RunWith(AndroidJUnit4.class)
 public class ListActivityLongPressTest {
