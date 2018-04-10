@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
@@ -73,8 +74,9 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return mCurrentLayout;
     }
 
+    @NonNull
     @Override
-    public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // There are two possible layouts for the RecyclerView: Normal or Compact.
         // For each of these two layouts, the layout of a ViewHolder is different.
         View v;
@@ -89,7 +91,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, int position) {
         // Gets element at 'position' and replaces the content of the view with that element
         if (mCursor.moveToPosition(position)) {
 
@@ -109,21 +111,23 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             holder.mAnnotationTextView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
             holder.mPriorityView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
 
-            if (priority == ListContract.ListEntry.HIGH_PRIORITY_PRODUCT) {
-                holder.mPriorityView.setText(mContext.getString(R.string.list_high_priority_mark));
-                holder.mPriorityView.setVisibility(View.VISIBLE);
-            }
-            else if (priority == ListContract.ListEntry.LOW_PRIORITY_PRODUCT) {
-                holder.mPriorityView.setText(mContext.getString(R.string.list_low_priority_mark));
-                holder.mPriorityView.setVisibility(View.VISIBLE);
-            }
-            else {
-                // For compact layout, we save space by using View.GONE when the priority marker is
-                // not visible. For normal layout, View.INVISIBLE gives a better alignment.
-                if (mCurrentLayout == NORMAL_LAYOUT)
-                    holder.mPriorityView.setVisibility(View.INVISIBLE);
-                else
-                    holder.mPriorityView.setVisibility(View.GONE);
+            switch (priority) {
+                case ListContract.ListEntry.HIGH_PRIORITY_PRODUCT:
+                    holder.mPriorityView.setText(mContext.getString(R.string.list_high_priority_mark));
+                    holder.mPriorityView.setVisibility(View.VISIBLE);
+                    break;
+                case ListContract.ListEntry.LOW_PRIORITY_PRODUCT:
+                    holder.mPriorityView.setText(mContext.getString(R.string.list_low_priority_mark));
+                    holder.mPriorityView.setVisibility(View.VISIBLE);
+                    break;
+                default: // Default priority : no mark.
+                    // For compact layout, we save space by using View.GONE when the priority marker is
+                    // not visible. For normal layout, View.INVISIBLE gives a better alignment.
+                    if (mCurrentLayout == NORMAL_LAYOUT)
+                        holder.mPriorityView.setVisibility(View.INVISIBLE);
+                    else
+                        holder.mPriorityView.setVisibility(View.GONE);
+                    break;
             }
 
             // A tag containing the Id of the element in the table is needed

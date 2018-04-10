@@ -3,10 +3,10 @@
 ## Description
 A simple Android app for managing a grocery list. 
 
-### Main Functionalities
+### Main features
 * The app's main screen contains a single list.
 * Every element added to the list is also saved into a history.
-* The user can then: edit the list, acccess the history, send a notification, send an email or access settings.
+* The user can then: edit the list, access the history, send a notification, send an email or access settings.
 
 More information as well as screenshots on the Google Play Store page of the app (link below). 
 

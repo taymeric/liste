@@ -1,6 +1,7 @@
 package com.athebapps.android.list;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.PendingIntent;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
@@ -10,11 +11,12 @@ import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.NotificationCompat;
 
 import com.athebapps.android.list.database.ListContract;
 import com.athebapps.android.list.database.ListQueryHandler;
@@ -223,8 +225,14 @@ class DatabaseUtils {
         Intent resultIntent = new Intent(context, ListActivity.class);
         PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder)
-                new NotificationCompat.Builder(context)
+        String channelId;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            channelId = NotificationChannel.DEFAULT_CHANNEL_ID;
+        else
+            channelId = "default";
+
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(context, channelId)
                         .setSmallIcon(R.drawable.ic_shopping_basket_white_24dp)
                         .setContentTitle(title)
                         .setContentText(list)

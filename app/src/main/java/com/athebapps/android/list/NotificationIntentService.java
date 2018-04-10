@@ -1,38 +1,41 @@
 package com.athebapps.android.list;
 
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.annotation.Nullable;
+import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
+
+import com.firebase.jobdispatcher.JobService;
 
 import static com.athebapps.android.list.NotificationReceiver.NOTIFICATION_ID_KEY;
 
-/** IntentService used to create and send a notification to the NotificationManager and
- * update the SharedPreferences, all in a background thread. */
-public class NotificationIntentService extends IntentService {
-
-    public NotificationIntentService() {
-        super("NotificationIntentService");
-    }
+/** JobService used to create and send a notification to the NotificationManager and
+ * update the SharedPreferences. */
+public class NotificationIntentService extends JobService {
 
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
+    public boolean onStartJob(com.firebase.jobdispatcher.JobParameters job) {
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
         Notification notification = DatabaseUtils.createNotificationFromListProducts(this);
-
+        Bundle bundle = job.getExtras();
         int id = 0;
-        if (intent != null) id= intent.getIntExtra(NOTIFICATION_ID_KEY, 0);
-        if (notificationManager != null) notificationManager.notify(id, notification);
+        if (bundle != null)
+            id = bundle.getInt(NOTIFICATION_ID_KEY);
+        if (notificationManager != null)
+            notificationManager.notify(id, notification);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         PreferenceUtils.setAlarm(this, sharedPreferences, false, null);
 
+        return false; // Answers the question: "Is there still work going on?"
+    }
+
+    @Override
+    public boolean onStopJob(com.firebase.jobdispatcher.JobParameters job) {
+        return false; // Answers the question: "Should this job be retried?"
     }
 }

@@ -49,7 +49,7 @@ public class ListActivityMenuTest {
 
     // Tests if the preferences activity is launched when clicking on the corresponding menu button.
     @Test
-    public void clickOnPrefencesButton_checkIntent() {
+    public void clickOnPreferencesButton_checkIntent() {
 
         // Open the menu.
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());

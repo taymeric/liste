@@ -148,7 +148,7 @@ public class ListActivity extends AppCompatActivity
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
-        mFab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        mFab = findViewById(R.id.floatingActionButton);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,7 +158,7 @@ public class ListActivity extends AppCompatActivity
         });
 
         // Set up the RecyclerView and its Adapter
-        mRecyclerView = (RecyclerView) findViewById(R.id.list_recycler_view);
+        mRecyclerView = findViewById(R.id.list_recycler_view);
         mLayoutManager = PreferenceUtils.getListLayoutManager(this, mSharedPreferences);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new ListAdapter(this, this);
@@ -192,7 +192,7 @@ public class ListActivity extends AppCompatActivity
         mEmptyView = findViewById(R.id.empty_view);
 
         // Make the progress bar visible until the list has finished loading
-        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        mProgressBar = findViewById(R.id.progress_bar);
         mProgressBar.setVisibility(View.VISIBLE);
 
         // Initiate loading of the list to populate the RecyclerView
@@ -380,7 +380,7 @@ public class ListActivity extends AppCompatActivity
         final MenuItem menuItem = menu.findItem(R.id.action_add);
         View v = menuItem.getActionView();
 
-        MenuItemCompat.OnActionExpandListener expandListener = new MenuItemCompat.OnActionExpandListener() {
+        MenuItem.OnActionExpandListener expandListener = new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 // When the ActionView is collapsed, hide the soft keyboard and clear the TextView field.
@@ -418,7 +418,7 @@ public class ListActivity extends AppCompatActivity
                 return true;
             }
         };
-        MenuItemCompat.setOnActionExpandListener(menuItem, expandListener);
+        menuItem.setOnActionExpandListener(expandListener);
 
         mAutoCompleteTextView = v.findViewById(R.id.add_text_view);
 

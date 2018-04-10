@@ -3,6 +3,7 @@ package com.athebapps.android.list;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -67,8 +68,9 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
         setHasStableIds(true);
     }
 
+    @NonNull
     @Override
-    public HistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public HistoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // There are two possible layouts for the RecyclerView: Normal or Compact.
         // For each of these two layouts, the layout of a ViewHolder is different.
         View v;
@@ -83,7 +85,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(HistoryAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HistoryAdapter.ViewHolder holder, int position) {
         // Gets element at 'position' and replaces the contents of the view with that element
         if (mCursor.moveToPosition(position)) {
             String s = mCursor.getString(mCursor.getColumnIndex(ListContract.HistoryEntry.COLUMN_PRODUCT));

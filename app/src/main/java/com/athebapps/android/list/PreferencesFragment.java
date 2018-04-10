@@ -3,6 +3,7 @@ package com.athebapps.android.list;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceCategory;
@@ -75,11 +76,12 @@ public class PreferencesFragment extends PreferenceFragmentCompat
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
         DialogFragment fragment;
+        FragmentManager fragmentManager = getFragmentManager();
         // AboutDialogPreference is used to display a dialog for the help/info section
-        if (preference instanceof AboutDialogPreference) {
+        if (fragmentManager != null && preference instanceof AboutDialogPreference) {
             fragment = AboutPreferenceDialogFragmentCompat.newInstance(preference);
             fragment.setTargetFragment(this, 0);
-            fragment.show(getFragmentManager(),
+            fragment.show(fragmentManager,
                     "android.support.v7.preference.PreferenceFragment.DIALOG");
         } else super.onDisplayPreferenceDialog(preference);
     }

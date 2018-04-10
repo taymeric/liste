@@ -81,7 +81,7 @@ public class HistoryActivity extends AppCompatActivity
         else
             selected = new HashMap<>();
 
-        mFab = (FloatingActionButton) findViewById(R.id.floatingActionButtonHistory);
+        mFab = findViewById(R.id.floatingActionButtonHistory);
         updateFabVisibility();
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,7 +96,7 @@ public class HistoryActivity extends AppCompatActivity
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
         // Set up the Recycler View with its Adapter
-        mRecyclerView = (RecyclerView) findViewById(R.id.history_recycler_view);
+        mRecyclerView = findViewById(R.id.history_recycler_view);
         mLayoutManager = PreferenceUtils.getHistoryLayoutManager(this, mSharedPreferences);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new HistoryAdapter(this, selected, this);
@@ -106,7 +106,7 @@ public class HistoryActivity extends AppCompatActivity
         mEmptyView = findViewById(R.id.empty_view);
 
         // Make the progress bar visible until the history has finished loading
-        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        mProgressBar = findViewById(R.id.progress_bar);
         mProgressBar.setVisibility(View.VISIBLE);
 
         getLoaderManager().initLoader(HISTORY_LOADER_ID, null, this);
