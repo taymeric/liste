@@ -10,12 +10,23 @@
         <item name="preferenceTheme">@style/myPreferenceTheme</item>
     </style>
 
+    <!-- Theme for disabling default ActionBar -->
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- Toolbar themes -->
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <!-- Required Preferences theme -->
     <style name="myPreferenceTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
         <item name="android:overScrollMode">never</item>
     </style>
 
     <!-- Specific theme for history activity. -->
-    <style name="HistoryTheme" parent="AppTheme">
+    <style name="HistoryTheme" parent="AppTheme.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimaryHistory</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkHistory</item>
@@ -23,7 +34,7 @@
     </style>
 
     <!-- Specific theme for history activity. -->
-    <style name="PreferencesTheme" parent="AppTheme">
+    <style name="PreferencesTheme" parent="AppTheme.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimaryPreferences</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkPreferences</item>
