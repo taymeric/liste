@@ -16,6 +16,8 @@
         tools:ignore="GoogleAppIndexingWarning"
         >
 
+        <meta-data android:name="preloaded_fonts" android:resource="@array/preloaded_fonts" />
+
         <activity
             android:name="com.athebapps.android.list.ListActivity"
             android:launchMode="singleTop"
@@ -54,7 +56,7 @@
             android:authorities="com.athebapps.android.list"
             android:exported="false"/>
 
-        <service android:name="com.athebapps.android.list.NotificationIntentService"
+        <service android:name="com.athebapps.android.list.NotificationJobService"
                  android:exported="false"/>
 
         <receiver android:name="com.athebapps.android.list.NotificationReceiver"/>

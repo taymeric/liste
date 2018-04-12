@@ -9,11 +9,14 @@ import android.support.v7.preference.PreferenceManager;
 
 import com.firebase.jobdispatcher.JobService;
 
-import static com.athebapps.android.list.NotificationReceiver.NOTIFICATION_ID_KEY;
 
 /** JobService used to create and send a notification to the NotificationManager and
- * update the SharedPreferences. */
-public class NotificationIntentService extends JobService {
+ * update the SharedPreferences if the source of this notification is a reminder (as
+ * opposed to a direct notification). */
+public class NotificationJobService extends JobService {
+
+    public static final String NOTIFICATION_ID_KEY = "notification_id";
+    public static final String NOTIFICATION_SOURCE_IS_REMINDER = "notification_source_reminder";
 
     @Override
     public boolean onStartJob(com.firebase.jobdispatcher.JobParameters job) {
@@ -23,13 +26,18 @@ public class NotificationIntentService extends JobService {
         Notification notification = DatabaseUtils.createNotificationFromListProducts(this);
         Bundle bundle = job.getExtras();
         int id = 0;
-        if (bundle != null)
+        boolean reminder = false;
+        if (bundle != null) {
             id = bundle.getInt(NOTIFICATION_ID_KEY);
+            reminder = bundle.getBoolean(NOTIFICATION_SOURCE_IS_REMINDER);
+        }
         if (notificationManager != null)
             notificationManager.notify(id, notification);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        PreferenceUtils.setAlarm(this, sharedPreferences, false, null);
+        if (reminder) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            PreferenceUtils.setAlarm(this, sharedPreferences, false, null);
+        }
 
         return false; // Answers the question: "Is there still work going on?"
     }

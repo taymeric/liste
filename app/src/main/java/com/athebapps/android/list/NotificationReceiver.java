@@ -9,13 +9,15 @@ import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 
+import static com.athebapps.android.list.NotificationJobService.NOTIFICATION_ID_KEY;
+import static com.athebapps.android.list.NotificationJobService.NOTIFICATION_SOURCE_IS_REMINDER;
+
 /**
  *  BroadcastReceiver to get notified of the Alarm triggering and to launch the JobIntentService
  *  that handle the response.
  */
 public class NotificationReceiver extends BroadcastReceiver {
 
-    public static final String NOTIFICATION_ID_KEY = "notification_id";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -27,9 +29,10 @@ public class NotificationReceiver extends BroadcastReceiver {
         int id = intent.getIntExtra(NOTIFICATION_ID_KEY, 0);
         Bundle myExtras = new Bundle();
         myExtras.putInt(NOTIFICATION_ID_KEY, id);
+        myExtras.putBoolean(NOTIFICATION_SOURCE_IS_REMINDER, true);
 
         Job notificationJob = dispatcher.newJobBuilder()
-                .setService(NotificationIntentService.class) // the JobService that will be called
+                .setService(NotificationJobService.class) // the JobService that will be called
                 .setExtras(myExtras)
                 .setTag("notification-job") // uniquely identifies the job
                 .build();

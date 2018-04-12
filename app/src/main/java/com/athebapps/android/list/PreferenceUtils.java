@@ -43,7 +43,7 @@ class PreferenceUtils {
      *  Possible values: 'sans-serif' or 'casual' */
     static String getFont(Context context, SharedPreferences sharedPreferences) {
         return sharedPreferences.getString(context.getString(R.string.pref_font_key),
-                context.getString(R.string.pref_font_normal_value));
+                context.getString(R.string.pref_font_roboto_value));
     }
 
     /** @return the String representation of the sort order set in preferences,
@@ -66,18 +66,31 @@ class PreferenceUtils {
     /** Sets the alarm 'on' or 'off'. If 'on', also saves the time as a String representation. */
     static void setAlarm(Context context, SharedPreferences sharedPreferences, boolean is_on, String time) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(context.getString(R.string.list_notification_alarm_on), is_on);
-        if (is_on && time != null) editor.putString(context.getString(R.string.list_notification_alarm_time), time);
+        editor.putBoolean(context.getString(R.string.list_reminder_alarm_on), is_on);
+        if (is_on && time != null) editor.putString(context.getString(R.string.list_reminder_alarm_time), time);
         editor.apply();
     }
 
     /** @return true if a reminder is scheduled, false otherwise */
     static boolean isAlarmOn(Context context, SharedPreferences sharedPreferences) {
-        return sharedPreferences.getBoolean(context.getString(R.string.list_notification_alarm_on), false);
+        return sharedPreferences.getBoolean(context.getString(R.string.list_reminder_alarm_on), false);
     }
 
     /** @return the String representation of the time set for the alarm */
     static String getAlarmTime(Context context, SharedPreferences sharedPreferences) {
-        return sharedPreferences.getString(context.getString(R.string.list_notification_alarm_time), "");
+        return sharedPreferences.getString(context.getString(R.string.list_reminder_alarm_time), "");
+    }
+
+    /** Sets the Toolbar font to the provided Typeface */
+    static void styleToolbar(Toolbar toolbar, Typeface typeface) {
+        // this is gross but toolbar doesn't expose it's children
+        for (int i = 0; i < toolbar.getChildCount(); i++) {
+            View rawView = toolbar.getChildAt(i);
+            if (!(rawView instanceof TextView)) {
+                continue;
+            }
+            TextView textView = (TextView) rawView;
+            textView.setTypeface(typeface);
+        }
     }
 }

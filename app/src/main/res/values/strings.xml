@@ -41,23 +41,26 @@
     <string name="list_menu_normal_layout">One column</string>
 
     <!-- Strings for notification -->
-    <string name="list_menu_activate_notification">Notification</string>
-    <string name="list_menu_deactivate_notification">Deactivate</string>
-    <string name="list_menu_notification_information">Get notification information</string>
-    <string name="list_notification_information_dialog_message">Date and time of notification:\n\n%1$s</string>
-    <string name="list_notification_set_message">Notification set: %1$s</string>
-    <string name="list_notification_canceled_message">Notification canceled.</string>
-    <string name="list_notification_date_picker_message">1. Select day:</string>
-    <string name="list_notification_time_picker_message">2. Select time:</string>
-    <string name="list_notification_pickers_next_button">Next</string>
+    <string name="list_menu_launch_notification">Notification</string>
     <string name="list_notification_button">Open</string>
     <string name="list_notification_title_empty">Grocery list (empty)</string>
     <plurals name="list_notification_title">
         <item quantity="one">Grocery list (%d product):</item>
         <item quantity="other">Grocery list (%d products):</item>
     </plurals>
-    <string name="list_notification_alarm_on" translatable="false">alarm_on</string>
-    <string name="list_notification_alarm_time" translatable="false">alarm_time</string>
+
+    <!-- Strings for reminder -->
+    <string name="list_menu_activate_reminder">Reminder</string>
+    <string name="list_menu_deactivate_reminder">Deactivate</string>
+    <string name="list_menu_reminder_information">Get reminder information</string>
+    <string name="list_reminder_information_dialog_message">Date and time of reminder:\n\n%1$s</string>
+    <string name="list_reminder_set_message">Reminder set: %1$s</string>
+    <string name="list_reminder_canceled_message">Reminder canceled.</string>
+    <string name="list_reminder_date_picker_message">1. Select day:</string>
+    <string name="list_reminder_time_picker_message">2. Select time:</string>
+    <string name="list_reminder_pickers_next_button">Next</string>
+    <string name="list_reminder_alarm_on" translatable="false">alarm_on</string>
+    <string name="list_reminder_alarm_time" translatable="false">alarm_time</string>
 
     <!-- Strings for email -->
     <string name="list_menu_email">Email</string>
@@ -113,12 +116,20 @@
 
     <!-- Strings for font preference -->
     <string name="pref_font_label">Font</string>
-    <string name="pref_font_normal_label">By default</string>
-    <string name="pref_font_handwritten_label">Handwritten</string>
+
+    <string name="pref_font_roboto_label" translatable="false">Roboto</string>
+    <string name="pref_font_coming_soon_label" translatable="false">Coming Soon</string>
+    <string name="pref_font_permanent_marker_label" translatable="false">Permanent Marker</string>
+    <string name="pref_font_special_elite_label" translatable="false">Special Elite</string>
+    <string name="pref_font_rock_salt_label" translatable="false">Rock Salt</string>
 
     <string name="pref_font_key" translatable="false">font</string>
-    <string name="pref_font_normal_value" translatable="false">sans-serif</string>
-    <string name="pref_font_handwritten_value" translatable="false">casual</string>
+
+    <string name="pref_font_roboto_value" translatable="false">Roboto</string>
+    <string name="pref_font_coming_soon_value" translatable="false">Coming Soon</string>
+    <string name="pref_font_permanent_marker_value" translatable="false">Permanent Marker</string>
+    <string name="pref_font_special_elite_value" translatable="false">Special Elite</string>
+    <string name="pref_font_rock_salt_value" translatable="false">Rock Salt</string>
 
     <!--Strings for sort order preference -->
     <string name="pref_sort_order_label">Sort</string>

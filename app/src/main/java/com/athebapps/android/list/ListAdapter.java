@@ -47,8 +47,8 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
      * Possible values: PreferenceUtils.NORMAL_LAYOUT_ITEM or PreferenceUtils.COMPACT_LAYOUT_ITEM */
     private int mCurrentLayout;
 
-    /* Name of the font used for TextViews in a ViewHolder. Possible values: 'sans-serif' or 'casual' */
-    private String mFontFamily;
+    /* Font used for TextViews in a ViewHolder. */
+    private Typeface mTypeface;
 
     /** @param context  needed for PreferenceUtils methods and other operations.
      *  @param clickHandler used to interact with List activity. */
@@ -56,7 +56,9 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         mContext = context;
         mListAdapterOnClickHandler = clickHandler;
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        mFontFamily = PreferenceUtils.getFont(mContext, mSharedPreferences);
+
+        //String fontFamily = PreferenceUtils.getFont(mContext, mSharedPreferences);
+        //mTypeface = Typeface.create(fontFamily, Typeface.NORMAL);
 
         boolean isCompactLayout = mSharedPreferences.getBoolean(
                 mContext.getString(R.string.pref_list_compact_layout_key), context.getResources().getBoolean(R.bool.list_layout_compact_default));
@@ -107,9 +109,11 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
             holder.mProductTextView.setText(product);
 
-            holder.mProductTextView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
-            holder.mAnnotationTextView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
-            holder.mPriorityView.setTypeface(Typeface.create(mFontFamily, Typeface.NORMAL));
+            if (mTypeface != null) {
+                holder.mProductTextView.setTypeface(mTypeface);
+                holder.mAnnotationTextView.setTypeface(mTypeface);
+                holder.mPriorityView.setTypeface(mTypeface);
+            }
 
             switch (priority) {
                 case ListContract.ListEntry.HIGH_PRIORITY_PRODUCT:
@@ -156,8 +160,8 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     }
 
     /** Updates the font value for TextViews to the most recent value from the user's preferences */
-    void reloadFont() {
-        mFontFamily = PreferenceUtils.getFont(mContext, mSharedPreferences);
+    void reloadFont(Typeface typeface) {
+        mTypeface = typeface;
         notifyDataSetChanged();
     }
 

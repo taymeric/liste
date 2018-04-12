@@ -6,7 +6,7 @@
     <PreferenceCategory
         android:title="@string/pref_list_label">
         <ListPreference
-            android:defaultValue="@string/pref_font_normal_value"
+            android:defaultValue="@string/pref_font_roboto_value"
             android:entries="@array/pref_font_labels"
             android:entryValues="@array/pref_font_values"
             android:icon="@drawable/ic_font_download_black_24dp"

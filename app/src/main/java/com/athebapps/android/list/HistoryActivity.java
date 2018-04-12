@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
@@ -84,7 +85,12 @@ public class HistoryActivity extends AppCompatActivity
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
         setTitle(getString(R.string.history_title));
+
+        PreferenceUtils.styleToolbar(toolbar, ResourcesCompat.getFont(this, R.font.rock_salt));
 
         if (savedInstanceState != null)
             //noinspection unchecked
@@ -103,8 +109,7 @@ public class HistoryActivity extends AppCompatActivity
             }
         });
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
 
         // Set up the Recycler View with its Adapter
         mRecyclerView = findViewById(R.id.history_recycler_view);

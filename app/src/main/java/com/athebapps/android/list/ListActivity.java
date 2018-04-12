@@ -1,7 +1,6 @@
 package com.athebapps.android.list;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -17,12 +16,17 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.provider.FontRequest;
+import android.support.v4.provider.FontsContractCompat;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
@@ -31,6 +35,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -48,13 +53,20 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.athebapps.android.list.database.ListContract;
 import com.athebapps.android.list.database.ListQueryHandler;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import static com.athebapps.android.list.NotificationJobService.NOTIFICATION_ID_KEY;
+import static com.athebapps.android.list.NotificationJobService.NOTIFICATION_SOURCE_IS_REMINDER;
 
 
 /**
@@ -76,6 +88,9 @@ public class ListActivity extends AppCompatActivity
         SharedPreferences.OnSharedPreferenceChangeListener,
         ListAdapter.ListAdapterOnClickHandler
 {
+
+    private static final String TAG = ListActivity.class.getSimpleName() ;
+
     /* Helps the LoaderManager identify the loader for the whole list */
     private static final int LIST_LOADER_ID = 100;
 
@@ -125,6 +140,8 @@ public class ListActivity extends AppCompatActivity
     /* Used to perform Content Provider operations on a background thread */
     private ListQueryHandler mListQueryHandler;
 
+    private Handler fontHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -151,6 +168,8 @@ public class ListActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        PreferenceUtils.styleToolbar(toolbar, ResourcesCompat.getFont(this, R.font.rock_salt));
+
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
@@ -171,6 +190,8 @@ public class ListActivity extends AppCompatActivity
         mRecyclerView.setAdapter(mAdapter);
         // Lower default animation duration (default = 250)
         mRecyclerView.getItemAnimator().setMoveDuration(120);
+
+        requestFont();
 
         // The ItemTouchHelper class manages deletion of a RecyclerView item that is swiped
         ItemTouchHelper.SimpleCallback mSimpleCallback = new ItemTouchHelper.SimpleCallback(0,
@@ -251,13 +272,16 @@ public class ListActivity extends AppCompatActivity
                 invalidateOptionsMenu();
                 return true;
             case R.id.action_notify:
-                showNotificationSetupDialogs();
+                displayNotification();
+                return true;
+            case R.id.action_remind:
+                showReminderSetupDialogs();
                 return true;
             case R.id.action_email:
                 getLoaderManager().restartLoader(LIST_FOR_EMAIL_LOADER_ID, null, this);
                 return true;
-            case R.id.action_alarm_info:
-                showScheduledNotificationInformationDialog();
+            case R.id.action_reminder_info:
+                showScheduledReminderInformationDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -350,11 +374,11 @@ public class ListActivity extends AppCompatActivity
             mAdapter.reloadLayout();
         } else if (s.equals(getString(R.string.pref_sort_order_key))) {
             getLoaderManager().restartLoader(LIST_LOADER_ID, null, this);
-        } else if (s.equals(getString(R.string.list_notification_alarm_on))) {
+        } else if (s.equals(getString(R.string.list_reminder_alarm_on))) {
             invalidateOptionsMenu();
         } else if (s.equals(getString(R.string.pref_font_key))) {
-            mAdapter.reloadFont();
-            mAdapter.notifyDataSetChanged();
+            //mAdapter.reloadFont();
+            requestFont();
         }
     }
 
@@ -372,9 +396,9 @@ public class ListActivity extends AppCompatActivity
      * the AppBar and that the menu entry for settings up a notification does not appear anymore.  */
     private void setupNotificationButtons(Menu menu) {
         boolean isAlarmSet = PreferenceUtils.isAlarmOn(this, mSharedPreferences);
-        MenuItem alarmSettingButton = menu.findItem(R.id.action_notify);
+        MenuItem alarmSettingButton = menu.findItem(R.id.action_remind);
         alarmSettingButton.setVisible(!isAlarmSet);
-        MenuItem alarmCancelButton = menu.findItem(R.id.action_alarm_info);
+        MenuItem alarmCancelButton = menu.findItem(R.id.action_reminder_info);
         alarmCancelButton.setVisible(isAlarmSet);
     }
 
@@ -603,12 +627,29 @@ public class ListActivity extends AppCompatActivity
         }
     }
 
-    /* Nesting method launching the first step of the notification setup. */
-    private void showNotificationSetupDialogs() {
+    /* Display a notification in the system tray. */
+    private void displayNotification() {
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+
+        Bundle myExtras = new Bundle();
+        myExtras.putInt(NOTIFICATION_ID_KEY, NOTIFICATION_ID);
+        myExtras.putBoolean(NOTIFICATION_SOURCE_IS_REMINDER, false);
+
+        Job notificationJob = dispatcher.newJobBuilder()
+                .setService(NotificationJobService.class) // the JobService that will be called
+                .setExtras(myExtras)
+                .setTag("notification-job") // uniquely identifies the job
+                .build();
+
+        dispatcher.schedule(notificationJob);
+    }
+
+    /* Nesting method launching the first step of the reminder setup. */
+    private void showReminderSetupDialogs() {
         showDatePicker();
     }
 
-    /* Shows a dialog for the selection of the date of the notification. */
+    /* Shows a dialog for the selection of the date of the reminder. */
     private void showDatePicker() {
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
@@ -631,7 +672,7 @@ public class ListActivity extends AppCompatActivity
         final ViewGroup nullParent = null;
         View v = inflater.inflate(R.layout.dialog_picker_title, nullParent);
         TextView tv = v.findViewById(R.id.text_title);
-        tv.setText(getString(R.string.list_notification_date_picker_message));
+        tv.setText(getString(R.string.list_reminder_date_picker_message));
 
         datePickerDialog.setCustomTitle(v);
 
@@ -639,10 +680,10 @@ public class ListActivity extends AppCompatActivity
 
         // This call is after show() because Button are not created before
         Button confirmButton = datePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        if (confirmButton != null) confirmButton.setText(getString(R.string.list_notification_pickers_next_button));
+        if (confirmButton != null) confirmButton.setText(getString(R.string.list_reminder_pickers_next_button));
     }
 
-    /* Shows a dialog for the selection of the time for the notification. The previously selected date
+    /* Shows a dialog for the selection of the time for the reminder. The previously selected date
      * is passed as parameter. */
     private void showTimePicker(final int year, final int month, final int day) {
         Calendar c = Calendar.getInstance();
@@ -654,7 +695,7 @@ public class ListActivity extends AppCompatActivity
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 // When the time for the notification has been selected along with the date, launch the
                 // final step of the notification setup.
-                setNotificationTime(year, month, day, hour, minute);
+                setReminderTime(year, month, day, hour, minute);
             }
         };
 
@@ -670,20 +711,20 @@ public class ListActivity extends AppCompatActivity
         final ViewGroup nullParent = null;
         View v = inflater.inflate(R.layout.dialog_picker_title, nullParent);
         TextView tv = v.findViewById(R.id.text_title);
-        tv.setText(getString(R.string.list_notification_time_picker_message));
+        tv.setText(getString(R.string.list_reminder_time_picker_message));
 
         timePickerDialog.setCustomTitle(v);
 
         timePickerDialog.show();
     }
 
-    /* Sets the time of the scheduled notification according to the time and date passed
+    /* Sets the time of the scheduled reminder according to the time and date passed
      * as parameters. */
-    private void setNotificationTime(int year, int month, int day, int hour, int minute) {
+    private void setReminderTime(int year, int month, int day, int hour, int minute) {
 
         // Creation of the PendingIntent that will be used when the alarm is triggered
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
-        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID_KEY, NOTIFICATION_ID);
+        notificationIntent.putExtra(NotificationJobService.NOTIFICATION_ID_KEY, NOTIFICATION_ID);
         PendingIntent pendingIntent =
                 PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -702,29 +743,29 @@ public class ListActivity extends AppCompatActivity
 
         PreferenceUtils.setAlarm(this, mSharedPreferences, true, time);
 
-        showLongMessage(getResources().getString(R.string.list_notification_set_message, time));
+        showLongMessage(getResources().getString(R.string.list_reminder_set_message, time));
 
         invalidateOptionsMenu();
     }
 
-    /* Shows a dialog with the time and date of the scheduled notification, as well as an option
-     * to cancel this notification. */
-    private void showScheduledNotificationInformationDialog() {
+    /* Shows a dialog with the time and date of the scheduled reminder, as well as an option
+     * to cancel this reminder. */
+    private void showScheduledReminderInformationDialog() {
         String time = PreferenceUtils.getAlarmTime(this, mSharedPreferences);
         new AlertDialog.Builder(ListActivity.this)
-                .setMessage(getResources().getString(R.string.list_notification_information_dialog_message, time))
+                .setMessage(getResources().getString(R.string.list_reminder_information_dialog_message, time))
                 .setPositiveButton(android.R.string.ok, null)
-                .setNegativeButton(R.string.list_menu_deactivate_notification, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.list_menu_deactivate_reminder, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        cancelScheduledNotification();
+                        cancelScheduledReminder();
                     }
                 })
                 .create().show();
     }
 
-    /* Cancels the scheduled notification and recreates the menu. */
-    private void cancelScheduledNotification() {
+    /* Cancels the scheduled reminder and recreates the menu. */
+    private void cancelScheduledReminder() {
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
@@ -734,7 +775,7 @@ public class ListActivity extends AppCompatActivity
 
         invalidateOptionsMenu();
 
-        showMessage(getString(R.string.list_notification_canceled_message));
+        showMessage(getString(R.string.list_reminder_canceled_message));
     }
 
     /* Sends an implicit intent to a mail app with the content of the list as the body of the mail.
@@ -824,5 +865,39 @@ public class ListActivity extends AppCompatActivity
                     }
                 })
                 .show();
+    }
+
+
+    private Handler getFontHandlerThread() {
+        if (fontHandler == null) {
+            HandlerThread handlerThread = new HandlerThread("fonts");
+            handlerThread.start();
+            fontHandler = new Handler(handlerThread.getLooper());
+        }
+        return fontHandler;
+    }
+
+    private void requestFont() {
+        String font = PreferenceUtils.getFont(this, mSharedPreferences);
+        FontRequest fontRequest = new FontRequest("com.google.android.gms.fonts",
+                "com.google.android.gms",
+                "name="+font,
+                R.array.com_google_android_gms_fonts_certs);
+        FontsContractCompat.FontRequestCallback toolbarFontCallback =
+                new FontsContractCompat.FontRequestCallback() {
+                    @Override public void onTypefaceRetrieved(Typeface typeface) {
+                        // If we got our font apply it to the toolbar
+                        Toast.makeText(ListActivity.this, "font retrieved", Toast.LENGTH_SHORT).show();
+                        mAdapter.reloadFont(typeface);
+                    }
+                    @Override public void onTypefaceRequestFailed(int reason) {
+                        Log.w(TAG, "Failed to fetch Toolbar font: " + reason);
+                    }
+                };
+
+        // Start async fetch on the handler thread
+        FontsContractCompat.requestFont(this, fontRequest, toolbarFontCallback,
+                getFontHandlerThread());
+
     }
 }

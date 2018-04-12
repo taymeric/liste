@@ -41,34 +41,34 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="ListLayout">
+    <style name="ListItemLayout">
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">16dp</item>
     </style>
 
-    <style name="ListLayout.Normal">
+    <style name="ListItemLayout.Normal">
         <item name="android:paddingLeft">40dp</item>
         <item name="android:paddingRight">40dp</item>
     </style>
 
-    <style name="ListLayout.Compact">
+    <style name="ListItemLayout.Compact">
         <item name="android:paddingLeft">32dp</item>
         <item name="android:paddingRight">32dp</item>
     </style>
 
-    <style name="HistoryLayout">
+    <style name="HistoryItemLayout">
         <item name="android:paddingTop">11dp</item>
         <item name="android:paddingBottom">11dp</item>
     </style>
 
-    <style name="HistoryLayout.Normal">
+    <style name="HistoryItemLayout.Normal">
         <item name="android:layout_marginLeft">8dp</item>
         <item name="android:paddingLeft">12dp</item>
         <item name="android:paddingRight">24dp</item>
 
     </style>
 
-    <style name="HistoryLayout.Compact">
+    <style name="HistoryItemLayout.Compact">
         <item name="android:paddingTop">9dp</item>
         <item name="android:paddingBottom">9dp</item>
     </style>
