@@ -31,7 +31,6 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimaryHistory</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkHistory</item>
-        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <!-- Specific theme for history activity. -->
@@ -39,7 +38,6 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimaryPreferences</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkPreferences</item>
-        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="ListItemLayout">
@@ -48,13 +46,13 @@
     </style>
 
     <style name="ListItemLayout.Normal">
-        <item name="android:paddingLeft">40dp</item>
-        <item name="android:paddingRight">40dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
     </style>
 
     <style name="ListItemLayout.Compact">
-        <item name="android:paddingLeft">32dp</item>
-        <item name="android:paddingRight">32dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
     </style>
 
     <style name="HistoryItemLayout">
