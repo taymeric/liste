@@ -53,10 +53,12 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.athebapps.android.list.database.ListContract;
 import com.athebapps.android.list.database.ListQueryHandler;
+import com.athebapps.android.list.utils.DatabaseUtils;
+import com.athebapps.android.list.utils.PreferenceUtils;
+import com.athebapps.android.list.utils.Utils;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
@@ -168,7 +170,7 @@ public class ListActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        PreferenceUtils.styleToolbar(toolbar, ResourcesCompat.getFont(this, R.font.rock_salt));
+        Utils.styleToolbar(toolbar, ResourcesCompat.getFont(this, R.font.montserrat_bold));
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -878,7 +880,7 @@ public class ListActivity extends AppCompatActivity
     }
 
     private void requestFont() {
-        String font = PreferenceUtils.getFont(this, mSharedPreferences);
+        String font = PreferenceUtils.getFontName(this, mSharedPreferences);
         FontRequest fontRequest = new FontRequest("com.google.android.gms.fonts",
                 "com.google.android.gms",
                 "name="+font,
@@ -887,7 +889,6 @@ public class ListActivity extends AppCompatActivity
                 new FontsContractCompat.FontRequestCallback() {
                     @Override public void onTypefaceRetrieved(Typeface typeface) {
                         // If we got our font apply it to the toolbar
-                        Toast.makeText(ListActivity.this, "font retrieved", Toast.LENGTH_SHORT).show();
                         mAdapter.reloadFont(typeface);
                     }
                     @Override public void onTypefaceRequestFailed(int reason) {

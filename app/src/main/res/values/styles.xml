@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="preferenceTheme">@style/myPreferenceTheme</item>
+
     </style>
 
     <!-- Theme for disabling default ActionBar -->

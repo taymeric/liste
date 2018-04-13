@@ -26,8 +26,9 @@
             android:paddingRight="18dp"
             android:paddingTop="8dp"
             android:text="@string/history_instructions"
-            android:textSize="16sp"
-            android:textStyle="normal"
+            android:textSize="@dimen/text_history_instruction"
+            android:textStyle="italic"
+            tools:text="@tools:sample/lorem"
             />
 
         <android.support.v7.widget.RecyclerView

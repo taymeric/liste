@@ -5,6 +5,9 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.athebapps.android.list.utils.PreferenceUtils;
+import com.athebapps.android.list.utils.Utils;
+
 
 /**
  * Nesting activity for our PreferenceFragment
@@ -23,7 +26,7 @@ public class PreferencesActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        PreferenceUtils.styleToolbar(toolbar, ResourcesCompat.getFont(this, R.font.rock_salt));
+        Utils.styleToolbar(toolbar, ResourcesCompat.getFont(this, R.font.montserrat_bold));
     }
 
     @Override

@@ -122,6 +122,8 @@
     <string name="pref_font_permanent_marker_label" translatable="false">Permanent Marker</string>
     <string name="pref_font_special_elite_label" translatable="false">Special Elite</string>
     <string name="pref_font_rock_salt_label" translatable="false">Rock Salt</string>
+    <string name="pref_font_fredoka_one_label" translatable="false">Fredoka One</string>
+    <string name="pref_font_sriracha_label" translatable="false">Sriracha</string>
 
     <string name="pref_font_key" translatable="false">font</string>
 
@@ -130,6 +132,9 @@
     <string name="pref_font_permanent_marker_value" translatable="false">Permanent Marker</string>
     <string name="pref_font_special_elite_value" translatable="false">Special Elite</string>
     <string name="pref_font_rock_salt_value" translatable="false">Rock Salt</string>
+    <string name="pref_font_fredoka_one_value" translatable="false">Fredoka One</string>
+    <string name="pref_font_sriracha_value" translatable="false">Sriracha</string>
+
 
     <!--Strings for sort order preference -->
     <string name="pref_sort_order_label">Sort</string>

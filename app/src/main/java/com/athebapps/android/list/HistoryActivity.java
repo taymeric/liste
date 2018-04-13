@@ -24,6 +24,9 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.athebapps.android.list.database.ListContract;
+import com.athebapps.android.list.utils.DatabaseUtils;
+import com.athebapps.android.list.utils.PreferenceUtils;
+import com.athebapps.android.list.utils.Utils;
 
 import java.util.HashMap;
 
@@ -90,7 +93,7 @@ public class HistoryActivity extends AppCompatActivity
 
         setTitle(getString(R.string.history_title));
 
-        PreferenceUtils.styleToolbar(toolbar, ResourcesCompat.getFont(this, R.font.rock_salt));
+        Utils.styleToolbar(toolbar, ResourcesCompat.getFont(this, R.font.montserrat_bold));
 
         if (savedInstanceState != null)
             //noinspection unchecked

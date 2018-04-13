@@ -5,6 +5,9 @@
     <array name="preloaded_fonts">
         <item>@font/alegreya_sans_sc_bold</item>
         <item>@font/rock_salt</item>
+        <item>@font/roboto_slab</item>
+        <item>@font/montserrat</item>
+        <item>@font/montserrat_bold</item>
     </array>
 
     <!-- Arrays for font preference -->
@@ -14,6 +17,8 @@
         <item>@string/pref_font_special_elite_label</item>
         <item>@string/pref_font_permanent_marker_label</item>
         <item>@string/pref_font_rock_salt_label</item>
+        <item>@string/pref_font_fredoka_one_label</item>
+        <item>@string/pref_font_sriracha_label</item>
     </array>
     <array name="pref_font_values">
         <item>@string/pref_font_roboto_value</item>
@@ -21,6 +26,8 @@
         <item>@string/pref_font_special_elite_value</item>
         <item>@string/pref_font_permanent_marker_value</item>
         <item>@string/pref_font_rock_salt_value</item>
+        <item>@string/pref_font_fredoka_one_value</item>
+        <item>@string/pref_font_sriracha_value</item>
     </array>
 
     <!-- Arrays for sort order preference -->

@@ -1,4 +1,4 @@
-package com.athebapps.android.list;
+package com.athebapps.android.list.utils;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -18,6 +18,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
+import com.athebapps.android.list.ListActivity;
+import com.athebapps.android.list.R;
 import com.athebapps.android.list.database.ListContract;
 import com.athebapps.android.list.database.ListQueryHandler;
 
@@ -28,15 +30,15 @@ import java.util.HashMap;
  * Utility methods for operations that require access to the database,
  * using the Content Provider or Cursors.
  */
-class DatabaseUtils {
+public class DatabaseUtils {
 
     /** Inserts a product into the list table.
      *  Called when a product is entered from the ActionView in the AppBar of ListActivity.
      *  If the product is already in the table, it is not added a second time as COLUMN_PRODUCT in
      *  list table is UNIQUE.
-     *  @param listQueryHandler needed to perform insertion with ContentProvider on background thread
+     * @param listQueryHandler needed to perform insertion with ContentProvider on background thread
      *  @param product the name of the product to be inserted */
-    static void insertProductIntoListTable(ListQueryHandler listQueryHandler, String product) {
+    public static void insertProductIntoListTable(ListQueryHandler listQueryHandler, String product) {
 
         ContentValues values = new ContentValues();
         values.put(ListContract.ListEntry.COLUMN_PRODUCT, product);
@@ -50,9 +52,9 @@ class DatabaseUtils {
      *  Called when a product is entered from the ActionView in the AppBar of ListActivity.
      *  If the product is already in the table, it is not added a second time as COLUMN_PRODUCT in
      *  history table is UNIQUE.
-     *  @param listQueryHandler needed to perform insertion with ContentProvider on background thread
+     * @param listQueryHandler needed to perform insertion with ContentProvider on background thread
      *  @param product the name of the product to be inserted */
-    static void insertProductIntoHistoryTable(ListQueryHandler listQueryHandler, String product) {
+    public static void insertProductIntoHistoryTable(ListQueryHandler listQueryHandler, String product) {
 
         ContentValues values = new ContentValues();
         values.put(ListContract.HistoryEntry.COLUMN_PRODUCT, product);
@@ -67,7 +69,7 @@ class DatabaseUtils {
      * @param cu the cursor pointing to the product in the table to delete
      * @return (product, priority, annotation) of the deleted product
      */
-    static @Nullable ArrayList<String> deleteProductFromListTable(ListQueryHandler listQueryHandler, Cursor cu) {
+    public static @Nullable ArrayList<String> deleteProductFromListTable(ListQueryHandler listQueryHandler, Cursor cu) {
 
         if (cu!=null && cu.moveToFirst()) {
 
@@ -101,7 +103,7 @@ class DatabaseUtils {
      * @param priority the new priority for the product
      * @param annotation the new annotation for the product
      */
-    static void updateProductPriorityAndAnnotation(ListQueryHandler listQueryHandler, Uri uri, int priority, String annotation) {
+    public static void updateProductPriorityAndAnnotation(ListQueryHandler listQueryHandler, Uri uri, int priority, String annotation) {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(ListContract.ListEntry.COLUMN_PRIORITY, priority);
@@ -117,7 +119,7 @@ class DatabaseUtils {
      * @param products the (id, name) pairs of the products to be deleted, only id is used here
      * @return the number of products actually added to the list (not duplicates)
      */
-    static int insertProductsIntoListTable(Context context, HashMap<String, String> products) {
+    public static int insertProductsIntoListTable(Context context, HashMap<String, String> products) {
 
         Uri uri = ListContract.ListEntry.CONTENT_URI;
         ContentValues[] cv_all = new ContentValues[products.size()];
@@ -145,7 +147,7 @@ class DatabaseUtils {
      * @param products the (id, name) pairs of the products to be deleted, only id is used here
      * @return the number of products deleted from history
      */
-    static int deleteProductsFromHistoryTable(Context context, HashMap<String, String> products) {
+    public static int deleteProductsFromHistoryTable(Context context, HashMap<String, String> products) {
 
         // We use ContentProviderOperations to delete the selected products in one
         // batch operation.
@@ -185,7 +187,7 @@ class DatabaseUtils {
      * @param context used to get access to Content Resolver
      * @return the full Notification object (to be sent to the Notification Manager)
      */
-    static Notification createNotificationFromListProducts(Context context) {
+    public static Notification createNotificationFromListProducts(Context context) {
 
         Uri uri = ListContract.ListEntry.CONTENT_URI;
         // For notifications, the whole list may not be entirely visible, so we sort by priority,
@@ -254,7 +256,7 @@ class DatabaseUtils {
      * @return the String representation of the whole list with products, annotations and priorities.
      */
     @NonNull
-    static String formatListForEmail(Context context, Cursor cursor) {
+    public static String formatListForEmail(Context context, Cursor cursor) {
 
         StringBuilder list = new StringBuilder();
 
