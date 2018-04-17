@@ -50,7 +50,7 @@ public class ListContract {
         /** The only column for the history table: the text corresponding to the name of the product
          *  of the history. There is no normalization of the database: the name of the products are
          *  repeated in both tables. The reason is it is possible to have a product in one of the
-         *  tables and not int the other. */
+         *  tables and not in the other. */
         public static final String COLUMN_PRODUCT = "product";
         /** Internal name for the table. */
         static final String TABLE_NAME = "history";

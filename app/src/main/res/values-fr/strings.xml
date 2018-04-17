@@ -39,6 +39,7 @@
     <string name="list_menu_launch_notification">Notification</string>
     <string name="list_notification_button">Ouvrir</string>
     <string name="list_notification_title_empty">Liste de courses (vide)</string>
+    <string name="list_notification_character_separator">,\u0020</string>
     <plurals name="list_notification_title">
         <item quantity="one">Liste de courses (%d produit) :</item>
         <item quantity="other">Liste de courses (%d produits) :</item>
@@ -58,6 +59,10 @@
     <!-- Strings for email -->
     <string name="list_menu_email">E-mail</string>
     <string name="list_email_title">Liste de courses du %1$s.</string>
+    <string name="list_email_character_bullet">-\u0020</string>
+    <string name="list_email_character_space_separator"> </string>
+    <string name="list_email_character_open_parenthesis">\u0020(</string>
+    <string name="list_email_character_close_parenthesis">)</string>
 
     <!-- Strings for List activity end -->
 

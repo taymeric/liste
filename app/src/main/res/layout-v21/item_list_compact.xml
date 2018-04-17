@@ -52,7 +52,6 @@
             android:gravity="end"
             android:textAppearance="?android:textAppearance"
             android:textSize="@dimen/text_list_product_small"
-            android:textStyle="bold"
             tools:text="!!!"/>
 
     </LinearLayout>

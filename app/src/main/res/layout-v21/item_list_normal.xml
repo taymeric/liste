@@ -30,7 +30,6 @@
                 android:layout_gravity="center_vertical"
                 android:textAppearance="?android:textAppearance"
                 android:textSize="@dimen/text_list_product_big"
-                android:textStyle="bold"
                 tools:text="@tools:sample/cities"/>
 
             <TextView
@@ -55,7 +54,6 @@
             android:gravity="end"
             android:textAppearance="?android:textAppearance"
             android:textSize="@dimen/text_list_product_big"
-            android:textStyle="bold"
             tools:text="!!!"/>
 
     </LinearLayout>

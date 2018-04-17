@@ -179,9 +179,9 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     interface ListAdapterOnClickHandler {
         /**
          * @param id the _id in the list SQL table of the clicked item
-         * @param long_press whether the click was prolonged or not
+         * @param deletion whether the clicked product should be deleted
          * */
-        void onClick(int id, boolean long_press);
+        void onClick(int id, boolean deletion);
     }
 
     /** Our ViewHolder for Recycling purpose */
@@ -214,23 +214,14 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                                             @Override
                                             public void onLongPress(MotionEvent e) {
                                                 if (id > 0)
-                                                    mListAdapterOnClickHandler.onClick(id, true);
+                                                    mListAdapterOnClickHandler.onClick(id, false);
                                                 super.onLongPress(e);
                                             }
 
                                             @Override
                                             public boolean onSingleTapConfirmed(MotionEvent e) {
-                                                /*if (id > 0)
-                                                    //mListAdapterOnClickHandler.onClick(id, false);
-                                                {
-                                                    mProductTextView.setPaintFlags(
-                                                            mProductTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                                                    mAnnotationTextView.setPaintFlags(
-                                                            mAnnotationTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
-                                                }*/
                                                 if (id > 0)
-                                                    mListAdapterOnClickHandler.onClick(id, false);
+                                                    mListAdapterOnClickHandler.onClick(id, true);
                                                 return super.onSingleTapConfirmed(e);
                                             }
                                         });

@@ -22,7 +22,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.JobIntentService;
@@ -392,8 +391,8 @@ public class ListActivity extends AppCompatActivity
     }
 
     @Override
-    public void onClick(int id, boolean long_press) {
-        if (long_press) {
+    public void onClick(int id, boolean deletion) {
+        if (!deletion) {
             mRecyclerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
             editProduct(id);
         } else {
