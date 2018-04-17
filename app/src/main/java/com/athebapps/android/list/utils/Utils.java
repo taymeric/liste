@@ -5,6 +5,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+
 public class Utils {
 
     /** Sets the Toolbar font to the provided Typeface */

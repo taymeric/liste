@@ -18,11 +18,14 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.JobIntentService;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.provider.FontRequest;
@@ -59,16 +62,14 @@ import com.athebapps.android.list.database.ListQueryHandler;
 import com.athebapps.android.list.utils.DatabaseUtils;
 import com.athebapps.android.list.utils.PreferenceUtils;
 import com.athebapps.android.list.utils.Utils;
-import com.firebase.jobdispatcher.FirebaseJobDispatcher;
-import com.firebase.jobdispatcher.GooglePlayDriver;
-import com.firebase.jobdispatcher.Job;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import static com.athebapps.android.list.NotificationJobService.NOTIFICATION_ID_KEY;
-import static com.athebapps.android.list.NotificationJobService.NOTIFICATION_SOURCE_IS_REMINDER;
+import static com.athebapps.android.list.NotificationJobIntentService.NOTIFICATION_ID_KEY;
+import static com.athebapps.android.list.NotificationJobIntentService.NOTIFICATION_JOB_ID;
 
 
 /**
@@ -105,8 +106,11 @@ public class ListActivity extends AppCompatActivity
     /* Helps the LoaderManager identify the loader for a single element of the list in the case of deletion */
     private static final int LIST_PRODUCT_FOR_DELETION_LOADER_ID = 102;
 
-    /* Used by NotificationManager to identify the notification within the app */
-    private static final int NOTIFICATION_ID = 200;
+    /* Used by NotificationManager to identify a notification that is launch directly. */
+    public static final int DIRECT_NOTIFICATION_ID = 201;
+
+    /* Used by NotificationManager to identify a notification that is triggered by a reminder. */
+    public static final int REMINDER_NOTIFICATION_ID = 202;
 
     /* Used by onActivityResult to identifies that the result comes from HistoryActivity */
     private static final int HISTORY_FOR_RESULT_ID = 300;
@@ -142,12 +146,14 @@ public class ListActivity extends AppCompatActivity
     /* Used to perform Content Provider operations on a background thread */
     private ListQueryHandler mListQueryHandler;
 
+    /* Used when retrieving fonts from Google Fonts programmatically */
     private Handler fontHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        /*if (DEVELOPER_MODE) {
+        /*boolean DEVELOPER_MODE = true;
+        if (DEVELOPER_MODE) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     .detectDiskReads()
                     .detectDiskWrites()
@@ -170,7 +176,8 @@ public class ListActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Utils.styleToolbar(toolbar, ResourcesCompat.getFont(this, R.font.montserrat_bold));
+        // Change the default font of the Toolbar to our custom one.
+        new ReadAndSetToolbarFontAsyncTask(this).execute();
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -391,6 +398,37 @@ public class ListActivity extends AppCompatActivity
             editProduct(id);
         } else {
             deleteSingleProduct(id);
+        }
+    }
+
+    // Custom AsyncTask used to perform reading the font from Resources and then setting the font
+    // to the toolbar of the activity. An AsyncTask is used because STRICT_MODE reveals that this
+    // read operation takes too long. A WeakReference is used as an attribute to avoid leaks in case
+    // the activity is destroyed before the task has completed.
+    private static class ReadAndSetToolbarFontAsyncTask extends AsyncTask<Void, Void, Typeface> {
+
+        final private WeakReference<ListActivity> activityReference;
+
+        ReadAndSetToolbarFontAsyncTask(ListActivity my_activity) {
+            activityReference = new WeakReference<>(my_activity);
+        }
+
+        @Override
+        protected Typeface doInBackground(Void... voids) {
+            ListActivity my_activity = activityReference.get();
+            if (my_activity != null)
+                return ResourcesCompat.getFont(my_activity, R.font.montserrat_bold);
+            else
+                return null;
+        }
+
+        @Override
+        protected void onPostExecute(Typeface typeface) {
+            ListActivity my_activity = activityReference.get();
+            if (my_activity != null && typeface != null) {
+                Toolbar toolbar = my_activity.findViewById(R.id.toolbar);
+                Utils.styleToolbar(toolbar, typeface);
+            }
         }
     }
 
@@ -631,19 +669,11 @@ public class ListActivity extends AppCompatActivity
 
     /* Display a notification in the system tray. */
     private void displayNotification() {
-        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
 
-        Bundle myExtras = new Bundle();
-        myExtras.putInt(NOTIFICATION_ID_KEY, NOTIFICATION_ID);
-        myExtras.putBoolean(NOTIFICATION_SOURCE_IS_REMINDER, false);
+        Intent work = new Intent();
+        work.putExtra(NOTIFICATION_ID_KEY, DIRECT_NOTIFICATION_ID);
 
-        Job notificationJob = dispatcher.newJobBuilder()
-                .setService(NotificationJobService.class) // the JobService that will be called
-                .setExtras(myExtras)
-                .setTag("notification-job") // uniquely identifies the job
-                .build();
-
-        dispatcher.schedule(notificationJob);
+        JobIntentService.enqueueWork(this, NotificationJobIntentService.class, NOTIFICATION_JOB_ID, work);
     }
 
     /* Nesting method launching the first step of the reminder setup. */
@@ -726,7 +756,7 @@ public class ListActivity extends AppCompatActivity
 
         // Creation of the PendingIntent that will be used when the alarm is triggered
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
-        notificationIntent.putExtra(NotificationJobService.NOTIFICATION_ID_KEY, NOTIFICATION_ID);
+        notificationIntent.putExtra(NOTIFICATION_ID_KEY, REMINDER_NOTIFICATION_ID);
         PendingIntent pendingIntent =
                 PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
