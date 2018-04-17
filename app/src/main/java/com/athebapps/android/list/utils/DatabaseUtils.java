@@ -214,7 +214,7 @@ public class DatabaseUtils {
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 stringBuilder.append(cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT)));
-                stringBuilder.append(", ");
+                stringBuilder.append(context.getString(R.string.list_notification_character_separator));
             }
             // Don't forget to close the cursor
             cursor.close();
@@ -262,23 +262,23 @@ public class DatabaseUtils {
 
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                list.append("- ");
+                list.append(context.getString(R.string.list_email_character_bullet));
                 list.append(cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRODUCT)));
 
                 String annotation = cursor.getString(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_ANNOTATION));
                 if (annotation != null && !annotation.equals("")) {
-                    list.append(" (");
+                    list.append(context.getString(R.string.list_email_character_open_parenthesis));
                     list.append(annotation);
-                    list.append(")");
+                    list.append(context.getString(R.string.list_email_character_close_parenthesis));
                 }
 
                 int p = cursor.getInt(cursor.getColumnIndex(ListContract.ListEntry.COLUMN_PRIORITY));
                 if (p == ListContract.ListEntry.HIGH_PRIORITY_PRODUCT) {
-                    list.append(" ");
+                    list.append(context.getString(R.string.list_email_character_space_separator));
                     list.append(context.getString(R.string.list_high_priority_mark));
                 }
                 else if (p == ListContract.ListEntry.LOW_PRIORITY_PRODUCT) {
-                    list.append(" ");
+                    list.append(context.getString(R.string.list_email_character_space_separator));
                     list.append(context.getString(R.string.list_low_priority_mark));
                 }
 

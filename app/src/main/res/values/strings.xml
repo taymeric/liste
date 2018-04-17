@@ -44,6 +44,7 @@
     <string name="list_menu_launch_notification">Notification</string>
     <string name="list_notification_button">Open</string>
     <string name="list_notification_title_empty">Grocery list (empty)</string>
+    <string name="list_notification_character_separator">,\u0020</string>
     <plurals name="list_notification_title">
         <item quantity="one">Grocery list (%d product):</item>
         <item quantity="other">Grocery list (%d products):</item>
@@ -65,6 +66,10 @@
     <!-- Strings for email -->
     <string name="list_menu_email">Email</string>
     <string name="list_email_title">Grocery list for %1$s.</string>
+    <string name="list_email_character_bullet">-\u0020</string>
+    <string name="list_email_character_space_separator"> </string>
+    <string name="list_email_character_open_parenthesis">\u0020(</string>
+    <string name="list_email_character_close_parenthesis">)</string>
 
     <!-- Strings for List activity end -->
 
