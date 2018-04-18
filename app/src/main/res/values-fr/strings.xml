@@ -60,7 +60,7 @@
     <string name="list_menu_email">E-mail</string>
     <string name="list_email_title">Liste de courses du %1$s.</string>
     <string name="list_email_character_bullet">-\u0020</string>
-    <string name="list_email_character_space_separator"> </string>
+    <string name="list_email_character_space_separator">\u0020</string>
     <string name="list_email_character_open_parenthesis">\u0020(</string>
     <string name="list_email_character_close_parenthesis">)</string>
 

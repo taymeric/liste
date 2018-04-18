@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Einkaufsliste</string>
+
+
+    <!-- Strings for List activity start -->
+
+    <string name="list_fab_content_description">Zugriff auf Verlauf</string>
+    <string name="list_empty_message">Die Liste ist leer.</string>
+    <string name="list_empty_view_text">Die Liste ist leer.</string>
+
+    <string name="list_menu_preferences">Einstellungen</string>
+
+    <!-- Strings for edition -->
+    <string name="list_edition_annotation_label">Anmerkung:</string>
+    <string name="list_edition_priority_label">Vorrang:</string>
+    <string name="list_edition_priority_normal_label">Standard</string>
+    <string name="list_edition_annotation_hint">z.B. Menge</string>
+
+    <!-- Strings for addition -->
+    <string name="list_menu_add_hint">Produkt hinzufügen</string>
+    <string name="list_no_new_product_message">Kein neues Produkt.</string>
+    <plurals name="list_new_products_message">
+        <item quantity="one">%d neues Produkt in die Liste aufgenommen.</item>
+        <item quantity="other">%d neue Produkte in die Liste aufgenommen.</item>
+    </plurals>
+
+    <!-- Strings for deletion -->
+    <string name="list_menu_clear">Liste leeren</string>
+    <string name="list_clear_title">Aktuelle Liste leeren?</string>
+    <string name="list_removed_product_message">\'%1$s\' aus der Liste entfernt.</string>
+
+    <!-- Strings for list layout change menu -->
+    <string name="list_menu_compact_layout">Zwei Säulen</string>
+    <string name="list_menu_normal_layout">Eine Säule</string>
+
+    <!-- Strings for notification -->
+    <string name="list_menu_launch_notification">Benachrichtigung</string>
+    <string name="list_notification_button">Öffnen</string>
+    <string name="list_notification_title_empty">Einkaufsliste (leer)</string>
+    <string name="list_notification_character_separator">,\u0020</string>
+    <plurals name="list_notification_title">
+        <item quantity="one">Einkaufsliste (%d Produkt):</item>
+        <item quantity="other">Einkaufsliste (%d Produkte):</item>
+    </plurals>
+
+    <!-- Strings for reminder -->
+    <string name="list_menu_activate_reminder">Mahnung</string>
+    <string name="list_menu_deactivate_reminder">Abbrechen</string>
+    <string name="list_menu_reminder_information">Informationen über die Mahnung erhalten</string>
+    <string name="list_reminder_information_dialog_message">Datum und Uhrzeit der Mahnung:\n\n%1$s</string>
+    <string name="list_reminder_set_message">Mahnung gesetzt: %1$s</string>
+    <string name="list_reminder_canceled_message">Mahnung abgebrochen.</string>
+    <string name="list_reminder_date_picker_message">1. Wählen Sie den Tag:</string>
+    <string name="list_reminder_time_picker_message">2. Wählen Sie die Zeit:</string>
+    <string name="list_reminder_pickers_next_button">Nächste</string>
+
+    <!-- Strings for email -->
+    <string name="list_menu_email">E-Mail</string>
+    <string name="list_email_title">Einkaufsliste für %1$s.</string>
+    <string name="list_email_character_bullet">-\u0020</string>
+    <string name="list_email_character_space_separator"> </string>
+    <string name="list_email_character_open_parenthesis">\u0020(</string>
+    <string name="list_email_character_close_parenthesis">)</string>
+
+    <!-- Strings for List activity end -->
+
+
+    <!-- Strings for History activity start -->
+
+    <string name="history_title">Historie</string>
+    <string name="history_instructions">Produkte zum Hinzufügen auswählen:</string>
+    <string name="history_empty_view_text">Ihre Historie ist leer.\nBeginnen Sie mit dem Hinzufügen von Produkten aus dem Hauptbildschirm.</string>
+    <string name="history_fab_content_description">Produkte hinzufügen</string>
+
+    <!-- Strings for deletion menu -->
+    <string name="history_menu_delete">Auswahl löschen</string>
+    <plurals name="history_delete_selection_title">
+        <item quantity="one">Ausgewähltes Produkt aus der Historie löschen?</item>
+        <item quantity="other">Ausgewählte Produkte aus der Historie löschen?</item>
+    </plurals>
+    <plurals name="history_products_deleted_message">
+        <item quantity="one">%d Produkt aus der Historie gelöscht.</item>
+        <item quantity="other">%d Produkte aus der Historie gelöscht.</item>
+    </plurals>
+
+    <!-- Strings for history layout change menu -->
+    <string name="history_menu_compact_layout">Zwei Säulen</string>
+    <string name="history_menu_normal_layout">Eine Säule</string>
+
+    <!-- Strings for confirmation dialog -->
+    <string name="history_confirm_yes">Ja</string>
+    <string name="history_confirm_no">Nein</string>
+    <plurals name="history_add_selected_products">
+        <item quantity="one">Ausgewähltes Produkt zur Liste hinzufügen?</item>
+        <item quantity="other">Ausgewählte Produkte zur Liste hinzufügen?</item>
+    </plurals>
+
+    <!-- Strings for History activity end -->
+
+
+    <!-- Strings for Preferences activity start -->
+
+    <string name="pref_title">Einstellungen</string>
+    <string name="pref_list_label">Liste</string>
+    <string name="pref_information_label">Informationen</string>
+
+    <!-- Strings for font preference -->
+    <string name="pref_font_label">Schrift</string>
+
+    <!--Strings for sort order preference -->
+    <string name="pref_sort_order_label">Ordnen</string>
+    <string name="pref_sort_order_by_name_label">Nach Namen</string>
+    <string name="pref_sort_order_by_priority_label">Nach Vorrang</string>
+
+    <!-- Strings for About dialog in preference screen -->
+    <string name="pref_about_title">Über Einkaufsliste</string>
+    <string name="pref_about_version_number_label">Version</string>
+    <string name="pref_about_email_label">Kontakt</string>
+    <string name="pref_about_icons_label">Ikonen von Google</string>
+
+    <!-- Strings for Preferences activity end -->
+
+</resources>
