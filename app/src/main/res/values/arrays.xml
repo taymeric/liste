@@ -10,12 +10,14 @@
     <array name="pref_font_labels">
         <item>@string/pref_font_roboto_label</item>
         <item>@string/pref_font_coming_soon_label</item>
+        <item>@string/pref_font_lora_label</item>
         <item>@string/pref_font_special_elite_label</item>
         <item>@string/pref_font_rock_salt_label</item>
     </array>
     <array name="pref_font_values">
         <item>@string/pref_font_roboto_value</item>
         <item>@string/pref_font_coming_soon_value</item>
+        <item>@string/pref_font_lora_value</item>
         <item>@string/pref_font_special_elite_value</item>
         <item>@string/pref_font_rock_salt_value</item>
     </array>
