@@ -402,8 +402,9 @@ public class ListActivity extends AppCompatActivity
 
     // Custom AsyncTask used to perform reading the font from Resources and then setting the font
     // to the toolbar of the activity. An AsyncTask is used because STRICT_MODE reveals that this
-    // read operation takes too long. A WeakReference is used as an attribute to avoid leaks in case
-    // the activity is destroyed before the task has completed.
+    // read operation takes too long. In theory, it should not happen because the font is preloaded
+    // in the manifest but in practice, there is a problem. A WeakReference is used as an attribute
+    // to avoid leaks in case the activity is destroyed before the task has completed.
     private static class ReadAndSetToolbarFontAsyncTask extends AsyncTask<Void, Void, Typeface> {
 
         final private WeakReference<ListActivity> activityReference;
