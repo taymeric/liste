@@ -176,7 +176,7 @@ public class ListActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         // Change the default font of the Toolbar to our custom one.
-        new ReadAndSetToolbarFontAsyncTask(this).execute();
+        Utils.styleToolbar(toolbar, ResourcesCompat.getFont(this, R.font.montserrat_bold));
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -397,38 +397,6 @@ public class ListActivity extends AppCompatActivity
             editProduct(id);
         } else {
             deleteSingleProduct(id);
-        }
-    }
-
-    // Custom AsyncTask used to perform reading the font from Resources and then setting the font
-    // to the toolbar of the activity. An AsyncTask is used because STRICT_MODE reveals that this
-    // read operation takes too long. In theory, it should not happen because the font is preloaded
-    // in the manifest but in practice, there is a problem. A WeakReference is used as an attribute
-    // to avoid leaks in case the activity is destroyed before the task has completed.
-    private static class ReadAndSetToolbarFontAsyncTask extends AsyncTask<Void, Void, Typeface> {
-
-        final private WeakReference<ListActivity> activityReference;
-
-        ReadAndSetToolbarFontAsyncTask(ListActivity my_activity) {
-            activityReference = new WeakReference<>(my_activity);
-        }
-
-        @Override
-        protected Typeface doInBackground(Void... voids) {
-            ListActivity my_activity = activityReference.get();
-            if (my_activity != null)
-                return ResourcesCompat.getFont(my_activity, R.font.montserrat_bold);
-            else
-                return null;
-        }
-
-        @Override
-        protected void onPostExecute(Typeface typeface) {
-            ListActivity my_activity = activityReference.get();
-            if (my_activity != null && typeface != null) {
-                Toolbar toolbar = my_activity.findViewById(R.id.toolbar);
-                Utils.styleToolbar(toolbar, typeface);
-            }
         }
     }
 
