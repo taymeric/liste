@@ -21,7 +21,7 @@ import static org.hamcrest.core.AllOf.allOf;
 
 
 /**
- * Performs several simples tests on the ListActivity menu.
+ * Performs several simples tests (relative to intents) on the ListActivity menu.
  */
 @RunWith(AndroidJUnit4.class)
 public class ListActivityMenuTest {

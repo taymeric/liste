@@ -9,6 +9,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressKey;
@@ -21,10 +25,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 
 /**
- * Tests that using the "Create" button on the App Bar of entering product names actually adds a
- * View in the list with the name of the product. Warning: the checked product name should not be
- * in the list already! (Also if the list is long, and the product is not visible, I'm not sure it
- * would work...
+ * Tests that using the "Create" button on the App Bar of entering a product name actually adds a
+ * View in the list with the name of the product.
+ * WARNING: if the list is long, and the product is not visible without scrolling, I'm not sure
+ * onView(withText(...)) would work.
  */
 @RunWith(AndroidJUnit4.class)
 public class ListActivityCreateTest {
@@ -39,13 +43,18 @@ public class ListActivityCreateTest {
         // Click on the "add" button
         onView(withId(R.id.action_add)).perform(click());
 
-        // Type "Bread" then type ENTER
-        onView(isAssignableFrom(EditText.class)).perform(typeText("Bread"), pressKey(KeyEvent.KEYCODE_ENTER));
+        // Create a unique String to identify our test product
+        String testProduct = createUniqueString();
 
-        // Type "Milk" then type ENTER
-        onView(isAssignableFrom(EditText.class)).perform(typeText("Milk"), pressKey(KeyEvent.KEYCODE_ENTER));
+        // Type our  then type ENTER
+        onView(isAssignableFrom(EditText.class)).perform(typeText(testProduct), pressKey(KeyEvent.KEYCODE_ENTER));
 
         // Check the text "Bread" is Displayed on a View
-        onView(withText("Bread")).check(matches(isDisplayed()));
+        onView(withText(testProduct)).check(matches(isDisplayed()));
+    }
+
+    private String createUniqueString() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+        return dateFormat.format(new Date());
     }
 }

@@ -20,7 +20,7 @@ import static org.hamcrest.CoreMatchers.not;
  * Tests that when the first item of the history is clicked and thus selected, the Floating Button
  * Buttons appears. Then, when the same item is clicked again and thus no item is selected, the FAB
  * disappears. Also, tests under the same conditions that the delete button is displayed.
- * Warning: It only works if there is at least one element in the history.
+ * WARNING: It only works if there is at least one element in the history!
  */
 @RunWith(AndroidJUnit4.class)
 public class HistoryActivityClickDisplayTest {
