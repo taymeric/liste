@@ -783,7 +783,7 @@ public class ListActivity extends AppCompatActivity
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setData(Uri.parse("mailto:")); // only email apps should handle this
             intent.putExtra(Intent.EXTRA_SUBJECT,
-                    getResources().getString(R.string.list_email_title, getDate()));
+                    getResources().getString(R.string.list_email_title, Utils.getDate(this)));
             intent.putExtra(Intent.EXTRA_TEXT,
                     DatabaseUtils.formatListForEmail(this, cursor));
             if (intent.resolveActivity(getPackageManager()) != null) {
@@ -792,14 +792,6 @@ public class ListActivity extends AppCompatActivity
         } else {
             showMessage(getString(R.string.list_empty_message));
         }
-    }
-
-    /* Gets the current date as a String representation. */
-    private String getDate() {
-        Calendar c = Calendar.getInstance();
-        Date date = c.getTime();
-        java.text.DateFormat formatter = DateFormat.getDateFormat(this);
-        return formatter.format(date);
     }
 
     /* Updates the visibility of the Empty View. */
