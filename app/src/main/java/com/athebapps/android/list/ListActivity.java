@@ -18,7 +18,6 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -62,7 +61,6 @@ import com.athebapps.android.list.utils.DatabaseUtils;
 import com.athebapps.android.list.utils.PreferenceUtils;
 import com.athebapps.android.list.utils.Utils;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;

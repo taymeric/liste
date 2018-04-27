@@ -17,9 +17,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.CoreMatchers.not;
 
 /**
- * Tests that when the first item of the history is clicked and thus selected, the Floating Button
- * Buttons appears. Then, when the same item is clicked again and thus no item is selected, the FAB
- * disappears. Also, tests under the same conditions that the delete button is displayed.
+ * Tests that when the first item of the history is clicked and thus checked, the Floating Button
+ * Buttons appears. Then, when the same item is clicked again (or unchecked) and thus no item is selected,
+ * the FAB disappears. Also, tests under the same conditions that the delete button is displayed.
  * WARNING: It only works if there is at least one element in the history!
  */
 @RunWith(AndroidJUnit4.class)
@@ -30,7 +30,7 @@ public class HistoryActivityClickDisplayTest {
             new ActivityTestRule<>(HistoryActivity.class);
 
     @Test
-    public void clickUnclickFirstItemCheckFAB() {
+    public void clickFirstItemCheckFAB() {
 
         // First checks that FAB is initially invisible
         onView(withId(R.id.floatingActionButtonHistory)).check(matches(not(isDisplayed())));
@@ -51,7 +51,7 @@ public class HistoryActivityClickDisplayTest {
     }
 
     @Test
-    public void clickUnclickFirstItemCheckDeleteButton() {
+    public void clickFirstItemCheckDeleteButton() {
 
         // First check that the delete button is invisible
         onView(withId(R.id.action_delete)).check(doesNotExist());
