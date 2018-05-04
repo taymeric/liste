@@ -7,7 +7,7 @@
     <!-- Strings for List activity start -->
 
     <string name="list_fab_content_description">Zugriff auf Verlauf</string>
-    <string name="list_empty_message">Die Liste ist leer.</string>
+    <string name="list_empty_message">Die Liste ist leer…</string>
     <string name="list_empty_view_text">Die Liste ist leer.</string>
 
     <string name="list_menu_preferences">Einstellungen</string>
@@ -112,7 +112,7 @@
     <!--Strings for sort order preference -->
     <string name="pref_sort_order_label">Ordnen</string>
     <string name="pref_sort_order_by_name_label">Nach Namen</string>
-    <string name="pref_sort_order_by_priority_label">Nach Vorrang</string>
+    <string name="pref_sort_order_by_priority_label">Nach Vorrang\n<em><small>(lange drücken, um die Priorität einzustellen)</small></em></string>
 
     <!-- Strings for About dialog in preference screen -->
     <string name="pref_about_title">Über Einkaufsliste</string>

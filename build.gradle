@@ -23,3 +23,11 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+// Define versions in a single place
+ext {
+    // App dependencies
+    supportLibraryVersion = '27.1.1'
+    junitVersion = '4.12'
+    espressoVersion = '3.0.2'
+}
