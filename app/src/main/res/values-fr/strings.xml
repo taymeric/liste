@@ -32,8 +32,8 @@
     <string name="list_removed_product_message">\'%1$s\' retiré de la liste.</string>
 
     <!-- Strings for list layout change menu -->
-    <string name="list_menu_compact_layout">Deux colonnes</string>
-    <string name="list_menu_normal_layout">Une colonne</string>
+    <string name="list_menu_compact_layout">Affichage : deux colonnes</string>
+    <string name="list_menu_normal_layout">Affichage : une colonne</string>
 
     <!-- Strings for notification -->
     <string name="list_menu_launch_notification">Notification</string>

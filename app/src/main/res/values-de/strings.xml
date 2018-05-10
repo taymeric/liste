@@ -86,8 +86,8 @@
     </plurals>
 
     <!-- Strings for history layout change menu -->
-    <string name="history_menu_compact_layout">Zwei Säulen</string>
-    <string name="history_menu_normal_layout">Eine Säule</string>
+    <string name="history_menu_compact_layout">Anzeige: zwei Säulen</string>
+    <string name="history_menu_normal_layout">Anzeige: eine Säule</string>
 
     <!-- Strings for confirmation dialog -->
     <string name="history_confirm_yes">Ja</string>
