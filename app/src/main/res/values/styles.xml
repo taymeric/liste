@@ -43,33 +43,15 @@
     <style name="ListItemLayout">
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">16dp</item>
-    </style>
-
-    <style name="ListItemLayout.Normal">
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
-    </style>
-
-    <style name="ListItemLayout.Compact">
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
     </style>
 
     <style name="HistoryItemLayout">
-        <item name="android:paddingTop">11dp</item>
-        <item name="android:paddingBottom">11dp</item>
-    </style>
-
-    <style name="HistoryItemLayout.Normal">
-        <item name="android:layout_marginLeft">8dp</item>
-        <item name="android:paddingLeft">12dp</item>
-        <item name="android:paddingRight">24dp</item>
-
-    </style>
-
-    <style name="HistoryItemLayout.Compact">
-        <item name="android:paddingTop">9dp</item>
-        <item name="android:paddingBottom">9dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:layout_marginLeft">4dp</item>
+        <item name="android:paddingLeft">4dp</item>
     </style>
 
 </resources>

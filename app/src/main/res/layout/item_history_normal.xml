@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_product"
-    style="@style/HistoryItemLayout.Normal"
+    style="@style/HistoryItemLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textColor="@android:color/tertiary_text_light"

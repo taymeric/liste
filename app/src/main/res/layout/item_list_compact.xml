@@ -12,7 +12,7 @@
 
     <LinearLayout
         android:id="@+id/item_list_layout"
-        style="@style/ListItemLayout.Compact"
+        style="@style/ListItemLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">

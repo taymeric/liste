@@ -581,7 +581,6 @@ public class ListActivity extends AppCompatActivity
             alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
                 public void onShow(DialogInterface dialog) {
-                    editText.requestFocus();
                     final InputMethodManager inputMethodManager
                             = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (inputMethodManager != null)
