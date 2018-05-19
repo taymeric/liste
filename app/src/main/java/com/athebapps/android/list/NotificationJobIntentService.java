@@ -34,7 +34,7 @@ public class NotificationJobIntentService extends JobIntentService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null)
-            notificationManager.notify(id, notification);
+            notificationManager.notify(NOTIFICATION_JOB_ID, notification);
 
         // In the case the notification comes from a reminder, we update SharedPreferences which
         // the main activity monitors in order to update the ui.

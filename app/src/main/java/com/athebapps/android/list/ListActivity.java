@@ -63,7 +63,6 @@ import com.athebapps.android.list.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import static com.athebapps.android.list.NotificationJobIntentService.NOTIFICATION_ID_KEY;
 import static com.athebapps.android.list.NotificationJobIntentService.NOTIFICATION_JOB_ID;
