@@ -242,14 +242,6 @@ public class ListActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.activity_list, menu);
         setupNotificationButtons(menu);
         setupAddButton(menu);
-
-        // Only show one of the layout change buttons
-        MenuItem compact_layout = menu.findItem(R.id.action_compact_layout);
-        MenuItem normal_layout = menu.findItem(R.id.action_normal_layout);
-        boolean isCompactLayout = mSharedPreferences.getBoolean(getString(R.string.pref_list_compact_layout_key), getResources().getBoolean(R.bool.list_layout_compact_default));
-        compact_layout.setVisible(!isCompactLayout);
-        normal_layout.setVisible(isCompactLayout);
-
         return true;
     }
 
@@ -263,18 +255,6 @@ public class ListActivity extends AppCompatActivity
                 return true;
             case R.id.action_delete:
                 showDeleteAllDialog();
-                return true;
-            case R.id.action_compact_layout:
-                SharedPreferences.Editor editor = mSharedPreferences.edit();
-                editor.putBoolean(getString(R.string.pref_list_compact_layout_key), true);
-                editor.apply();
-                invalidateOptionsMenu();
-                return true;
-            case R.id.action_normal_layout:
-                SharedPreferences.Editor editor2 = mSharedPreferences.edit();
-                editor2.putBoolean(getString(R.string.pref_list_compact_layout_key), false);
-                editor2.apply();
-                invalidateOptionsMenu();
                 return true;
             case R.id.action_notify:
                 displayNotification();
@@ -373,7 +353,7 @@ public class ListActivity extends AppCompatActivity
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         // If a preference has been modified, makes the necessary calls in order to update the display
-        if (s.equals(getString(R.string.pref_list_compact_layout_key))) {
+        if (s.equals(getString(R.string.pref_list_layout_key))) {
             mLayoutManager = PreferenceUtils.getListLayoutManager(this, mSharedPreferences);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mAdapter.reloadLayout();

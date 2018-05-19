@@ -31,10 +31,6 @@
     <string name="list_clear_title">Aktuelle Liste leeren?</string>
     <string name="list_removed_product_message">\'%1$s\' aus der Liste entfernt.</string>
 
-    <!-- Strings for list layout change menu -->
-    <string name="list_menu_compact_layout">Zwei Säulen</string>
-    <string name="list_menu_normal_layout">Eine Säule</string>
-
     <!-- Strings for notification -->
     <string name="list_menu_launch_notification">Benachrichtigung</string>
     <string name="list_notification_button">Öffnen</string>
@@ -86,8 +82,8 @@
     </plurals>
 
     <!-- Strings for history layout change menu -->
-    <string name="history_menu_compact_layout">Anzeige: zwei Säulen</string>
     <string name="history_menu_normal_layout">Anzeige: eine Säule</string>
+    <string name="history_menu_compact_layout">Anzeige: zwei Säulen</string>
 
     <!-- Strings for confirmation dialog -->
     <string name="history_confirm_yes">Ja</string>
@@ -105,6 +101,11 @@
     <string name="pref_title">Einstellungen</string>
     <string name="pref_list_label">Liste</string>
     <string name="pref_information_label">Informationen</string>
+
+    <!-- Strings for layout preference -->
+    <string name="pref_list_layout_label">Anzeige</string>
+    <string name="pref_list_layout_one_column_label">Eine Säule</string>
+    <string name="pref_list_layout_two_columns_label">Zwei Säulen</string>
 
     <!-- Strings for font preference -->
     <string name="pref_font_label">Schrift</string>

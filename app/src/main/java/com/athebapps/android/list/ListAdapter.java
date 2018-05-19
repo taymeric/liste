@@ -23,10 +23,10 @@ import com.athebapps.android.list.database.ListContract;
 class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     /** Identifies a normal layout */
-    private static final int NORMAL_LAYOUT = 1;
+    private static final int ONE_COLUMN_LAYOUT = 1;
 
     /* Identifies a compact layout */
-    private static final int COMPACT_LAYOUT = 2;
+    private static final int TWO_COLUMNS_LAYOUT = 2;
 
     /* Context object needed for using PreferenceUtils methods and Context.getString() as well as
      * getting a reference to SharedPreferences */
@@ -57,12 +57,13 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         mListAdapterOnClickHandler = clickHandler;
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
-        boolean isCompactLayout = mSharedPreferences.getBoolean(
-                mContext.getString(R.string.pref_list_compact_layout_key), context.getResources().getBoolean(R.bool.list_layout_compact_default));
-        if (isCompactLayout)
-            mCurrentLayout = COMPACT_LAYOUT;
+        String layoutType = mSharedPreferences.getString(
+                mContext.getString(R.string.pref_list_layout_key),
+                mContext.getString(R.string.pref_list_layout_two_columns_value));
+        if (layoutType.equals(mContext.getString(R.string.pref_list_layout_two_columns_value)))
+            mCurrentLayout = TWO_COLUMNS_LAYOUT;
         else
-            mCurrentLayout = NORMAL_LAYOUT;
+            mCurrentLayout = ONE_COLUMN_LAYOUT;
 
         // Optimization
         setHasStableIds(true);
@@ -79,7 +80,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         // There are two possible layouts for the RecyclerView: Normal or Compact.
         // For each of these two layouts, the layout of a ViewHolder is different.
         View v;
-        if (viewType == NORMAL_LAYOUT) {
+        if (viewType == ONE_COLUMN_LAYOUT) {
             v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_list_normal, parent, false);
         } else {
@@ -124,7 +125,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 default: // Default priority : no mark.
                     // For compact layout, we save space by using View.GONE when the priority marker is
                     // not visible. For normal layout, View.INVISIBLE gives a better alignment.
-                    if (mCurrentLayout == NORMAL_LAYOUT)
+                    if (mCurrentLayout == ONE_COLUMN_LAYOUT)
                         holder.mPriorityView.setVisibility(View.INVISIBLE);
                     else
                         holder.mPriorityView.setVisibility(View.GONE);
@@ -164,12 +165,13 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     /** Updates the layout of the RecyclerView to the most recent value from the user's preferences */
     void reloadLayout() {
-        boolean isCompactLayout = mSharedPreferences.getBoolean(
-                mContext.getString(R.string.pref_list_compact_layout_key), false);
-        if (isCompactLayout)
-            mCurrentLayout = COMPACT_LAYOUT;
+        String layoutType = mSharedPreferences.getString(
+                mContext.getString(R.string.pref_list_layout_key),
+                mContext.getString(R.string.pref_list_layout_two_columns_value));
+        if (layoutType.equals(mContext.getString(R.string.pref_list_layout_two_columns_value)))
+            mCurrentLayout = TWO_COLUMNS_LAYOUT;
         else
-            mCurrentLayout = NORMAL_LAYOUT;
+            mCurrentLayout = ONE_COLUMN_LAYOUT;
         notifyDataSetChanged();
     }
 

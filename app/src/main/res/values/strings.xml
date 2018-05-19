@@ -36,10 +36,6 @@
     <string name="list_clear_title">Clear current list?</string>
     <string name="list_removed_product_message">\'%1$s\' removed from list.</string>
 
-    <!-- Strings for list layout change menu -->
-    <string name="list_menu_compact_layout">Two columns</string>
-    <string name="list_menu_normal_layout">One column</string>
-
     <!-- Strings for notification -->
     <string name="list_menu_launch_notification">Notification</string>
     <string name="list_notification_button">Open</string>
@@ -116,8 +112,15 @@
     <string name="pref_information_label">Information</string>
 
     <!-- Strings for layout preference -->
-    <string name="pref_list_compact_layout_key" translatable="false">list_layout</string>
+    <string name="pref_list_layout_label">Display</string>
+    <string name="pref_list_layout_one_column_label">One column</string>
+    <string name="pref_list_layout_two_columns_label">Two columns</string>
+    <string name="pref_list_layout_key" translatable="false">list_layout</string>
+    <string name="pref_list_layout_one_column_value" translatable="false">one_column</string>
+    <string name="pref_list_layout_two_columns_value" translatable="false">two_columns</string>
+
     <string name="pref_history_compact_layout_key" translatable="false">history_layout</string>
+
 
     <!-- Strings for font preference -->
     <string name="pref_font_label">Font</string>

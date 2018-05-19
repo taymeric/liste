@@ -6,6 +6,16 @@
         <item>@font/montserrat_bold</item>
     </array>
 
+    <!-- Arrays for layout -->
+    <array name="pref_layout_labels">
+        <item>@string/pref_list_layout_one_column_label</item>
+        <item>@string/pref_list_layout_two_columns_label</item>
+    </array>
+    <array name="pref_layout_values">
+        <item>@string/pref_list_layout_one_column_value</item>
+        <item>@string/pref_list_layout_two_columns_value</item>
+    </array>
+
     <!-- Arrays for font preference -->
     <array name="pref_font_labels">
         <item>@string/pref_font_roboto_label</item>
@@ -23,11 +33,11 @@
     </array>
 
     <!-- Arrays for sort order preference -->
-    <array name="pref_sort_order_option_labels">
+    <array name="pref_sort_order_labels">
         <item>@string/pref_sort_order_by_name_label</item>
         <item>@string/pref_sort_order_by_priority_label</item>
     </array>
-    <array name="pref_sort_order_option_values">
+    <array name="pref_sort_order_values">
         <item>@string/pref_sort_order_name_value</item>
         <item>@string/pref_sort_order_priority_value</item>
     </array>

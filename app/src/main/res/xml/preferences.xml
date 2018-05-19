@@ -6,6 +6,13 @@
     <PreferenceCategory
         android:title="@string/pref_list_label">
         <ListPreference
+            android:defaultValue="@string/pref_list_layout_two_columns_value"
+            android:entries="@array/pref_layout_labels"
+            android:entryValues="@array/pref_layout_values"
+            android:icon="@drawable/ic_view_stream_black_24"
+            android:key="@string/pref_list_layout_key"
+            android:title="@string/pref_list_layout_label"/>
+        <ListPreference
             android:defaultValue="@string/pref_font_roboto_value"
             android:entries="@array/pref_font_labels"
             android:entryValues="@array/pref_font_values"
@@ -14,8 +21,8 @@
             android:title="@string/pref_font_label"/>
         <ListPreference
             android:defaultValue="@string/pref_sort_order_name_value"
-            android:entries="@array/pref_sort_order_option_labels"
-            android:entryValues="@array/pref_sort_order_option_values"
+            android:entries="@array/pref_sort_order_labels"
+            android:entryValues="@array/pref_sort_order_values"
             android:icon="@drawable/ic_sort_black_24dp"
             android:key="@string/pref_sort_order_key"
             android:title="@string/pref_sort_order_label"

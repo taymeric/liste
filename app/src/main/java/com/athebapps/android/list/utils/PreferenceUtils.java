@@ -20,8 +20,10 @@ public class PreferenceUtils {
     /** @return  the RecyclerView.LayoutManager for the list activity, according to the user's preferences. */
     public static RecyclerView.LayoutManager getListLayoutManager(
             Context context, SharedPreferences sharedPreferences) {
-        if (sharedPreferences.getBoolean(context.getString(R.string.pref_list_compact_layout_key),
-                context.getResources().getBoolean(R.bool.list_layout_compact_default)))
+        String listLayout = sharedPreferences.getString(
+                context.getString(R.string.pref_list_layout_key),
+                context.getString(R.string.pref_list_layout_two_columns_value));
+        if (listLayout.equals(context.getString(R.string.pref_list_layout_two_columns_value)))
             return new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         else
             return new LinearLayoutManager(context);

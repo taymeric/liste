@@ -51,7 +51,7 @@ public class ListActivityCreateTest {
         // Scroll to the element with the typed String
         onView(withId(R.id.list_recycler_view)).perform(scrollTo(hasDescendant(withText(testProduct))));
 
-        // Check the unique Strign is Displayed on a View
+        // Check the unique String is Displayed on a View
         onView(withText(testProduct)).check(matches(isDisplayed()));
     }
 
