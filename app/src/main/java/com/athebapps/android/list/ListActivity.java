@@ -577,6 +577,28 @@ public class ListActivity extends AppCompatActivity
                     })
                     .setNegativeButton(android.R.string.cancel, null)
                     .create();
+
+            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    editText.requestFocus();
+                    final InputMethodManager inputMethodManager
+                            = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (inputMethodManager != null)
+                        inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+                }
+            });
+
+            alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    final InputMethodManager inputMethodManager
+                            = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (inputMethodManager != null)
+                        inputMethodManager.hideSoftInputFromWindow(findViewById(R.id.main).getWindowToken(), 0);
+                }
+            });
+
             alertDialog.show();
 
             editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
