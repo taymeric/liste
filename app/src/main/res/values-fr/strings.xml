@@ -89,8 +89,8 @@
     <string name="history_confirm_yes">Oui</string>
     <string name="history_confirm_no">Non</string>
     <plurals name="history_add_selected_products">
-        <item quantity="one" tools:ignore="ImpliedQuantity">Ajouter l\'élément sélectionné à la liste ?</item>
-        <item quantity="other">Ajouter les éléments sélectionnés à la liste ?</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">Ajouter le produit sélectionné à la liste ?</item>
+        <item quantity="other">Ajouter les produits sélectionnés à la liste ?</item>
     </plurals>
 
     <!-- Strings for History activity end -->

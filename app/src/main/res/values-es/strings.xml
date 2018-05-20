@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="app_name">Lista de compras</string>
+
+
+    <!-- Strings for List activity start -->
+
+    <string name="list_fab_content_description">Historial de acceso</string>
+    <string name="list_empty_message">La lista está vacía…</string>
+    <string name="list_empty_view_text">La lista está vacía.</string>
+
+    <string name="list_menu_preferences">Preferencias</string>
+
+    <!-- Strings for edition -->
+    <string name="list_edition_annotation_label">Anotación:</string>
+    <string name="list_edition_priority_label">Prioridad:</string>
+    <string name="list_edition_priority_normal_label">Por defecto</string>
+    <string name="list_edition_annotation_hint">p.ej. cuantía</string>
+
+    <!-- Strings for addition -->
+    <string name="list_menu_add_hint">Añadir un producto</string>
+    <string name="list_no_new_product_message">No hay nuevos productos.</string>
+    <plurals name="list_new_products_message">
+        <item quantity="one">%d nuevo producto añadido a la lista.</item>
+        <item quantity="other">%d nuevos productos añadidos a la lista.</item>
+    </plurals>
+
+    <!-- Strings for deletion -->
+    <string name="list_menu_clear">Borrar la lista</string>
+    <string name="list_clear_title">¿Borrar la lista actual?</string>
+    <string name="list_removed_product_message">\'%1$s\' borrado de la lista.</string>
+
+    <!-- Strings for notification -->
+    <string name="list_menu_launch_notification">Notificación</string>
+    <string name="list_notification_button">Abrir</string>
+    <string name="list_notification_title_empty">Lista de compras (vacío)</string>
+    <string name="list_notification_character_separator">,\u0020</string>
+    <plurals name="list_notification_title">
+        <item quantity="one">Lista de compras (%d producto) :</item>
+        <item quantity="other">Lista de compras (%d productos) :</item>
+    </plurals>
+
+    <!-- Strings for reminder -->
+    <string name="list_menu_activate_reminder">Recordatorio</string>
+    <string name="list_menu_deactivate_reminder">Desactivar</string>
+    <string name="list_menu_reminder_information">Información sobre recordatorio</string>
+    <string name="list_reminder_information_dialog_message">Fecha y hora del recordatorio:\n\n%1$s</string>
+    <string name="list_reminder_set_message">Recordatorio activado: %1$s</string>
+    <string name="list_reminder_canceled_message">Recordatorio cancelado.</string>
+    <string name="list_reminder_date_picker_message">1. Seleccione el día:</string>
+    <string name="list_reminder_time_picker_message">2. Seleccione la hora:</string>
+    <string name="list_reminder_pickers_next_button">Siguiente</string>
+
+    <!-- Strings for email -->
+    <string name="list_menu_email">Correo electrónico</string>
+    <string name="list_email_title">Lista de compras del %1$s.</string>
+    <string name="list_email_character_bullet">-\u0020</string>
+    <string name="list_email_character_space_separator">\u0020</string>
+    <string name="list_email_character_open_parenthesis">\u0020(</string>
+    <string name="list_email_character_close_parenthesis">)</string>
+
+    <!-- Strings for List activity end -->
+
+
+    <!-- Strings for History activity start -->
+
+    <string name="history_title">Historial</string>
+    <string name="history_instructions">Seleccione los productos a añadir:</string>
+    <string name="history_empty_view_text">Su historia está vacía.\nPara comenzar, añade productos desde la pantalla principal.</string>
+    <string name="history_fab_content_description">Añadir productos</string>
+
+    <!-- Strings for deletion menu -->
+    <string name="history_menu_delete">Borrar selección</string>
+    <plurals name="history_delete_selection_title">
+        <item quantity="one" tools:ignore="ImpliedQuantity">¿Borrar el producto seleccionado del historial?</item>
+        <item quantity="other">¿Borrar productos seleccionados del historial?</item>
+    </plurals>
+    <plurals name="history_products_deleted_message">
+        <item quantity="one">%d producto borrados del historial.</item>
+        <item quantity="other">%d productos borrados del historial.</item>
+    </plurals>
+
+    <!-- Strings for history layout change menu -->
+    <string name="history_menu_normal_layout">Visualización: una columna</string>
+    <string name="history_menu_compact_layout">Visualización: dos columnas</string>
+
+    <!-- Strings for confirmation dialog -->
+    <string name="history_confirm_yes">Sí</string>
+    <string name="history_confirm_no">No</string>
+    <plurals name="history_add_selected_products">
+        <item quantity="one" tools:ignore="ImpliedQuantity">¿Añadir el producto seleccionado a la lista?</item>
+        <item quantity="other">¿Añadir productos seleccionados a la lista?</item>
+    </plurals>
+
+    <!-- Strings for History activity end -->
+
+
+    <!-- Strings for Preferences activity start -->
+
+    <string name="pref_title">Preferencias</string>
+    <string name="pref_list_label">Lista</string>
+    <string name="pref_information_label">Información</string>
+
+    <!-- Strings for layout preference -->
+    <string name="pref_list_layout_label">Visualización</string>
+    <string name="pref_list_layout_one_column_label">Una columna</string>
+    <string name="pref_list_layout_two_columns_label">Dos columnas</string>
+
+    <!-- Strings for font preference -->
+    <string name="pref_font_label">Tipo de letra</string>
+
+    <!--Strings for sort order preference -->
+    <string name="pref_sort_order_label">Clasificar</string>
+    <string name="pref_sort_order_by_name_label">Orden alfabético</string>
+    <string name="pref_sort_order_by_priority_label">Orden de prioridad\n<em><small>(Pulsación larga para establecer la prioridad)</small></em></string>
+
+    <!-- Strings for About dialog in preference screen -->
+    <string name="pref_about_title">Acerca de</string>
+    <string name="pref_about_version_number_label">Versión</string>
+    <string name="pref_about_email_label">Contacto</string>
+    <string name="pref_about_icons_label">Iconos de Google</string>
+
+    <!-- Strings for Preferences activity end -->
+
+</resources>
