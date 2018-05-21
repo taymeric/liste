@@ -99,11 +99,11 @@
     <!-- Strings for Preferences activity start -->
 
     <string name="pref_title">Einstellungen</string>
-    <string name="pref_list_label">Liste</string>
+    <string name="pref_list_label">Listenanzeige</string>
     <string name="pref_information_label">Informationen</string>
 
     <!-- Strings for layout preference -->
-    <string name="pref_list_layout_label">Anzeige</string>
+    <string name="pref_list_layout_label">Darstellung</string>
     <string name="pref_list_layout_one_column_label">Eine Säule</string>
     <string name="pref_list_layout_two_columns_label">Zwei Säulen</string>
 
