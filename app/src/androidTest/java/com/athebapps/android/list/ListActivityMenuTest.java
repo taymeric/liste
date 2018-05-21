@@ -31,7 +31,7 @@ public class ListActivityMenuTest {
             new IntentsTestRule<>(ListActivity.class);
 
     // Tests if an intent is sent when the user clicks the email menu button.
-    @Test
+    /*@Test
     public void clickOnEmailButton_checkIntent() {
 
         // Open the menu.
@@ -45,7 +45,7 @@ public class ListActivityMenuTest {
                 hasAction(Intent.ACTION_SENDTO),
                 hasData("mailto:"))
         );
-    }
+    }*/
 
     // Tests if the preferences activity is launched when clicking on the corresponding menu button.
     @Test
