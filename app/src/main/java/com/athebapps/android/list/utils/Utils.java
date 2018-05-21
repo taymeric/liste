@@ -1,14 +1,9 @@
 package com.athebapps.android.list.utils;
 
-import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.TextView;
-
-import java.util.Calendar;
-import java.util.Date;
 
 
 public class Utils {

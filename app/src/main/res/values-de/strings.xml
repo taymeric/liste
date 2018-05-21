@@ -118,6 +118,7 @@
     <!-- Strings for About dialog in preference screen -->
     <string name="pref_about_title">Über Einkaufsliste</string>
     <string name="pref_about_version_number_label">Version</string>
+    <string name="pref_about_copyright_label">Copyright</string>
     <string name="pref_about_email_label">Kontakt</string>
     <string name="pref_about_icons_label">Ikonen</string>
     <string name="pref_about_fonts_label">Schriftarten</string>

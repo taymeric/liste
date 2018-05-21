@@ -118,6 +118,7 @@
     <!-- Strings for About dialog in preference screen -->
     <string name="pref_about_title">À propos</string>
     <string name="pref_about_version_number_label">Version</string>
+    <string name="pref_about_copyright_label">Copyright</string>
     <string name="pref_about_email_label">Contact</string>
     <string name="pref_about_icons_label">Icônes</string>
     <string name="pref_about_fonts_label">Polices de caractères</string>
