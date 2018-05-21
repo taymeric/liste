@@ -108,7 +108,7 @@
     <string name="pref_list_layout_two_columns_label">Deux colonnes</string>
 
     <!-- Strings for font preference -->
-    <string name="pref_font_label">Police de caractère</string>
+    <string name="pref_font_label">Police de caractères</string>
 
     <!--Strings for sort order preference -->
     <string name="pref_sort_order_label">Tri</string>
@@ -119,7 +119,8 @@
     <string name="pref_about_title">À propos</string>
     <string name="pref_about_version_number_label">Version</string>
     <string name="pref_about_email_label">Contact</string>
-    <string name="pref_about_icons_label">Icônes par Google</string>
+    <string name="pref_about_icons_label">Icônes</string>
+    <string name="pref_about_fonts_label">Polices de caractères</string>
 
     <!-- Strings for Preferences activity end -->
 

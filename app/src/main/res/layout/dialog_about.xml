@@ -13,6 +13,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAppearance="?android:textAppearanceMedium"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="@string/pref_about_version_number_label"
         android:textAppearance="?android:textAppearanceSmall"
         />
@@ -22,6 +30,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/pref_about_version_name"
+        android:textAppearance="?android:textAppearanceMedium"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/pref_about_copyright_label"
+        android:textAppearance="?android:textAppearanceSmall"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="email"
+        android:text="@string/pref_about_copyright"
         android:textAppearance="?android:textAppearanceMedium"
         />
 
@@ -54,6 +78,22 @@
         android:layout_height="wrap_content"
         android:autoLink="web"
         android:text="@string/pref_about_icons_url"
+        android:textAppearance="?android:textAppearanceMedium"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/pref_about_fonts_label"
+        android:textAppearance="?android:textAppearanceSmall"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:text="@string/pref_about_fonts_url"
         android:textAppearance="?android:textAppearanceMedium"
         />
 
