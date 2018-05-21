@@ -26,12 +26,12 @@ public class Utils {
         }
     }
 
-    /** Gets the current date as a String representation, formatted according to the locale. */
-    public static String getDate(Context context) {
+    ///** Gets the current date as a String representation, formatted according to the locale. */
+    /*public static String getDate(Context context) {
         Calendar c = Calendar.getInstance();
         Date date = c.getTime();
         java.text.DateFormat formatter = DateFormat.getDateFormat(context);
         return formatter.format(date);
-    }
+    }*/
 
 }

@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.JobIntentService;
@@ -94,7 +95,7 @@ public class ListActivity extends AppCompatActivity
     private static final int LIST_LOADER_ID = 100;
 
     /* Helps the LoaderManager identify the loader for the whole list in the case of email sending */
-    private static final int LIST_FOR_EMAIL_LOADER_ID = 103;
+    /*private static final int LIST_FOR_EMAIL_LOADER_ID = 103;*/
 
     /* Helps the LoaderManager identify the loader for a single element of the list in the case of edition */
     private static final int LIST_PRODUCT_FOR_EDITION_LOADER_ID = 101;
@@ -262,9 +263,9 @@ public class ListActivity extends AppCompatActivity
             case R.id.action_remind:
                 showReminderSetupDialogs();
                 return true;
-            case R.id.action_email:
+            /*case R.id.action_email:
                 getLoaderManager().restartLoader(LIST_FOR_EMAIL_LOADER_ID, null, this);
-                return true;
+                return true;*/
             case R.id.action_reminder_info:
                 showScheduledReminderInformationDialog();
                 return true;
@@ -277,7 +278,7 @@ public class ListActivity extends AppCompatActivity
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LIST_LOADER_ID:
-            case LIST_FOR_EMAIL_LOADER_ID:
+            /*case LIST_FOR_EMAIL_LOADER_ID:*/
                 String sortOrder = PreferenceUtils.getSortOrder(this, mSharedPreferences);
                 // Returns a new CursorLoader
                 return new CursorLoader(
@@ -317,10 +318,10 @@ public class ListActivity extends AppCompatActivity
                 mAdapter.swapCursor(data);
                 updateEmptyViewVisibility();
                 break;
-            case LIST_FOR_EMAIL_LOADER_ID:
+            /*case LIST_FOR_EMAIL_LOADER_ID:
                 sendByEmail(data);
                 getLoaderManager().destroyLoader(LIST_FOR_EMAIL_LOADER_ID);
-                break;
+                break;*/
             case LIST_PRODUCT_FOR_EDITION_LOADER_ID:
                 showEditionDialog(data);
                 break;
@@ -778,7 +779,7 @@ public class ListActivity extends AppCompatActivity
 
     /* Sends an implicit intent to a mail app with the content of the list as the body of the mail.
      * @param cursor a Cursor pointing to the whole list sorted according to the user's preference */
-    private void sendByEmail(Cursor cursor) {
+    /*private void sendByEmail(Cursor cursor) {
         if (mAdapter.getItemCount() != 0) {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
             intent.setData(Uri.parse("mailto:")); // only email apps should handle this
@@ -792,7 +793,7 @@ public class ListActivity extends AppCompatActivity
         } else {
             showMessage(getString(R.string.list_empty_message));
         }
-    }
+    }*/
 
     /* Updates the visibility of the Empty View. */
     private void updateEmptyViewVisibility() {

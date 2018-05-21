@@ -13,7 +13,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.RemoteException;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -249,13 +248,13 @@ public class DatabaseUtils {
         return notificationBuilder.build();
     }
 
-    /**
-     * Formats the list as a String to be used in the body of an email.
-     * @param context used to access String values
-     * @param cursor a Cursor pointing to the table representing the list
-     * @return the String representation of the whole list with products, annotations and priorities.
-     */
-    @NonNull
+    ///**
+    // * Formats the list as a String to be used in the body of an email.
+    // * @param context used to access String values
+    // * @param cursor a Cursor pointing to the table representing the list
+    // * @return the String representation of the whole list with products, annotations and priorities.
+    // */
+    /*@NonNull
     public static String formatListForEmail(Context context, Cursor cursor) {
 
         StringBuilder list = new StringBuilder();
@@ -287,5 +286,5 @@ public class DatabaseUtils {
             cursor.close();
         }
         return list.toString();
-    }
+    }*/
 }

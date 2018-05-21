@@ -154,7 +154,7 @@
     <string name="pref_about_version_number_label">Version</string>
     <string name="pref_about_email_label">Contact</string>
     <string name="pref_about_icons_label">Icons by Google</string>
-    <string name="pref_about_version_name" translatable="false">1.12</string>
+    <string name="pref_about_version_name" translatable="false">1.13</string>
     <string name="pref_about_email" translatable="false">athebapps@gmail.com</string>
     <string name="pref_about_icons_url" translatable="false">https://material.io/icons/</string>
 
