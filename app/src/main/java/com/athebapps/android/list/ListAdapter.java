@@ -181,9 +181,8 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     interface ListAdapterOnClickHandler {
         /**
          * @param id the _id in the list SQL table of the clicked item
-         * @param deletion whether the clicked product should be deleted
          * */
-        void onClick(int id, boolean deletion);
+        void onClick(int id);
     }
 
     /** Our ViewHolder for Recycling purpose */
@@ -213,17 +212,17 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                                 new GestureDetector(
                                         mContext,
                                         new GestureDetector.SimpleOnGestureListener() {
-                                            @Override
+                                            /*@Override
                                             public void onLongPress(MotionEvent e) {
                                                 if (id > 0)
-                                                    mListAdapterOnClickHandler.onClick(id, false);
+                                                    mListAdapterOnClickHandler.onClick(id);
                                                 super.onLongPress(e);
-                                            }
+                                            }*/
 
                                             @Override
                                             public boolean onSingleTapConfirmed(MotionEvent e) {
                                                 if (id > 0)
-                                                    mListAdapterOnClickHandler.onClick(id, true);
+                                                    mListAdapterOnClickHandler.onClick(id);
                                                 return super.onSingleTapConfirmed(e);
                                             }
                                         });

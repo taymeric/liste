@@ -16,7 +16,7 @@
     <string name="list_edition_annotation_label">Annotation :</string>
     <string name="list_edition_priority_label">Priorité :</string>
     <string name="list_edition_priority_normal_label">Par défaut</string>
-    <string name="list_edition_annotation_hint">Ex. quantité</string>
+    <string name="list_edition_annotation_hint">ex. quantité</string>
 
     <!-- Strings for addition -->
     <string name="list_menu_add_hint">Ajouter un produit</string>
@@ -113,7 +113,8 @@
     <!--Strings for sort order preference -->
     <string name="pref_sort_order_label">Tri</string>
     <string name="pref_sort_order_by_name_label">Ordre alphabétique</string>
-    <string name="pref_sort_order_by_priority_label">Ordre de priorité\n<em><small>(Appui long pour définir priorité)</small></em></string>
+    <string name="pref_sort_order_by_priority_label">Ordre de priorité</string>
+    <!--<string name="pref_sort_order_by_priority_label">Ordre de priorité\n<em><small>(Appui long pour définir priorité)</small></em></string>-->
 
     <!-- Strings for About dialog in preference screen -->
     <string name="pref_about_title">À propos</string>

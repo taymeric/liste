@@ -113,7 +113,8 @@
     <!--Strings for sort order preference -->
     <string name="pref_sort_order_label">Clasificar</string>
     <string name="pref_sort_order_by_name_label">Orden alfabético</string>
-    <string name="pref_sort_order_by_priority_label">Orden de prioridad\n<em><small>(Pulsación larga para establecer la prioridad)</small></em></string>
+    <string name="pref_sort_order_by_priority_label">Orden de prioridad</string>
+    <!--<string name="pref_sort_order_by_priority_label">Orden de prioridad\n<em><small>(Pulsación larga para establecer la prioridad)</small></em></string>-->
 
     <!-- Strings for About dialog in preference screen -->
     <string name="pref_about_title">Acerca de</string>

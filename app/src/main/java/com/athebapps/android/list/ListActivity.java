@@ -54,6 +54,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.athebapps.android.list.database.ListContract;
 import com.athebapps.android.list.database.ListQueryHandler;
@@ -362,19 +363,14 @@ public class ListActivity extends AppCompatActivity
         } else if (s.equals(getString(R.string.list_reminder_alarm_on))) {
             invalidateOptionsMenu();
         } else if (s.equals(getString(R.string.pref_font_key))) {
-            //mAdapter.reloadFont();
             requestFont();
         }
     }
 
     @Override
-    public void onClick(int id, boolean deletion) {
-        if (!deletion) {
-            mRecyclerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-            editProduct(id);
-        } else {
-            deleteSingleProduct(id);
-        }
+    public void onClick(int id) {
+        //mRecyclerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+        editProduct(id);
     }
 
     /* This method makes sure that when a notification is scheduled, an informative menu item appears on
@@ -557,7 +553,7 @@ public class ListActivity extends AppCompatActivity
                     .setNegativeButton(android.R.string.cancel, null)
                     .create();
 
-            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            /*alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
                 public void onShow(DialogInterface dialog) {
                     final InputMethodManager inputMethodManager
@@ -565,9 +561,9 @@ public class ListActivity extends AppCompatActivity
                     if (inputMethodManager != null)
                         inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
                 }
-            });
+            });*/
 
-            alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            /*alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
                     final InputMethodManager inputMethodManager
@@ -575,7 +571,7 @@ public class ListActivity extends AppCompatActivity
                     if (inputMethodManager != null)
                         inputMethodManager.hideSoftInputFromWindow(findViewById(R.id.main).getWindowToken(), 0);
                 }
-            });
+            });*/
 
             alertDialog.show();
 
@@ -839,7 +835,7 @@ public class ListActivity extends AppCompatActivity
     /* Shows a Snackbar message with an 'undo' action. */
     private void showMessageWithUndoAction(String message, final String product, final int priority,
                                            final String annotation) {
-        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_LONG)
                 .setAction(getString(android.R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
